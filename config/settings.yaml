@@ -22,6 +22,12 @@ paths:
   figures: reports/figures
   metrics: reports/metrics
 
+pipeline:
+  # Formatos de data aceitos na padronização (PRD 3.3), tentados na ordem listada.
+  formatos_data:
+    - "%Y-%m-%d"
+    - "%d/%m/%Y"
+
 environment:
   # Nome da variável de ambiente que guarda a credencial; o valor fica no .env local.
   api_key_env: LLM_API_KEY

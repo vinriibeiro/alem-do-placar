@@ -2,7 +2,7 @@
 
 Plataforma analítica de inteligência esportiva (futebol, Campeonato Brasileiro Série A) que combina engenharia de dados, estatística, Machine Learning, Power BI e um assistente de IA.
 
-**Status atual:** T002 — auditoria e catálogo das fontes de dados. A fundação (T001) permanece como base. Não há coleta de dados, modelos, API funcional, dashboard ou assistente.
+**Status atual:** T003 — pipeline de coleta e tratamento sobre arquivos locais sintéticos, implementado e pendente de revisão. A coleta real e a execução sobre dados reais estão bloqueadas até a seleção e a verificação de licença da fonte (T002). Não há modelos, API funcional, dashboard ou assistente.
 
 Referências: `docs/PRD.md` (requisitos), `docs/TASKS.md` (controle de tarefas), `docs/architecture.md` (arquitetura da fundação).
 
@@ -41,10 +41,11 @@ python -m pip install -e ".[test,lint]"
 
 Grupos de dependências:
 
+- Execução: DuckDB, PyArrow e PyYAML (declaradas em `pyproject.toml`, usadas pelo pipeline T003).
 - `test`: Pytest.
 - `lint`: Ruff (lint e formatação).
 
-As dependências de execução (Pandas, DuckDB, scikit-learn, MLflow, FastAPI etc.) serão declaradas somente nas tarefas que as utilizarem. O catálogo de fontes (T002) usa apenas a biblioteca padrão (`tomllib`); não há pacote novo.
+O comando acima instala também as dependências de execução. Nesta etapa elas foram apenas declaradas; não foram instaladas nem executadas. Pandas não é usado.
 
 ## Testes
 
@@ -52,7 +53,7 @@ As dependências de execução (Pandas, DuckDB, scikit-learn, MLflow, FastAPI et
 python -B -m pytest
 ```
 
-O parâmetro `-B` evita a gravação de arquivos `__pycache__`. Os testes da fundação e do catálogo usam apenas a biblioteca padrão e o Pytest, não exigem rede, dados reais nem bibliotecas de fases futuras.
+O parâmetro `-B` evita a gravação de arquivos `__pycache__`. Os testes usam arquivos sintéticos criados em diretórios temporários, bloqueiam chamadas de rede e não usam dados reais.
 
 ## Lint e formatação
 
@@ -65,7 +66,7 @@ python -m ruff format --check .
 
 1. Copie o modelo: `Copy-Item .env.example .env` (PowerShell) ou `cp .env.example .env` (bash).
 2. Preencha somente localmente os valores necessários. O arquivo `.env` nunca deve ser versionado.
-3. Parâmetros não sensíveis ficam em `config/settings.yaml`. Credenciais são referenciadas pelo nome da variável de ambiente (`api_key_env`), nunca pelo valor.
+3. Parâmetros não sensíveis ficam em `config/settings.yaml`, inclusive os formatos de data do pipeline (`pipeline.formatos_data`). Credenciais são referenciadas pelo nome da variável de ambiente (`api_key_env`), nunca pelo valor.
 
 ## Catálogo de fontes (T002)
 
@@ -77,16 +78,24 @@ Regras e limites:
 - **Valores "a verificar":** indicam ausência de evidência. Não devem ser tratados como fatos confirmados.
 - **Licença verificada:** só é aceita com `url_termos`, `data_verificacao` e `verificador` preenchidos.
 - **Fonte principal:** só pode ser marcada como `selecionada` com licença verificada e `justificativa` preenchida. No máximo uma fonte pode ser selecionada.
-- **Revisão humana:** a verificação de licenças depende de revisão humana. O código aplica regras formais de consistência, mas não confirma termos de uso. Cabe ao responsável do projeto ler os termos de cada fonte e registrar a evidência antes de qualquer decisão.
+- **Revisão humana:** a verificação de licenças depende de revisão humana. O código aplica regras formais de consistência, mas não confirma termos de uso.
 - **Sem rede:** a validação não acessa a internet e não baixa dados.
 
-O carregamento e a validação ficam em `src/ingestion/source_catalog.py` (`carregar_catalogo`). Após a instalação editável, o uso é:
+O carregamento e a validação ficam em `src/ingestion/source_catalog.py` (`carregar_catalogo`):
 
 ```python
 from ingestion.source_catalog import carregar_catalogo
 
 catalogo = carregar_catalogo("config/data_sources.toml")
 ```
+
+## Pipeline de coleta e tratamento (T003)
+
+Fluxo em `src/processing/pipeline.py` (`executar_pipeline`): fonte selecionada no catálogo -> leitura de um CSV local com o mapeamento da fonte -> cópia bruta em `data/raw` -> padronização (equipes por aliases, datas, gols) -> validação de integridade -> tabelas do PRD 5.1 -> Parquet em `data/processed`.
+
+- Sem fonte selecionada, ou com mapeamento `a verificar` em campos lidos, o pipeline falha com `ColetaErro` e não grava dados.
+- Achados críticos da validação (duplicidade, mandante igual ao visitante, gols negativos ou não inteiros, pontos fora de 3/1/0, ausências obrigatórias) lançam `IntegridadeErro` antes da gravação das tabelas. Avisos (por exemplo, rodada ausente) são registrados em log.
+- As consultas (`src/processing/consultas.py`) usam DuckDB em memória, com SQL fixo e parâmetros `?`, sem criar arquivos `.duckdb`.
 
 ## Estrutura
 
@@ -107,11 +116,12 @@ tests/             unit, integration, model, api
 - Nenhuma fonte de dados foi aprovada. O catálogo T002 registra as candidatas com decisão pendente.
 - As licenças das fontes permanecem `pendente_verificacao`; a verificação exige revisão humana.
 - A cobertura do Brasileirão e as temporadas disponíveis estão marcadas como "a verificar".
-- Nenhum módulo de `src/` contém pipeline; `source_catalog.py` apenas carrega e valida o catálogo.
+- O pipeline T003 foi testado apenas com arquivos sintéticos. Não há coleta real, nem execução sobre dados reais, até a seleção da fonte.
+- Os aliases de equipes são exemplos e devem ser revisados com a fonte aprovada.
 - A CI executa instalação, lint, formatação e testes em Python 3.12, mas ainda não foi disparada.
 
 ## Próximos passos
 
-1. Revisão técnica (Codex) e QA do catálogo T002.
+1. Revisão técnica (Codex) do pipeline T003 e do catálogo T002.
 2. Verificação humana das licenças e da cobertura de cada fonte candidata.
-3. Decisão sobre a fonte principal, com justificativa registrada, antes da T003.
+3. Decisão sobre a fonte principal, com justificativa registrada. Só depois disso a coleta real pode ser executada.
