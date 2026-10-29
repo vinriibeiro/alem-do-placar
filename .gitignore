@@ -52,3 +52,6 @@ mlruns/
 # Ferramentas de qualidade e notebooks
 .ruff_cache/
 .ipynb_checkpoints/
+
+# Power BI (cache local do Desktop)
+**/.pbi/
