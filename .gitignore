@@ -83,3 +83,6 @@ data/predictions/cientifica/*
 
 # Site estático gerado por scripts/build_site.py
 site/
+
+# Versões geradas para conferência enquanto o projeto principal está aberto no Desktop
+dashboard/powerbi/*-nova-versao/

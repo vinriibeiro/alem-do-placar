@@ -8,15 +8,15 @@
 | Infraestrutura | GET /health | 200 | OK | status 200 |
 | Infraestrutura | GET / | 200 | OK | status 200 |
 | Infraestrutura | GET /dashboard | 200 | OK | status 200 |
-| Infraestrutura | GET /assistente | 200 | OK | status 200 |
+| Infraestrutura | GET /consulta | 200 | OK | status 200 |
 | Infraestrutura | GET /metodologia | 200 | OK | status 200 |
 | Infraestrutura | GET /api/config | 200 | OK | status 200 |
-| Infraestrutura | GET /api/sugestoes | 200 | OK | status 200 |
+| Infraestrutura | GET /dados/conhecimento.json | 200 | OK | status 200 |
 | Segurança | Cabeçalhos | CSP e nosniff | OK |  |
 | KPIs | Partidas | 3040 | OK | 3040 |
 | KPIs | Temporadas | 8 | OK | 8 |
 | KPIs | MAE do modelo | 0.478 | OK | 0.478 |
-| KPIs | Cobertura | 91,2% | OK | 0.9121212121212121 |
+| KPIs | Cobertura | 91,2% | OK | 0.9121 |
 | Classificação | Qual foi a classificação de 2025? | Flamengo com 79 pontos | OK | HTTP 200, modo deterministico |
 | Classificação | Quem foi o campeão de 2024? | Botafogo FR com 79 pontos | OK | HTTP 200, modo deterministico |
 | Equipes | Resumo do Flamengo em 2025 | Flamengo 79 pontos | OK | HTTP 200, modo deterministico |

@@ -592,6 +592,11 @@ Uma tarefa poderá receber status CONCLUÍDA somente quando:
 | 2026-10-29 | T010 (F4) | Preparação de deploy | 739f084 |
 | 2026-10-29 | T010 (F5) | QA final e material de divulgação | ver `git log` da branch feature/t010-publicacao |
 
+| 2026-10-29 | T008 | Ajustes pós-Desktop: cartões, cabeçalho, ordenação e escudos | a0cacba |
+| 2026-10-29 | T008 | Identidade Brasileirão, classificação por temporada, destaques reais e páginas didáticas | d888b53 |
+| 2026-10-29 | T009 | Central de Consulta estática, sem IA paga, pronta para GitHub Pages | c37702d |
+| 2026-10-29 | T010 | Auditoria de Ciência de Dados, dicionário de dados, README e guia de publicação | ver `git log` |
+
 Nenhuma tarefa foi aprovada formalmente pelo usuário. Revisões Codex e QA Gemini ainda não foram registradas em `docs/qa/`.
 
 O histórico deverá ser atualizado a cada entrega aprovada.

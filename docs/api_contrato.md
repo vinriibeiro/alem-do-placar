@@ -1,4 +1,9 @@
-# Contrato da API do assistente (T009 v2)
+# Contrato da API local (T009 v2)
+
+> A interface pública agora é a **Central de Consulta**, estática: ela lê `dados/<nome>.json`
+> (`partidas`, `modelo`, `destaques`, `escudos`, `conhecimento`, `contexto`, `sugestoes`, `config`),
+> gerados por `src/api/central.py`. O servidor local serve os mesmos arquivos em `/dados/<nome>.json`.
+> Os endpoints abaixo continuam disponíveis para uso local, mas o site não depende deles.
 
 Base: mesma origem do site. Sem CORS aberto. Documentação OpenAPI desativada.
 

@@ -26,9 +26,10 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--url-base", help="URL https da pasta data/ (exigida com --fonte web)")
     ap.add_argument("--url-central", help="URL https da Central de Consulta publicada")
     ap.add_argument("--url-repositorio", help="URL https do repositório no GitHub")
+    ap.add_argument("--saida", type=Path, default=RAIZ / "dashboard" / "powerbi" / "AlemDoPlacar")
     args = ap.parse_args(argv)
 
-    saida = RAIZ / "dashboard" / "powerbi" / "AlemDoPlacar"
+    saida = args.saida
     if saida.exists():
         if not (saida / "AlemDoPlacar.pbip").is_file():
             sys.exit(f"Recusado: {saida} existe e não parece um projeto gerado.")

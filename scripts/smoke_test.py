@@ -278,6 +278,11 @@ def main() -> int:
         default=0.0,
         help="segundos entre perguntas (use 3.2 contra o site público: o limite é 20 por minuto)",
     )
+    ap.add_argument(
+        "--estatico",
+        action="store_true",
+        help="site estático (GitHub Pages): confere páginas, dados/*.json e indicadores, sem /api",
+    )
     args = ap.parse_args()
     url = args.url.rstrip("/")
     linhas: list[tuple[str, str, str, bool, str]] = []
@@ -286,32 +291,51 @@ def main() -> int:
         linhas.append((cat, nome, esperado, bool(passou), obs))
 
     # infraestrutura
-    for rota in (
-        "/health",
-        "/",
-        "/dashboard",
-        "/assistente",
-        "/metodologia",
-        "/api/config",
-        "/api/sugestoes",
-    ):
+    rotas = (
+        ("/index.html", "/dashboard.html", "/consulta.html", "/metodologia.html")
+        + tuple(
+            f"/dados/{n}.json"
+            for n in ("partidas", "modelo", "conhecimento", "destaques", "contexto", "config")
+        )
+        if args.estatico
+        else (
+            "/health",
+            "/",
+            "/dashboard",
+            "/consulta",
+            "/metodologia",
+            "/api/config",
+            "/dados/conhecimento.json",
+        )
+    )
+    for rota in rotas:
         try:
             with urllib.request.urlopen(url + rota, timeout=30) as r:
                 st = r.status
         except urllib.error.HTTPError as e:
             st = e.code
         registrar("Infraestrutura", f"GET {rota}", "200", st == 200, f"status {st}")
-    _, h, _ = chamar(url, "/health")
-    hl = {k.lower(): v for k, v in h.items()}
-    registrar(
-        "Segurança",
-        "Cabeçalhos",
-        "CSP e nosniff",
-        "content-security-policy" in hl and hl.get("x-content-type-options") == "nosniff",
-    )
+    if args.estatico:
+        with urllib.request.urlopen(url + "/consulta.html", timeout=30) as r:
+            html = r.read().decode("utf-8")
+        registrar(
+            "Segurança",
+            "CSP na página",
+            "meta Content-Security-Policy",
+            "Content-Security-Policy" in html,
+        )
+    else:
+        _, h, _ = chamar(url, "/health")
+        hl = {k.lower(): v for k, v in h.items()}
+        registrar(
+            "Segurança",
+            "Cabeçalhos",
+            "CSP e nosniff",
+            "content-security-policy" in hl and hl.get("x-content-type-options") == "nosniff",
+        )
 
     # indicadores da página inicial
-    st, _, ctx = chamar(url, "/api/contexto")
+    st, _, ctx = chamar(url, "/dados/contexto.json")
     registrar(
         "KPIs",
         "Partidas",
@@ -341,7 +365,9 @@ def main() -> int:
         str(ctx["cobertura"]),
     )
 
-    # perguntas
+    # perguntas (o motor da Central é testado em tests/js; aqui, a API local)
+    if args.estatico:
+        return _relatorio(linhas, url, args.salvar)
     for cat, pergunta, esperado, verifica in casos():
         time.sleep(args.pausa)
         st, _, r = chamar(url, "/api/pergunta", {"pergunta": pergunta})
@@ -364,6 +390,10 @@ def main() -> int:
     )
     registrar("Segurança", "Origem externa", "403", st == 403, f"status {st}")
 
+    return _relatorio(linhas, url, args.salvar)
+
+
+def _relatorio(linhas, url, salvar) -> int:
     falhas = [x for x in linhas if not x[3]]
     saida = [
         "# Resultado do teste de fumaça e integridade",
@@ -378,9 +408,9 @@ def main() -> int:
         saida.append(f"| {cat} | {nome} | {esp} | {'OK' if passou else 'FALHOU'} | {obs} |")
     texto = "\n".join(saida) + "\n"
     print(texto)
-    if args.salvar:
-        Path(args.salvar).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.salvar).write_text(texto, encoding="utf-8")
+    if salvar:
+        Path(salvar).parent.mkdir(parents=True, exist_ok=True)
+        Path(salvar).write_text(texto, encoding="utf-8")
     return 1 if falhas else 0
 
 

@@ -24,7 +24,7 @@ Opções:
 |---|---|
 | `--fonte local` (padrão) | Partições `File.Contents` com o caminho absoluto desta máquina. Não acessa rede. |
 | `--fonte web --url-base https://raw.githubusercontent.com/USUARIO/REPO/main/data` | Partições `Web.Contents`. Permite atualizar o relatório publicado sem gateway. |
-| `--url-assistente https://SEU-SITE/assistente` | Endereço do botão da página Assistente. O padrão `https://ALTERAR` é um marcador visível. |
+| `--url-central https://...` e `--url-repositorio https://...` | Links reais da Central e do GitHub. Sem eles, as páginas mostram que o link estará disponível após a publicação. |
 
 Os tokens de cor vêm de `dashboard/assets/tema_tokens.json`, gerado pelo site (`python scripts/gerar_og.py`). Assim o relatório e o site compartilham a identidade visual.
 
@@ -49,24 +49,32 @@ As pastas de entrada são somente lidas. A saída deve estar ausente ou vazia.
 
 ## Layout (canvas 1280 x 720)
 
-Todas as páginas seguem a mesma estrutura:
-
 | Faixa | Posição | Conteúdo |
 |---|---|---|
-| Cabeçalho | y 0–64 | Título e subtítulo da página, fundo azul-marinho |
-| Navegação | y 68–104 | Navegador de páginas nativo do Power BI |
-| Conteúdo | y 112–692 | Margens de 16 px, espaçamento de 12 px |
-| Rodapé | y 698–718 | Fonte, modelo, versão e corte de treino |
+| Cabeçalho | y 0–72 | Faixa única verde-escura com título, marca e subtítulo, sem borda |
+| Filete | y 72–76 | Linha amarela |
+| Navegação | y 82–114 | Navegador de páginas nativo do Power BI |
+| Conteúdo | y 122–688 | Margens de 16 px, espaçamento de 12 px |
+| Rodapé | y 694–718 | Fonte, temporadas, data da última partida e modelo |
 
 Páginas:
 
-1. **Visão Geral:** 5 indicadores, segmentações de temporada e equipe, gols por jogo por temporada, pontos por equipe e classificação.
-2. **Tendências:** média móvel de 3, 5 e 10 jogos, média recente por equipe e matriz de aproveitamento equipe x temporada.
-3. **Estatística:** distribuição de resultados, mandante x visitante, dispersão saldo de gols x pontos e volatilidade.
-4. **Laboratório de Modelos:** MAE do modelo e do baseline, MAE e RMSE por modelo, métricas e importância por permutação.
-5. **Previsões:** previsto, observado e intervalo de 90% por equipe, com aviso de que são previsões retrospectivas.
-6. **Assistente:** botão que abre o site do assistente e exemplos de perguntas.
-7. **Metodologia:** dados, modelo, leitura das previsões e limitações.
+1. **Visão Geral:** classificação da temporada (escudo, posição, P, J, V, E, D, SG, aproveitamento e zona), aviso de temporada e quatro destaques: artilheiro, Craque do Brasileirão, Melhor Goleiro e melhor ataque. Temporada 2025 pré-selecionada.
+2. **Tendências:** média móvel de 5 e 10 jogos da equipe escolhida (Flamengo pré-selecionado), ranking dos últimos 5 jogos e matriz de aproveitamento. A segmentação de equipe não filtra o ranking nem a matriz.
+3. **Estatísticas:** resultados como Derrota, Empate e Vitória em percentual, pontos por jogo por equipe com a média do campeonato, dispersão saldo × pontos e regularidade.
+4. **Modelos:** perguntas e respostas sobre o que é previsto, como, quais modelos, qual foi escolhido e a margem de erro; MAE e RMSE por modelo com nomes amigáveis; tabela comparativa e importância das variáveis.
+5. **Previsões:** previsto, real e faixa de 90% tracejada para a equipe escolhida (Flamengo pré-selecionado), com aviso e cobertura observada.
+6. **Central de Consulta:** apresentação, botão para a central publicada e seis temas com perguntas de exemplo.
+7. **Metodologia:** indicadores reais, três blocos explicativos, as oito etapas do processo e o bloco "Explore o projeto por dentro".
+
+### Filtros e proteção contra mistura de temporadas
+
+- As medidas da classificação (`Pontos (temporada)`, `Posição` e as demais) ficam vazias quando há mais de uma temporada no filtro, e o cartão "Sobre esta tabela" pede a escolha.
+- A pré-seleção (2025 e Flamengo) é gravada na segmentação. Se uma versão do Power BI ignorar a pré-seleção, a proteção acima continua valendo.
+
+### Destaques e escudos
+
+`config/destaques.csv` (gerado por `scripts/obter_destaques.py`) e `config/escudos.csv` (`scripts/obter_escudos.py`) alimentam as tabelas `destaque_artilheiro`, `destaque_craque`, `destaque_goleiro` e `destaque_ataque`, ligadas a `dim_temporadas[ano]`. Fotos só entram com licença livre; sem foto, aparece uma silhueta. Quando a fonte não registra um prêmio, a linha diz "Não informado na fonte".
 
 ## Medidas DAX
 

@@ -1,37 +1,66 @@
 # Além do Placar
 
-Plataforma de inteligência esportiva sobre o **Campeonato Brasileiro Série A (2018–2025)**: engenharia de dados, estatística, Machine Learning, dashboard em Power BI e um assistente de IA que responde em português, sempre com fonte, período e limitações.
+Projeto de **Business Intelligence e Ciência de Dados** sobre o Campeonato Brasileiro Série A (2018–2025): pipeline de dados, análise exploratória, engenharia de atributos, Machine Learning com validação temporal, dashboard em Power BI e uma **Central de Consulta** que responde perguntas sobre o campeonato e o projeto, sem inteligência artificial paga.
 
 ![Página inicial](docs/divulgacao/captura_1_inicio.png)
 
-**Demonstração pública:** a definir após a publicação (veja `docs/deploy.md`).
+**Links:** site e Central de Consulta (GitHub Pages) e dashboard público do Power BI serão adicionados após a publicação. Passo a passo em `docs/deploy.md`.
+
+## Objetivo
+
+Responder com dados se o desempenho recente de uma equipe ajuda a antecipar os próximos jogos, e apresentar a resposta de forma que um torcedor entenda, um usuário leigo consiga explorar e um recrutador consiga auditar.
+
+Perguntas analisadas:
+
+- Quem foi campeão, quem caiu e como cada clube evoluiu entre temporadas?
+- Quais equipes têm melhor ataque, defesa, regularidade e desempenho em casa e fora?
+- É possível prever a média de pontos dos próximos 5 jogos? Com que erro?
+- Um modelo de Machine Learning supera uma regra simples?
 
 ## Resultados
 
 | Indicador | Valor |
 |---|---|
-| Partidas analisadas | 3.040 (380 por temporada, 20 clubes por temporada) |
+| Partidas analisadas | 3.040 (8 temporadas completas, 380 partidas cada) |
 | Fonte | OpenFootball, licença CC0 |
-| Alvo do modelo | Média de pontos nas próximas 5 partidas de uma equipe |
-| Modelo selecionado | Ridge, escolhido por validação temporal (2022–2024) |
-| Erro no holdout de 2025 (MAE) | **0,478**, contra 0,567 do baseline de média recente |
-| Cobertura do intervalo de 90% no holdout | 91,2% |
-| Testes automatizados | 337 aprovados, lint sem pendências |
+| Alvo do modelo | Média de pontos nos próximos 5 jogos da equipe |
+| Modelo selecionado | Regressão Ridge, escolhido na validação de 2022 a 2024 |
+| Erro médio absoluto no teste de 2025 | **0,478 ponto por jogo**, contra 0,567 da média dos últimos 5 jogos |
+| Cobertura da faixa de 90% no teste | 91,2% |
+| Testes automatizados | 367 (Python e Node), lint sem pendências |
 
-O holdout de 2025 não participou da escolha do modelo. Veja os limites em [Limitações](#limitações).
+O teste de 2025 não participou da escolha do modelo. A auditoria completa está em `docs/auditoria_ciencia_dados.md`.
 
 ## O que tem no projeto
 
 | Parte | O que faz |
 |---|---|
-| **Pipeline de dados** | Coleta, padronização de equipes, validação de integridade e tabelas analíticas em Parquet, consultadas com DuckDB |
-| **Atributos e modelagem** | Médias móveis de 3, 5 e 10 jogos, mando de campo, volatilidade; baseline, Ridge, Random Forest e HistGradientBoosting com backtesting de janela expansiva |
+| **Pipeline de dados** | Leitura do OpenFootball, padronização dos nomes dos clubes, validação de integridade e tabelas em Parquet, consultadas com DuckDB |
+| **Atributos e modelagem** | 12 atributos temporais sem vazamento; duas referências e três modelos (Ridge, Random Forest, Gradient Boosting) com backtesting de janela expansiva |
 | **Explicabilidade** | Importância por permutação, resíduos por equipe e temporada, erros extremos e model card |
-| **Dashboard Power BI** | Sete páginas geradas por código, com tema próprio e navegação |
-| **Assistente** | Chat em português sobre classificações, confrontos, mando, gols, sequências, rankings e previsões |
-| **Site** | Início, dashboard incorporado, assistente e metodologia, com design system próprio |
+| **Dashboard Power BI** | Sete páginas geradas por código, com identidade visual do futebol brasileiro: Visão Geral, Tendências, Estatísticas, Modelos, Previsões, Central de Consulta e Metodologia |
+| **Central de Consulta** | Busca em português sobre classificação, confrontos, artilheiros, indicadores, modelos e metodologia; estatísticas calculadas no navegador a partir das partidas |
+| **Site estático** | Início, dashboard incorporado, Central e metodologia, publicados no GitHub Pages sem servidor |
 
-![Assistente](docs/divulgacao/captura_2_assistente.png)
+![Central de Consulta](docs/divulgacao/captura_2_consulta.png)
+
+### Visão Geral do dashboard
+
+- Classificação da temporada com escudos, posição, pontos, jogos, vitórias, empates, derrotas, saldo, aproveitamento e zona (Libertadores, Sul-Americana, rebaixamento).
+- Desempate pelos critérios da CBF disponíveis nos dados: pontos, vitórias, saldo e gols marcados. As medidas ficam vazias se mais de uma temporada for selecionada, para nunca misturar anos.
+- Destaques reais da temporada: artilheiro, Craque do Brasileirão e Melhor Goleiro (prêmios oficiais, via Wikipédia), com foto de licença livre ou silhueta, e melhor ataque calculado.
+- 2025 e Flamengo como seleção inicial.
+
+### Central de Consulta
+
+- Sem API paga e sem servidor: base de conhecimento em `config/central_conhecimento.yaml` e partidas em JSON.
+- Os números das explicações são preenchidos a partir dos dados na geração; nada é escrito à mão.
+- Perguntas fora do tema recebem uma recusa educada. Perguntas no tema sem dados recebem "Não encontrei informações suficientes nos dados disponíveis para responder com segurança.".
+- Trata temporada inexistente, equipe ausente, nome ambíguo ("Atlético"), jogador sem foto e métricas indisponíveis (xG, posse).
+
+## Tecnologias
+
+Python 3.12 · pandas · DuckDB · PyArrow · scikit-learn · MLflow (local) · FastAPI (servidor local opcional) · Power BI (PBIP/PBIR, DAX, Power Query) · HTML, CSS e JavaScript sem framework · pytest · Node test runner · Ruff · GitHub Actions
 
 ## Arquitetura
 
@@ -42,89 +71,82 @@ flowchart LR
     C --> D[Atributos temporais]
     D --> E[Modelos e backtesting]
     E --> F[Previsões e métricas]
-    C --> G[Catálogo de consultas]
-    F --> G
-    G --> H[Assistente: Claude escolhe a consulta]
+    W[Wikipédia e Wikimedia] --> X[Destaques e escudos]
     C --> I[Projeto Power BI gerado por código]
     F --> I
-    H --> J[Site FastAPI]
-    I --> J
+    X --> I
+    C --> J[JSON públicos]
+    F --> J
+    X --> J
+    K[Base de conhecimento YAML] --> J
+    J --> L[Central de Consulta no navegador]
+    I --> M[Power BI publicado na web]
+    L --> N[Site estático no GitHub Pages]
+    M --> N
 ```
 
-Regras do assistente, definidas no PRD:
+## Metodologia de validação
 
-- A IA nunca escreve SQL. Ela só escolhe uma consulta de um catálogo fechado e redige a resposta com os números devolvidos.
-- Se nenhuma consulta se aplica, a resposta é a frase padrão de "não calculável", e o texto do modelo é descartado.
-- Sem chave de API, ou ao atingir o teto diário, o assistente continua em modo determinístico, por palavras-chave.
-- Perguntas sobre jogos futuros, clima ou xG recebem recusa explícita. Nenhum valor é inventado.
+1. Atributos calculados por equipe e temporada em ordem cronológica, só com jogos encerrados.
+2. Validação temporal: para cada ano de 2022 a 2024, treino apenas com o passado; uma linha só entra no treino quando os 5 jogos do seu alvo já terminaram.
+3. Escolha do modelo só na validação: ganho mínimo de 2% no MAE e nenhuma temporada com piora acima de 10%.
+4. Teste único em 2025, com o modelo já escolhido.
+5. Faixa de 90% a partir dos erros da validação, com cobertura medida no teste.
+
+Detalhes em `docs/methodology.md`, `docs/model_card.md` e `docs/auditoria_ciencia_dados.md`. Nomes, tipos e fórmulas de todas as variáveis estão em `docs/dicionario_de_dados.md`.
 
 ## Como executar
 
-Requisitos: Python 3.12 e Git.
+Requisitos: Python 3.12 e Git; Node.js para os testes do motor da Central (opcional).
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -e ".[test,lint]"
 python -B -m pytest          # testes (ou .\scripts\run_tests.ps1 para testes, lint e formatação)
-.\scripts\run_local.ps1      # site e assistente em http://127.0.0.1:8765
+.\scripts\run_local.ps1      # site e Central em http://127.0.0.1:8765
 ```
 
 O diretório `.venv/` é ignorado pelo Git.
 
-Para ativar o assistente com IA, copie `.env.example` para `.env` e preencha `LLM_API_KEY`. O arquivo `.env` nunca vai para o Git.
-
-Para regenerar o projeto Power BI e a imagem de compartilhamento:
+Outras tarefas:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts\gerar_powerbi.py
-.\.venv\Scripts\python.exe scripts\gerar_og.py
-```
-
-Para conferir uma instância em execução contra cálculos independentes:
-
-```powershell
-.\.venv\Scripts\python.exe scripts\smoke_test.py --url http://127.0.0.1:8765
+python scripts\build_site.py         # site estático em site/
+python scripts\gerar_powerbi.py      # projeto Power BI em dashboard/powerbi/AlemDoPlacar
+python scripts\gerar_dicionario.py   # docs/dicionario_de_dados.md
+python scripts\obter_escudos.py      # atualiza config/escudos.csv (Wikipédia)
+python scripts\obter_destaques.py    # atualiza config/destaques.csv (Wikipédia)
+python scripts\smoke_test.py --url http://127.0.0.1:8765
 ```
 
 ## Estrutura
 
 ```text
-config/            fontes de dados e parâmetros
-data/              raw, processed, predictions (somente os artefatos finais vão ao Git)
+config/            fontes, base de conhecimento da Central, escudos e destaques
+data/              processed e predictions versionados; raw fora do Git
 dashboard/         projeto Power BI gerado, template e tokens de design
-docs/              PRD, tarefas, metodologia, model card, contrato da API, deploy, QA
-scripts/           execução local, geração do Power BI, teste de fumaça
+docs/              PRD, tarefas, metodologia, model card, auditoria, dicionário, deploy e QA
+scripts/           execução local, geração do site, do Power BI e do dicionário, teste de fumaça
 src/               ingestion, validation, processing, features, models, evaluation, api
-tests/             testes unitários e de integração
+tests/             testes Python (unit) e JavaScript (js)
 ```
-
-## Documentação
-
-| Documento | Conteúdo |
-|---|---|
-| `docs/PRD.md` | Requisitos do produto |
-| `docs/TASKS.md` | Controle das tarefas e histórico de entregas |
-| `docs/methodology.md`, `docs/model_card.md` | Metodologia, modelo, métricas e hipóteses |
-| `docs/assistente_catalogo.md`, `docs/api_contrato.md` | Consultas do assistente e contrato da API |
-| `docs/dashboard_setup.md` | Geração e validação do Power BI |
-| `docs/deploy.md` | Publicação no Render e no Power BI |
-| `docs/roadmap.md` | Próximas melhorias |
 
 ## Limitações
 
-- Dados observacionais de uma única competição, com cerca de 33 observações por equipe no holdout. Os resultados não são causais.
-- Um único holdout temporal. Os alvos de partidas consecutivas se sobrepõem, então as observações não são independentes e não há teste de significância.
-- A hipótese de que a média móvel recente supera a média histórica **não se confirmou** na validação (MAE 0,604 contra 0,515 da média histórica global). O Ridge superou as duas referências na validação (MAE 0,489), mas o experimento não isola a contribuição de cada atributo.
-- Não há xG: a hipótese sobre métricas avançadas não pôde ser avaliada. Dados de 2026 não foram usados.
-- Previsões são estimativas retrospectivas, não certezas nem recomendação de aposta.
-- A chamada à Claude API foi testada com cliente simulado. A integração real depende de uma chave e ainda precisa de um teste manual.
-- O projeto Power BI foi gerado e testado por código, mas a abertura no Power BI Desktop depende de validação manual (`docs/qa/T008/checklist_desktop.md`).
+- Dados observacionais de uma única competição, com cerca de 33 observações por equipe no teste. Os resultados não são causais.
+- Um único período de teste. Os alvos de jogos consecutivos se sobrepõem, então não há teste de significância.
+- A hipótese de que a média recente supera a média histórica **não se confirmou** na validação.
+- A faixa de 90% é empírica e tem o mesmo tamanho para todas as previsões.
+- Não há xG, finalizações, posse de bola nem estatísticas individuais por jogo.
+- As zonas da tabela não consideram vagas extras por títulos de copas.
+- Artilheiros e prêmios vêm da Wikipédia, sem conferência direta com a CBF.
+- O dashboard é gerado por código. A versão anterior foi aberta e conferida no Power BI Desktop; a versão atual precisa ser reaberta lá antes de publicar (`docs/qa/T008/checklist_desktop.md`).
 
 ## Status do fluxo de trabalho
 
-As tarefas T001 a T009 têm código entregue e testado. Revisão técnica independente, QA funcional e aprovação final do responsável pelo projeto estão pendentes, e a publicação aguarda autorização. O histórico está em `docs/TASKS.md`.
+O código das tarefas T001 a T010 está entregue e testado. Revisão técnica independente, QA funcional e aprovação final do responsável estão pendentes, e a publicação aguarda autorização. Histórico em `docs/TASKS.md`.
 
 ## Licença
 
-Código sob licença MIT (`LICENSE`). Dados de partidas do OpenFootball em domínio público (CC0). Os arquivos de `dashboard/powerbi` mantêm os avisos de licença da Microsoft. Os escudos são marcas dos clubes, exibidos a partir da Wikimedia apenas para identificação, sem fins comerciais.
+Código sob licença MIT (`LICENSE`). Partidas do OpenFootball em domínio público (CC0). Fotos de jogadores da Wikimedia Commons com licenças livres, creditadas no dashboard e na Central. Os escudos são marcas dos clubes, exibidos a partir da Wikimedia apenas para identificação, sem fins comerciais. Os arquivos de `dashboard/powerbi` mantêm os avisos de licença da Microsoft.

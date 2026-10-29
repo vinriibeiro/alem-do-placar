@@ -65,6 +65,8 @@ p { margin: 0 0 var(--e4); }
 .hero h1 { color: #fff; font-size: var(--fs-3xl); max-width: 16ch; margin-bottom: var(--e4); }
 .hero__lead { font-size: var(--fs-lg); max-width: 56ch; color: #d6e2f0; margin-bottom: var(--e6); }
 .hero__acoes { display: flex; flex-wrap: wrap; gap: var(--e3); }
+.hero .btn--primario { background: var(--cor-amarelo); color: var(--cor-texto); }
+.hero .btn--primario:hover { background: #ffd970; color: var(--cor-texto); }
 .hero .btn--sec { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.5); }
 .hero .btn--sec:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
 
