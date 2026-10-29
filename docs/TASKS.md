@@ -5,8 +5,8 @@
 - **Projeto:** Além do Placar — Inteligência Esportiva e Ciência de Dados
 - **Versão:** 1.0
 - **PRD de referência:** `docs/PRD.md`
-- **Status geral:** PLANEJAMENTO
-- **Tarefa atual:** T001
+- **Status geral:** T001–T009 com código entregue (aguardando revisão Codex, QA Gemini e aprovação do usuário); T010 em desenvolvimento
+- **Tarefa atual:** T010 — QA final e publicação (plano em `docs/PLANO_LANCAMENTO_WEB.md`, fase F0 concluída em código)
 - **Responsável pelo projeto:** Vinícius Ribeiro
 - **Desenvolvimento:** Claude Code
 - **Revisão técnica:** Codex
@@ -52,16 +52,16 @@ A aprovação técnica não equivale à aprovação final do usuário.
 
 | ID | Funcionalidade | Responsável | Status |
 |---|---|---|---|
-| T001 | Fundação e configuração do projeto | Claude Code | PENDENTE |
-| T002 | Auditoria e seleção das fontes de dados | Claude Code | PENDENTE |
-| T003 | Pipeline de coleta e tratamento | Claude Code | PENDENTE |
-| T004 | Análise exploratória e estatística | Claude Code | PENDENTE |
-| T005 | Engenharia de atributos | Claude Code | PENDENTE |
-| T006 | Modelagem preditiva e backtesting | Claude Code | PENDENTE |
-| T007 | Explicabilidade e avaliação científica | Claude Code | PENDENTE |
-| T008 | Dashboard Power BI | Claude Code | PENDENTE |
-| T009 | Assistente de inteligência artificial | Claude Code | PENDENTE |
-| T010 | QA final, documentação e publicação | Claude Code | PENDENTE |
+| T001 | Fundação e configuração do projeto | Claude Code | AGUARDANDO APROVAÇÃO |
+| T002 | Auditoria e seleção das fontes de dados | Claude Code | AGUARDANDO APROVAÇÃO |
+| T003 | Pipeline de coleta e tratamento | Claude Code | AGUARDANDO APROVAÇÃO |
+| T004 | Análise exploratória e estatística | Claude Code | AGUARDANDO APROVAÇÃO |
+| T005 | Engenharia de atributos | Claude Code | AGUARDANDO APROVAÇÃO |
+| T006 | Modelagem preditiva e backtesting | Claude Code | AGUARDANDO APROVAÇÃO |
+| T007 | Explicabilidade e avaliação científica | Claude Code | AGUARDANDO APROVAÇÃO |
+| T008 | Dashboard Power BI | Claude Code | AGUARDANDO APROVAÇÃO |
+| T009 | Assistente de inteligência artificial | Claude Code | AGUARDANDO APROVAÇÃO |
+| T010 | QA final, documentação e publicação | Claude Code | EM DESENVOLVIMENTO |
 
 ---
 
@@ -577,7 +577,17 @@ Uma tarefa poderá receber status CONCLUÍDA somente quando:
 
 | Data | Tarefa | Resultado | Commit |
 |---|---|---|---|
-| — | — | Nenhuma entrega registrada | — |
+| 2026-10-29 | T001 | Código entregue; aguardando revisão Codex, QA Gemini e aprovação | 236671c |
+| 2026-10-29 | T002 | Código entregue; aguardando revisão, QA e aprovação | fdd9205 |
+| 2026-10-29 | T003 | Código entregue; aguardando revisão, QA e aprovação | 6842876, 82357e6 |
+| 2026-10-29 | T004 | Código entregue; aguardando revisão, QA e aprovação | 2dfdfab |
+| 2026-10-29 | T005 | Código entregue; aguardando revisão, QA e aprovação | f28105f |
+| 2026-10-29 | T006 | Código entregue; aguardando revisão, QA e aprovação | 8319757 |
+| 2026-10-29 | T007 | Código entregue; aguardando revisão, QA e aprovação | 03d5e80 |
+| 2026-10-29 | T008 | Código entregue; validação visual no Power BI Desktop pendente | d0656a9, 1bb01d8 |
+| 2026-10-29 | T009 | Código entregue; aguardando revisão, QA e aprovação | d962e98 |
+
+Nenhuma tarefa foi aprovada formalmente pelo usuário. Revisões Codex e QA Gemini ainda não foram registradas em `docs/qa/`.
 
 O histórico deverá ser atualizado a cada entrega aprovada.
 
@@ -587,16 +597,14 @@ Não registrar tarefas como concluídas sem evidência.
 
 # 12. PRÓXIMA TAREFA
 
-**ID:** T001  
-**Nome:** Fundação do projeto  
-**Responsável:** Claude Code  
-**Status:** PENDENTE
+**ID:** T010
+**Nome:** QA final, documentação e publicação
+**Responsável:** Claude Code
+**Status:** EM DESENVOLVIMENTO
 
-**Primeira ação:**
+**Referência:** `docs/PLANO_LANCAMENTO_WEB.md` (fases F0 a F5, com prompts por fase).
 
-Verificar a estrutura existente e implementar apenas os elementos necessários para estabelecer a fundação técnica do projeto.
-
-Após a implementação, executar testes e encaminhar para revisão Codex.
+**Fase atual:** F0 (higiene e base) concluída em código. Próxima: F1 — assistente v2 com Claude.
 
 ---
 
@@ -619,5 +627,5 @@ Trabalhe de forma eficiente, aproveitando o código existente. Evite análises r
 9. Alterações de escopo exigem atualização do PRD.
 10. A qualidade científica tem prioridade sobre a complexidade visual.
 
-**Status do projeto:** PLANEJAMENTO  
-**Próxima execução:** T001 — Fundação do projeto.
+**Status do projeto:** T001–T009 entregues em código; T010 em desenvolvimento  
+**Próxima execução:** T010, fase F1 — assistente v2 (ver plano de lançamento).

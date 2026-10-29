@@ -2,7 +2,7 @@
 
 **Status:** execução histórica real (T006) realizada pelo controlador, com fonte OpenFootball CC0 de 2018–2025 e holdout exclusivo de 2025. Não há dados de 2026.
 
-Explicabilidade e avaliação científica (T007): código e testes entregues. Os números da execução T007 ainda não foram produzidos e serão preenchidos pelo controlador após a execução real.
+Explicabilidade e avaliação científica (T007): código, testes e execução real entregues. Os números abaixo vêm de `data/predictions/cientifica/relatorio_cientifico.md`.
 
 ## Modelo e alvo
 
@@ -47,7 +47,26 @@ Intervalo de 90% empírico: quantil de 90% dos erros absolutos das previsões de
 
 ### Resultados da execução T007
 
-Pendente. A execução real de `avaliar_cientificamente` sobre o backtesting será registrada pelo controlador. Nenhum número da T007 foi produzido nesta entrega.
+Fonte: `data/predictions/cientifica/relatorio_cientifico.md` (versão T007-1.0, seed 42, 5 repetições de permutação, holdout 2025 de 2025-03-29 a 2025-11-15).
+
+| Métrica (holdout, n=660) | M01_ridge | M00_media_recente_5 |
+|---|---:|---:|
+| MAE | 0.478089 | 0.567091 |
+| RMSE | 0.590887 | 0.722596 |
+| Viés | -0.016830 | -0.001520 |
+
+Diferença de MAE (selecionado menos baseline): -0.089002. Cobertura do intervalo de 90%: 91,21%.
+
+Importância por permutação (ΔMAE médio, maiores): media_saldo_gols_5 +0.0151; media_pontos_visitante_historico +0.0124; media_pontos_10 +0.0058; media_pontos_5 +0.0039; media_pontos_mandante_historico +0.0031. Mando e dias de descanso ficaram próximos de zero ou negativos. É medida preditiva exploratória, não causal.
+
+Hipóteses (resultado observado nesta comparação, sem generalização):
+
+- H01 e H05: favoráveis. O Ridge supera o baseline no holdout.
+- H02: desfavorável. Na validação, a média recente (MAE 0.604) ficou pior que a média histórica global do treino (MAE 0.515). A referência B01 não é média por clube.
+- H03 e H04: não conclusivas.
+- H06: não avaliável, pois xG não está disponível.
+
+Erros extremos concentram-se em São Paulo, Bragantino e Vasco no segundo semestre de 2025. Os erros por equipe têm viés de sinal variado (por exemplo, SC Recife +0.52 e Mirassol -0.33), então não há ranking de mérito.
 
 ## Limitações
 

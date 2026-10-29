@@ -2,9 +2,20 @@
 
 Plataforma analítica de inteligência esportiva (futebol, Campeonato Brasileiro Série A) que combina engenharia de dados, estatística, Machine Learning, Power BI e um assistente de IA.
 
-**Status atual:** T004 — análise exploratória implementada e executada sobre 3.040 partidas reais de 2018–2025 do perfil OpenFootball CC0 verificado. Pipeline local validado; notebook e gráficos gerados. Modelos, API e dashboard serão desenvolvidos nas próximas tarefas.
+**Status atual:** T001–T009 com código entregue e testado localmente (264 testes, lint limpo). Dados reais OpenFootball CC0 2018–2025 (3.040 partidas), modelo Ridge selecionado (MAE 0,478 no holdout de 2025 contra 0,567 do baseline), projeto Power BI gerado e assistente local. Ainda não publicado: o plano de lançamento está em `docs/PLANO_LANCAMENTO_WEB.md`. Revisão Codex, QA Gemini e aprovação do usuário seguem pendentes.
 
 Referências: `docs/PRD.md` (requisitos), `docs/TASKS.md` (controle de tarefas), `docs/architecture.md` (arquitetura da fundação).
+
+## Como executar
+
+Com o ambiente criado (seção Ambiente virtual e Instalação):
+
+```powershell
+.\scriptsun_tests.ps1   # pytest, ruff check e ruff format --check
+.\scriptsun_local.ps1   # assistente em http://127.0.0.1:8765
+```
+
+Plano de publicação: `docs/PLANO_LANCAMENTO_WEB.md`.
 
 ## Requisitos
 
