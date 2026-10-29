@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "AlemDoPlacar"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ec716e19-72f8-4630-9e19-51a249ed2a08"
+  }
+}

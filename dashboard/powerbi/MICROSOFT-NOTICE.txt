@@ -1,0 +1,38 @@
+THIRD-PARTY NOTICES
+
+This file lists the third-party open-source components used at runtime by
+`@microsoft/powerbi-report-authoring-cli`. It does not list devDependencies
+(build/lint/test-only) since those are not distributed with the package.
+
+The Microsoft software is licensed under the MIT license (see LICENSE).
+The components below retain their own licenses; nothing here grants
+additional rights beyond those licenses.
+
+----------------------------------------------------------------------
+ajv (https://ajv.js.org/)
+  License: MIT
+  Copyright (c) 2015-present Evgeny Poberezkin
+
+ajv-formats (https://github.com/ajv-validator/ajv-formats)
+  License: MIT
+  Copyright (c) 2020 Evgeny Poberezkin
+
+commander (https://github.com/tj/commander.js)
+  License: MIT
+  Copyright (c) 2011 TJ Holowaychuk <tj@vision-media.ca>
+
+fast-deep-equal (https://github.com/epoberezkin/fast-deep-equal)
+  License: MIT
+  Copyright (c) 2017 Evgeny Poberezkin
+
+fast-uri (https://github.com/fastify/fast-uri)
+  License: BSD-3-Clause
+  Copyright (c) 2021 The Fastify Team
+
+json-schema-traverse (https://github.com/epoberezkin/json-schema-traverse)
+  License: MIT
+  Copyright (c) 2017 Evgeny Poberezkin
+
+require-from-string (https://github.com/floatdrop/require-from-string)
+  License: MIT
+  Copyright (c) Vsevolod Strukchinsky <floatdrop@gmail.com>
