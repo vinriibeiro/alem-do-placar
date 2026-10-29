@@ -96,14 +96,17 @@ def test_entrada_invalida_e_campo_extra_rejeitados(cliente):
     assert cliente.post("/api/pergunta", json={**PERGUNTA, "equipe": "x" * 101}).status_code == 422
 
 
-def test_html_sem_cdn_sem_innerhtml_com_fontes_e_selo(cliente):
-    r = cliente.get("/")
-    assert r.status_code == 200 and "text/html" in r.headers["content-type"]
-    html = r.text
-    assert "Histórico 2018–2025" in html and "Segoe UI" in html and "Além do Placar" in html
-    assert "#17364D" in html and "#188A8A" in html
-    assert "http://" not in html and "https://" not in html
-    assert "innerHTML" not in html
+def test_paginas_html_com_navegacao_e_identidade(cliente):
+    for rota, titulo in (
+        ("/", "Além do Placar"),
+        ("/dashboard", "Dashboard"),
+        ("/assistente", "Assistente"),
+        ("/metodologia", "Metodologia"),
+    ):
+        r = cliente.get(rota)
+        assert r.status_code == 200 and "text/html" in r.headers["content-type"]
+        assert titulo in r.text and 'lang="pt-BR"' in r.text and "og:image" in r.text
+        assert 'aria-current="page"' in r.text and "{{" not in r.text
 
 
 def test_sem_dados_retorna_503(tmp_path):

@@ -71,7 +71,12 @@ class Servico:
         return random.sample(todas, min(n, len(todas)))
 
     def contexto(self) -> dict:
-        return self.base.contexto() | {"temas": TEMAS, "llm_ativo": self.agente.disponivel}
+        ctx = self.base.contexto()
+        hist = self.base._hist
+        if hist is not None:
+            # Cada partida gera duas linhas (uma por equipe).
+            ctx |= {"partidas": len(hist) // 2, "temporadas": len(ctx["anos"])}
+        return ctx | {"temas": TEMAS, "llm_ativo": self.agente.disponivel}
 
     def perguntar(self, pergunta: str, ano: int | None, equipe: str | None) -> dict:
         aviso = None

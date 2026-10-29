@@ -405,7 +405,6 @@ class Catalogo:
             {
                 "posicao": i + 1,
                 "equipe": e,
-                "metrica": rot,
                 "valor": _num(v, 3 if metrica == "consistencia" else 2),
             }
             for i, (e, v) in enumerate(serie.head(top).items())

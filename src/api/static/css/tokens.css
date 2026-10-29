@@ -1,0 +1,61 @@
+/* Design tokens — Além do Placar.
+   Fonte única da identidade visual. Espelhados em dashboard/assets/tema_tokens.json
+   para o tema do Power BI; altere os dois juntos. */
+:root {
+  /* Cor */
+  --cor-primaria: #0b2545;
+  --cor-primaria-700: #12345c;
+  --cor-primaria-100: #e6edf6;
+  --cor-destaque: #0f8f68;
+  --cor-destaque-700: #0b6f50;
+  --cor-destaque-100: #e3f5ee;
+  --cor-fundo: #f6f8fa;
+  --cor-superficie: #ffffff;
+  --cor-borda: #e1e7ee;
+  --cor-borda-forte: #c5cfda;
+  --cor-texto: #14212e;
+  --cor-texto-suave: #4f5f70;
+  --cor-sucesso: #1a7f4b;
+  --cor-alerta: #9a6700;
+  --cor-alerta-fundo: #fff6e0;
+  --cor-erro: #b42318;
+  --cor-erro-fundo: #fdecea;
+  --serie-1: #0b2545;
+  --serie-2: #0f8f68;
+  --serie-3: #e0a526;
+  --serie-4: #5b8def;
+  --serie-5: #c2410c;
+  --serie-6: #7a8ca3;
+
+  /* Tipografia */
+  --fonte: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.1875rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: clamp(2.125rem, 5vw, 3.25rem);
+  --lh: 1.55;
+
+  /* Espaço (múltiplos de 4 px) */
+  --e1: 0.25rem;
+  --e2: 0.5rem;
+  --e3: 0.75rem;
+  --e4: 1rem;
+  --e5: 1.25rem;
+  --e6: 1.5rem;
+  --e8: 2rem;
+  --e10: 2.5rem;
+  --e12: 3rem;
+  --e16: 4rem;
+
+  /* Forma */
+  --raio-sm: 8px;
+  --raio: 12px;
+  --raio-lg: 20px;
+  --sombra-1: 0 1px 2px rgba(11, 37, 69, 0.06), 0 1px 3px rgba(11, 37, 69, 0.08);
+  --sombra-2: 0 4px 12px rgba(11, 37, 69, 0.08), 0 2px 4px rgba(11, 37, 69, 0.06);
+  --foco: 0 0 0 3px rgba(15, 143, 104, 0.45);
+  --largura: 1120px;
+}

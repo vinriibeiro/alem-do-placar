@@ -36,4 +36,5 @@ class Config:
         self.llm_diario = int(e.get("LLM_DAILY_LIMIT") or 500)
         self.taxa_por_min = int(e.get("RATE_LIMIT_PER_MIN") or 20)
         self.embed_url = (e.get("POWERBI_EMBED_URL") or "").strip()
+        self.repo_url = (e.get("REPO_URL") or "").strip()
         self.confia_proxy = (e.get("TRUST_PROXY") or "").lower() in {"1", "true", "yes"}

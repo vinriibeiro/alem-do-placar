@@ -1,0 +1,29 @@
+<div class="conteiner">
+  <div class="pagina-titulo">
+    <h1>Dashboard</h1>
+    <p>Relatório interativo em Power BI. Use a barra superior do relatório para navegar entre as sete páginas e os filtros para escolher equipe e temporada.</p>
+  </div>
+  <div class="barra">
+    <span class="selo" id="dash-status">Carregando…</span>
+    <div class="barra__acoes" id="dash-acoes" hidden>
+      <button class="btn btn--sec" type="button" id="dash-tela-cheia">Tela cheia</button>
+      <a class="btn btn--sec" id="dash-nova-aba" href="#" target="_blank" rel="noopener">Abrir em nova aba</a>
+    </div>
+  </div>
+  <div class="moldura" id="dash-moldura">
+    <div class="moldura__carregando" id="dash-carregando">Preparando o relatório…</div>
+  </div>
+  <div class="vazio card" id="dash-vazio" hidden>
+    <h2>Dashboard em publicação</h2>
+    <p>O relatório do Power BI ainda não foi publicado nesta instalação. Enquanto isso, o assistente já responde às mesmas perguntas com os mesmos dados.</p>
+    <p><a class="btn btn--primario" href="/assistente">Ir para o assistente</a></p>
+    <ul class="lista-paginas">
+      <li><strong>Visão Geral:</strong> partidas, gols, pontos e rankings.</li>
+      <li><strong>Tendências:</strong> médias móveis e comparação entre equipes.</li>
+      <li><strong>Estatística:</strong> distribuições, mando e volatilidade.</li>
+      <li><strong>Laboratório de Modelos:</strong> baseline contra Ridge, MAE e RMSE.</li>
+      <li><strong>Previsões:</strong> próximas cinco partidas com intervalo de 90%.</li>
+      <li><strong>Assistente e Metodologia:</strong> perguntas e limites do projeto.</li>
+    </ul>
+  </div>
+</div>

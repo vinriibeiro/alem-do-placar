@@ -11,15 +11,18 @@ from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from api.assistant import BaseConsultas
 from api.config import Config
+from api.paginas import FIGURAS, Paginas
 from api.servico import Servico
 
-ESTATICO = Path(__file__).resolve().parent / "static" / "index.html"
+ESTATICO = Path(__file__).resolve().parent / "static"
+HOSTS_EMBED = ("https://app.powerbi.com/", "https://app.fabric.microsoft.com/")
 MAX_CORPO = 4096
 
 
@@ -66,7 +69,8 @@ def create_app(
     config = Config(env)
     base = BaseConsultas(Path(raiz))
     servico = Servico(base, config, cliente_llm)
-    html = ESTATICO.read_text(encoding="utf-8")
+    paginas = Paginas(Path(raiz))
+    pasta_figuras = Path(raiz) / "data" / "predictions" / "cientifica"
     app = FastAPI(title="Além do Placar", docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=config.hosts)
 
@@ -76,6 +80,8 @@ def create_app(
         if tamanho and tamanho.isdigit() and int(tamanho) > MAX_CORPO:
             return JSONResponse({"detail": "corpo muito grande"}, status_code=413)
         resposta = await call_next(request)
+        if request.url.path.startswith("/static/"):
+            resposta.headers.setdefault("Cache-Control", "public, max-age=3600")
         resposta.headers.setdefault("X-Content-Type-Options", "nosniff")
         resposta.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
         return resposta
@@ -85,9 +91,32 @@ def create_app(
         # Não devolve o corpo recebido nem detalhes internos da validação.
         return JSONResponse({"detail": "entrada inválida"}, status_code=422)
 
-    @app.get("/", response_class=HTMLResponse)
-    def pagina() -> str:
-        return html
+    def _rota_pagina(caminho: str, nome: str) -> None:
+        @app.get(caminho, response_class=HTMLResponse, name=nome)
+        def _pagina() -> str:
+            return paginas.html[nome]
+
+    for caminho, nome in (
+        ("/", "inicio"),
+        ("/dashboard", "dashboard"),
+        ("/assistente", "assistente"),
+        ("/metodologia", "metodologia"),
+    ):
+        _rota_pagina(caminho, nome)
+
+    app.mount("/static", StaticFiles(directory=ESTATICO), name="static")
+
+    @app.get("/figuras/{nome}")
+    def figura(nome: str):
+        if nome not in FIGURAS or not (pasta_figuras / nome).is_file():
+            return JSONResponse({"detail": "não encontrado"}, status_code=404)
+        return FileResponse(pasta_figuras / nome, headers={"Cache-Control": "public, max-age=3600"})
+
+    @app.get("/api/config")
+    def configuracao() -> dict:
+        embed = config.embed_url if config.embed_url.startswith(HOSTS_EMBED) else ""
+        repo = config.repo_url if config.repo_url.startswith("https://") else ""
+        return {"powerbi_embed_url": embed, "repo_url": repo, "versao": "0.1.0"}
 
     @app.get("/health")
     def saude() -> dict:

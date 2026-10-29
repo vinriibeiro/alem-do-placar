@@ -1,0 +1,40 @@
+{
+  "fonte": "src/api/static/css/tokens.css",
+  "cores": {
+    "cor-primaria": "#0b2545",
+    "cor-primaria-700": "#12345c",
+    "cor-primaria-100": "#e6edf6",
+    "cor-destaque": "#0f8f68",
+    "cor-destaque-700": "#0b6f50",
+    "cor-destaque-100": "#e3f5ee",
+    "cor-fundo": "#f6f8fa",
+    "cor-superficie": "#ffffff",
+    "cor-borda": "#e1e7ee",
+    "cor-borda-forte": "#c5cfda",
+    "cor-texto": "#14212e",
+    "cor-texto-suave": "#4f5f70",
+    "cor-sucesso": "#1a7f4b",
+    "cor-alerta": "#9a6700",
+    "cor-alerta-fundo": "#fff6e0",
+    "cor-erro": "#b42318",
+    "cor-erro-fundo": "#fdecea",
+    "serie-1": "#0b2545",
+    "serie-2": "#0f8f68",
+    "serie-3": "#e0a526",
+    "serie-4": "#5b8def",
+    "serie-5": "#c2410c",
+    "serie-6": "#7a8ca3"
+  },
+  "serie": [
+    "#0b2545",
+    "#0f8f68",
+    "#e0a526",
+    "#5b8def",
+    "#c2410c",
+    "#7a8ca3"
+  ],
+  "tipografia": {
+    "familia": "Inter",
+    "alternativa": "Segoe UI"
+  }
+}
