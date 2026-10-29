@@ -12,6 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from api.catalogo import Catalogo, ConsultaErro, catalogo_disponivel
 from processing.padronizacao import normalizar_texto
 
 NAO_CALCULAVEL = (
@@ -69,6 +70,53 @@ RADICAIS = (
     ("evolucao", ("evolu", "tendenc", "queda", "declin", "cresc")),
 )
 QUEDA = ("queda", "declin", "cai")
+
+TEMAS = [
+    {
+        "categoria": "Classificação",
+        "exemplos": ["Qual foi a classificação de 2024?", "Quem foi o campeão de 2025?"],
+    },
+    {
+        "categoria": "Equipes",
+        "exemplos": ["Resumo do Flamengo em 2025", "Compare Palmeiras e Flamengo em 2025"],
+    },
+    {"categoria": "Confrontos", "exemplos": ["Histórico de confrontos entre Flamengo e Palmeiras"]},
+    {
+        "categoria": "Mando de campo",
+        "exemplos": ["Como o Corinthians vai como mandante e visitante?"],
+    },
+    {
+        "categoria": "Gols",
+        "exemplos": [
+            "Quantos gols por jogo em cada temporada?",
+            "Quais foram as maiores goleadas?",
+        ],
+    },
+    {
+        "categoria": "Sequências",
+        "exemplos": ["Maior sequência invicta de 2025", "Maior sequência de derrotas do Santos"],
+    },
+    {
+        "categoria": "Rankings",
+        "exemplos": ["Qual a melhor defesa de 2024?", "Quem teve o melhor ataque em 2023?"],
+    },
+    {
+        "categoria": "Tendências",
+        "exemplos": [
+            "Qual equipe mais evoluiu?",
+            "Quais clubes têm tendência de queda?",
+            "Qual equipe foi mais consistente em 2025?",
+        ],
+    },
+    {
+        "categoria": "Modelo preditivo",
+        "exemplos": [
+            "Qual é a previsão do Flamengo?",
+            "Qual é o erro médio do modelo?",
+            "Quais variáveis mais influenciaram o modelo?",
+        ],
+    },
+]
 
 
 def _tokens(texto: str) -> list[str]:
@@ -180,6 +228,7 @@ class BaseConsultas:
         self._metricas = self._carregar(
             raiz, "metricas", lambda p: json.loads(p.read_text(encoding="utf-8"))
         )
+        self.catalogo = Catalogo(self._hist) if catalogo_disponivel(self._hist) else None
         self._bases = {"hist": self._hist, "prev": self._prev, "imp": self._imp}
         if self._hist is not None:
             self._anos = sorted(int(a) for a in self._hist["temporada"].unique())
@@ -213,11 +262,25 @@ class BaseConsultas:
             )
         intencao = _intencao(tokens)
         if intencao is None:
+            doc = self._rotear_catalogo(pergunta, tokens, ano, equipe)
+            if doc is not None:
+                return doc
             return self._resposta(
                 "fora_escopo",
                 f"{NAO_CALCULAVEL} A pergunta não corresponde a uma consulta autorizada.",
                 limitacoes=[SUPORTADAS],
             )
+        return self._executar(intencao, pergunta, ano, equipe, tokens)
+
+    def executar_modelo(
+        self, intencao: str, ano: int | None = None, equipe: str | None = None, queda: bool = False
+    ) -> dict:
+        """Executa uma consulta de modelo/tendência já classificada (ferramentas do LLM)."""
+        if intencao not in self._consultas:
+            return self._resposta("fora_escopo", f"{NAO_CALCULAVEL} Consulta não autorizada.")
+        return self._executar(intencao, "", ano, equipe, ["queda"] if queda else [])
+
+    def _executar(self, intencao, pergunta, ano, equipe, tokens) -> dict:
         handler, bases, usa_ano, usa_equipe = self._consultas[intencao]
         if intencao in {"previsao", "erro", "importancia", "explicacao"} and any(
             not isinstance(self._meta.get(campo), str) or not self._meta[campo].strip()
@@ -400,6 +463,90 @@ class BaseConsultas:
                     + ". Informe o nome completo.",
                 )
         return None, None
+
+    # ---------- roteamento determinístico do catálogo (fallback sem LLM) ----------
+    def _rotear_catalogo(self, pergunta, tokens, ano, equipe):
+        cat = self.catalogo
+        if cat is None:
+            return None
+
+        def tem(*rad) -> bool:
+            return any(t.startswith(rad) for t in tokens)
+
+        times = _candidatas(pergunta, self._equipes)
+        if not times and equipe:
+            times = _candidatas(equipe, self._equipes)
+        citados = sorted({int(a) for a in re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)", pergunta)})
+        if len(citados) > 1:
+            return self._resposta(
+                "esclarecimento", "A pergunta cita mais de um ano. Escolha um ano por pergunta."
+            )
+        ano_ef = citados[0] if citados else ano
+        try:
+            if tem("classific", "tabela", "campea", "campeo", "lider", "rebaix", "g4", "z4"):
+                r = cat.classificacao(ano_ef, 5 if tem("lider", "campea", "campeo") else None)
+            elif tem("confronto", "versus", "vs") or (len(times) == 2 and tem("contra")):
+                r = cat.confronto_direto(*self._dois(times), ano_ef)
+            elif tem("compar") or len(times) == 2:
+                r = cat.comparar_equipes(*self._dois(times), ano_ef)
+            elif tem("mandante", "visitante") or {"casa", "fora"} & set(tokens):
+                r = cat.mando(self._um(times), ano_ef) if times else cat.mando(None, ano_ef)
+            elif tem("gol", "goleada", "placar"):
+                if tem("pro", "marcad", "ataque", "mais", "melhor") and not times:
+                    r = cat.ranking("ataque", ano_ef)
+                else:
+                    r = cat.gols(ano_ef)
+            elif tem("sequenc", "invict", "serie"):
+                tipo = "invicta"
+                if tem("derrota", "perd"):
+                    tipo = "derrotas"
+                elif tem("vitoria", "venc", "ganh"):
+                    tipo = "vitorias"
+                r = cat.sequencias(tipo, self._um(times) if times else None, ano_ef)
+            elif tem("ataque", "defesa", "ranking", "pontuou", "pontu", "aproveitamento", "saldo"):
+                metrica = (
+                    "defesa"
+                    if tem("defesa")
+                    else "ataque"
+                    if tem("ataque")
+                    else "aproveitamento"
+                    if tem("aproveit")
+                    else "saldo"
+                    if tem("saldo")
+                    else "pontos"
+                )
+                r = cat.ranking(metrica, ano_ef)
+            elif times and tem("resumo", "campanha", "temporada", "desempenho", "como"):
+                r = cat.resumo_equipe(self._um(times), ano_ef)
+            else:
+                return None
+        except ConsultaErro as exc:
+            return self._resposta("esclarecimento", str(exc))
+        return self._resposta(
+            r.get("status", "ok"),
+            r["texto_base"],
+            r["dados"],
+            r["fonte"],
+            r["periodo"],
+            r["limitacoes"],
+        )
+
+    @staticmethod
+    def _um(times: list[str]) -> str:
+        if len(times) != 1:
+            raise ConsultaErro(
+                "Informe uma única equipe" + (f" ({', '.join(times)})." if times else ".")
+            )
+        return times[0]
+
+    @staticmethod
+    def _dois(times: list[str]) -> tuple[str, str]:
+        if len(times) != 2:
+            raise ConsultaErro("Informe exatamente duas equipes para esta consulta.")
+        return times[0], times[1]
+
+    def temas(self) -> list[dict]:
+        return TEMAS
 
     @staticmethod
     def _periodo(ano: int, datas: pd.Series) -> str:

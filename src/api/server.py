@@ -11,6 +11,7 @@ from pathlib import Path
 import uvicorn
 
 from api.app import create_app
+from api.config import carregar_env_local
 
 HOST = "127.0.0.1"
 
@@ -20,6 +21,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--raiz", required=True, type=Path, help="pasta do projeto")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args(argv)
+    carregar_env_local(args.raiz)
     app = create_app(args.raiz)
     uvicorn.run(
         app,
