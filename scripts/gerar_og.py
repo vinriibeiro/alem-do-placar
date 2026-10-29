@@ -47,7 +47,7 @@ def gerar_og(t: dict[str, str]) -> Path:
     ax.plot([600, 600], [0, 630], color="white", alpha=0.07, lw=3)
     ax.add_patch(Circle((600, 315), 150, fill=False, ec="white", alpha=0.07, lw=3))
     ax.add_patch(Circle((1010, 470), 220, color=t["cor-destaque"], alpha=0.35))
-    ax.text(80, 420, "BRASILEIRÃO SÉRIE A · 2018–2025", color="#9fe3cb", fontsize=17, weight="bold")
+    ax.text(80, 420, "BRASILEIRÃO SÉRIE A · 2018–2025", color="#f3c84b", fontsize=17, weight="bold")
     ax.text(80, 320, "Além do Placar", color="white", fontsize=64, weight="bold")
     ax.text(
         80,

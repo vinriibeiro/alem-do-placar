@@ -1,8 +1,8 @@
-"""Layout PBIR do relatório Além do Placar (F3): tema, cabeçalho, navegação e as sete páginas.
+"""Layout PBIR do relatório Além do Placar: tema, cabeçalho, navegação e as sete páginas.
 
-Canvas 1280x720. Cabeçalho em 0–64, navegação em 68–104, conteúdo em 112–692 e rodapé em
-698–718, com margem lateral de 16 px e espaçamento de 12 px. Todas as cores vêm de tokens
-compartilhados com o site (``dashboard/assets/tema_tokens.json``).
+Canvas 1280x720. Faixa do cabeçalho em 0–72, filete amarelo em 72–76, navegação em 82–114,
+conteúdo em 122–688 e rodapé em 694–718, com margem lateral de 16 px e espaçamento de 12 px.
+As cores vêm dos tokens compartilhados com o site (``dashboard/assets/tema_tokens.json``).
 """
 
 from __future__ import annotations
@@ -10,38 +10,49 @@ from __future__ import annotations
 import hashlib
 from typing import Any
 
+from evaluation.nomes import ALVO
+
 FATO = "fato_desempenho_equipes"
 SCHEMA_PAGINA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json"
 SCHEMA_VISUAL = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
 
 LARGURA, ALTURA = 1280, 720
 MARGEM, ESPACO = 16, 12
-TOPO_CONTEUDO, FIM_CONTEUDO = 112, 692
-LARGURA_UTIL = LARGURA - 2 * MARGEM  # 1248
+TOPO, FIM = 122, 688
+UTIL = LARGURA - 2 * MARGEM  # 1248
 
 TOKENS_PADRAO = {
-    "cor-primaria": "#0b2545",
-    "cor-primaria-100": "#e6edf6",
-    "cor-destaque": "#0f8f68",
-    "cor-destaque-700": "#0b6f50",
-    "cor-fundo": "#f6f8fa",
+    "cor-primaria": "#075e45",
+    "cor-primaria-100": "#e3f1eb",
+    "cor-destaque": "#15966a",
+    "cor-destaque-700": "#0e7a55",
+    "cor-amarelo": "#f3c84b",
+    "cor-fundo": "#f3f5f4",
     "cor-superficie": "#ffffff",
-    "cor-borda": "#e1e7ee",
-    "cor-borda-forte": "#c5cfda",
-    "cor-texto": "#14212e",
-    "cor-texto-suave": "#4f5f70",
+    "cor-borda": "#dde3e1",
+    "cor-borda-forte": "#c3ccc9",
+    "cor-texto": "#202b29",
+    "cor-texto-suave": "#55625f",
     "cor-sucesso": "#1a7f4b",
     "cor-alerta": "#9a6700",
     "cor-erro": "#b42318",
-    "serie-1": "#0b2545",
-    "serie-2": "#0f8f68",
-    "serie-3": "#e0a526",
-    "serie-4": "#5b8def",
-    "serie-5": "#c2410c",
-    "serie-6": "#7a8ca3",
+    "serie-1": "#075e45",
+    "serie-2": "#15966a",
+    "serie-3": "#f3c84b",
+    "serie-4": "#202b29",
+    "serie-5": "#7fb8a4",
+    "serie-6": "#b98f1c",
 }
 FONTE = "Segoe UI"
 FONTE_TITULO = "Segoe UI Semibold"
+FONTE_VALOR = "'''Segoe UI Bold'', wf_segoe-ui_bold, helvetica, arial, sans-serif'"
+CINZA_LIMITE = "#AEB8B5"
+# Silhueta neutra (SVG embutido) para destaques sem foto com licença livre.
+SEM_FOTO = (
+    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>"
+    "<rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' "
+    "fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>"
+)
 
 
 def _cor(tokens: dict[str, str], nome: str) -> str:
@@ -55,22 +66,22 @@ def construir_tema(tokens: dict[str, str]) -> dict[str, Any]:
     solido = lambda hexa: {"solid": {"color": hexa}}  # noqa: E731
     return {
         "name": "AlemDoPlacar",
-        "dataColors": serie + ["#9fe3cb", "#f4c978", "#a9c1f5", "#e8a27c"],
+        "dataColors": serie + ["#a8d5c2", "#f8dd8f", "#5b6b67", "#3fb58a"],
         "background": c("cor-superficie"),
         "foreground": c("cor-texto"),
         "tableAccent": c("cor-destaque"),
         "good": c("cor-sucesso"),
-        "neutral": serie[2],
+        "neutral": c("cor-amarelo"),
         "bad": c("cor-erro"),
         "maximum": c("cor-destaque"),
-        "center": serie[2],
+        "center": c("cor-amarelo"),
         "minimum": c("cor-erro"),
         "null": c("cor-borda-forte"),
         "textClasses": {
             "callout": {"fontSize": 28, "fontFace": FONTE_TITULO, "color": c("cor-primaria")},
-            "title": {"fontSize": 13, "fontFace": FONTE_TITULO, "color": c("cor-primaria")},
-            "header": {"fontSize": 12, "fontFace": FONTE_TITULO, "color": c("cor-primaria")},
-            "label": {"fontSize": 11, "fontFace": FONTE, "color": c("cor-texto-suave")},
+            "title": {"fontSize": 12, "fontFace": FONTE_TITULO, "color": c("cor-texto")},
+            "header": {"fontSize": 11, "fontFace": FONTE_TITULO, "color": c("cor-texto")},
+            "label": {"fontSize": 10, "fontFace": FONTE, "color": c("cor-texto-suave")},
         },
         "visualStyles": {
             "*": {
@@ -78,27 +89,73 @@ def construir_tema(tokens: dict[str, str]) -> dict[str, Any]:
                     "title": [
                         {
                             "show": True,
-                            "fontColor": solido(c("cor-primaria")),
-                            "fontSize": 13,
+                            "fontColor": solido(c("cor-texto")),
+                            "fontSize": 12,
                             "fontFamily": FONTE_TITULO,
                         }
                     ],
                     "background": [
                         {"show": True, "color": solido(c("cor-superficie")), "transparency": 0}
                     ],
-                    "border": [{"show": True, "color": solido(c("cor-borda")), "radius": 8}],
+                    "border": [
+                        {"show": True, "color": solido(c("cor-borda")), "radius": 8, "width": 1}
+                    ],
+                    "dropShadow": [{"show": False}],
                 }
             },
             "page": {
-                "*": {
-                    "background": [{"color": solido(c("cor-fundo")), "transparency": 0}],
-                }
+                "*": {"background": [{"color": solido(c("cor-fundo")), "transparency": 0}]},
             },
         },
     }
 
 
 # --- Primitivas PBIR -------------------------------------------------------------------------
+
+ROTULOS = {
+    "nome_padronizado": "Equipe",
+    "equipe": "Equipe",
+    "escudo": " ",
+    "ano": "Temporada",
+    "temporada": "Temporada",
+    "data_referencia": "Data",
+    "previsao": "Previsão",
+    "limite_inferior": "Limite inferior",
+    "limite_superior": "Limite superior",
+    "resultado_equipe": "Resultado",
+    "variavel": "Variável",
+    "nome": " ",
+    "tipo": "Tipo",
+    "mae_validacao": "MAE validação",
+    "rmse_validacao": "RMSE validação",
+    "mae_teste": "MAE teste 2025",
+    "rmse_teste": "RMSE teste 2025",
+    "diferenca_referencia": "vs. referência",
+    "selecionado": "Escolhido",
+    "imagem": " ",
+    "detalhe": " ",
+    "Posição": "Pos.",
+    "Zona": "Zona",
+    "Pontos (temporada)": "P",
+    "Jogos (temporada)": "J",
+    "Vitórias (temporada)": "V",
+    "Empates (temporada)": "E",
+    "Derrotas (temporada)": "D",
+    "Saldo (temporada)": "SG",
+    "Aproveitamento (temporada)": "Aprov.",
+    "Média recente": "Últimos 5 jogos",
+    "Média 10 jogos": "Últimos 10 jogos",
+    "Média prevista": "Previsto",
+    "Média observada": "Real",
+    "Limite inferior": "Limite inferior (90%)",
+    "Limite superior": "Limite superior (90%)",
+    "Importância": "Aumento do erro",
+    "MAE do modelo": "Erro médio absoluto (MAE)",
+    "RMSE do modelo": "RMSE",
+    "Volatilidade de pontos": "Oscilação",
+    "Gols por jogo": "Gols marcados/jogo",
+    "Gols sofridos por jogo": "Gols sofridos/jogo",
+}
 
 
 def _id(*partes: str) -> str:
@@ -122,27 +179,6 @@ def m_(nome: str) -> tuple[str, str, str]:
     return (FATO, nome, "Measure")
 
 
-ROTULOS = {
-    "nome_padronizado": "Equipe",
-    "equipe": "Equipe",
-    "escudo": "Escudo",
-    "ano": "Temporada",
-    "temporada": "Temporada",
-    "data_referencia": "Data",
-    "previsao": "Previsão",
-    "limite_inferior": "Limite inferior",
-    "limite_superior": "Limite superior",
-    "fase": "Fase",
-    "modelo": "Modelo",
-    "mae": "MAE",
-    "rmse": "RMSE",
-    "vies": "Viés",
-    "atributo": "Variável",
-    "mando_campo": "Mando",
-    "pontos": "Pontos no jogo",
-}
-
-
 def _campo(ref: tuple[str, str, str]) -> dict:
     tabela, campo, tipo = ref
     return {tipo: {"Expression": {"SourceRef": {"Entity": tabela}}, "Property": campo}}
@@ -156,89 +192,16 @@ def _projecao(ref: tuple[str, str, str]) -> dict:
     return proj
 
 
-def _envelope(pos: tuple[int, int, int, int], visual: dict) -> dict:
+def _envelope(pos: tuple[int, int, int, int], visual: dict, chave: str | None = None) -> dict:
     x, y, largura, altura = pos
-    return {"position": {"x": x, "y": y, "width": largura, "height": altura}, "visual": visual}
+    env = {"position": {"x": x, "y": y, "width": largura, "height": altura}, "visual": visual}
+    if chave:
+        env["chave"] = chave
+    return env
 
 
-class Estilo:
-    """Cores e fontes resolvidas dos tokens."""
-
-    def __init__(self, tokens: dict[str, str]) -> None:
-        self.t = tokens
-        self.primaria = _cor(tokens, "cor-primaria")
-        self.destaque = _cor(tokens, "cor-destaque")
-        self.destaque_escuro = _cor(tokens, "cor-destaque-700")
-        self.superficie = _cor(tokens, "cor-superficie")
-        self.borda = _cor(tokens, "cor-borda")
-        self.texto = _cor(tokens, "cor-texto")
-        self.suave = _cor(tokens, "cor-texto-suave")
-        self.alerta = _cor(tokens, "cor-alerta")
-        self.claro = _cor(tokens, "cor-primaria-100")
-
-
-def _fundo(est: Estilo, cor: str | None, borda: bool) -> dict:
-    objetos: dict[str, Any] = {
-        "background": [
-            {
-                "properties": {
-                    "show": _lit("true"),
-                    "color": _solido(cor or est.superficie),
-                    "transparency": _lit("0D"),
-                }
-            }
-        ]
-    }
-    if borda:
-        objetos["border"] = [
-            {
-                "properties": {
-                    "show": _lit("true"),
-                    "color": _solido(est.borda),
-                    "radius": _lit("8D"),
-                }
-            }
-        ]
-    return objetos
-
-
-def caixa_texto(
-    est: Estilo,
-    pos: tuple[int, int, int, int],
-    paragrafos: list[dict],
-    fundo: str | None = None,
-    borda: bool = False,
-    respiro: tuple[int, int, int, int] = (8, 8, 12, 12),
-) -> dict:
-    """``paragrafos``: dicts com ``texto``, ``tamanho``, ``cor``, ``negrito``, ``url``, ``alinhar``.
-
-    ``respiro`` é o espaçamento interno (cima, baixo, esquerda, direita) em px.
-    """
-    blocos = []
-    for p in paragrafos:
-        estilo = {
-            "fontFamily": FONTE,
-            "fontSize": f"{p.get('tamanho', 12)}px",
-            "color": p.get("cor", est.texto),
-        }
-        if p.get("negrito"):
-            estilo["fontWeight"] = "bold"
-        if p.get("url"):
-            estilo["textDecoration"] = "underline"
-        execucao: dict[str, Any] = {"value": p["texto"], "textStyle": estilo}
-        if p.get("url"):
-            execucao["url"] = p["url"]
-        bloco: dict[str, Any] = {"textRuns": [execucao]}
-        if p.get("alinhar"):
-            bloco["horizontalTextAlignment"] = p["alinhar"]
-        blocos.append(bloco)
-    contexto = (
-        _fundo(est, fundo, borda)
-        if (fundo or borda)
-        else {"background": [{"properties": {"show": _lit("false")}}]}
-    )
-    cima, baixo, esq, dir_ = respiro
-    contexto["padding"] = [
+def _respiro(cima: int, baixo: int, esq: int, dir_: int) -> list[dict]:
+    return [
         {
             "properties": {
                 "top": _lit(f"{cima}D"),
@@ -248,6 +211,85 @@ def caixa_texto(
             }
         }
     ]
+
+
+class Estilo:
+    """Cores resolvidas dos tokens."""
+
+    def __init__(self, tokens: dict[str, str]) -> None:
+        self.primaria = _cor(tokens, "cor-primaria")
+        self.destaque = _cor(tokens, "cor-destaque")
+        self.destaque_escuro = _cor(tokens, "cor-destaque-700")
+        self.amarelo = _cor(tokens, "cor-amarelo")
+        self.superficie = _cor(tokens, "cor-superficie")
+        self.fundo = _cor(tokens, "cor-fundo")
+        self.borda = _cor(tokens, "cor-borda")
+        self.texto = _cor(tokens, "cor-texto")
+        self.suave = _cor(tokens, "cor-texto-suave")
+        self.alerta = _cor(tokens, "cor-alerta")
+        self.claro = _cor(tokens, "cor-primaria-100")
+
+
+def _contexto(est: Estilo, fundo: str | None, borda: bool, cor_borda: str | None = None) -> dict:
+    """Fundo, borda e sombra do contêiner. ``borda=False`` desliga a borda herdada do tema."""
+    return {
+        "background": [
+            {
+                "properties": {
+                    "show": _lit("true" if fundo else "false"),
+                    "color": _solido(fundo or est.superficie),
+                    "transparency": _lit("0D"),
+                }
+            }
+        ],
+        "border": [
+            {
+                "properties": {
+                    "show": _lit("true" if borda else "false"),
+                    "color": _solido(cor_borda or est.borda),
+                    "radius": _lit("8D" if borda else "0D"),
+                    "width": _lit("1D"),
+                }
+            }
+        ],
+        "dropShadow": [{"properties": {"show": _lit("false")}}],
+    }
+
+
+def caixa_texto(
+    est: Estilo,
+    pos: tuple[int, int, int, int],
+    paragrafos: list[dict],
+    fundo: str | None = None,
+    borda: bool = False,
+    respiro: tuple[int, int, int, int] = (8, 8, 12, 12),
+    cor_borda: str | None = None,
+) -> dict:
+    """Caixa de texto. Cada parágrafo é um dict com ``texto`` (ou ``trechos``: lista de dicts),
+    ``tamanho``, ``cor``, ``negrito``, ``url`` e ``alinhar``."""
+    blocos = []
+    for p in paragrafos:
+        execucoes = []
+        for t in p.get("trechos") or [p]:
+            estilo = {
+                "fontFamily": FONTE,
+                "fontSize": f"{t.get('tamanho', p.get('tamanho', 12))}px",
+                "color": t.get("cor", p.get("cor", est.texto)),
+            }
+            if t.get("negrito", p.get("negrito")):
+                estilo["fontWeight"] = "bold"
+            if t.get("url"):
+                estilo["textDecoration"] = "underline"
+            execucao: dict[str, Any] = {"value": t["texto"], "textStyle": estilo}
+            if t.get("url"):
+                execucao["url"] = t["url"]
+            execucoes.append(execucao)
+        bloco: dict[str, Any] = {"textRuns": execucoes}
+        if p.get("alinhar"):
+            bloco["horizontalTextAlignment"] = p["alinhar"]
+        blocos.append(bloco)
+    contexto = _contexto(est, fundo, borda, cor_borda)
+    contexto["padding"] = _respiro(*respiro)
     contexto["visualHeader"] = [{"properties": {"show": _lit("false")}}]
     visual: dict[str, Any] = {
         "visualType": "textbox",
@@ -264,58 +306,140 @@ def visual(
     papeis: dict[str, list],
     titulo: str,
     objetos: dict | None = None,
-    tamanho_titulo: int = 13,
+    tamanho_titulo: int = 12,
     respiro: int = 8,
     ordenar: tuple[str, str, str] | None = None,
+    crescente: bool = False,
+    chave: str | None = None,
 ) -> dict:
     estado = {p: {"projections": [_projecao(r) for r in refs]} for p, refs in papeis.items()}
     consulta: dict[str, Any] = {"queryState": estado}
     if ordenar:
         consulta["sortDefinition"] = {
-            "sort": [{"field": _campo(ordenar), "direction": "Descending"}],
+            "sort": [
+                {"field": _campo(ordenar), "direction": "Ascending" if crescente else "Descending"}
+            ],
             "isDefaultSort": True,
         }
     v: dict[str, Any] = {"visualType": tipo, "query": consulta}
     if objetos:
         v["objects"] = objetos
-    contexto_visual = _fundo(est, None, True)
-    contexto_visual["title"] = [
+    contexto = _contexto(est, est.superficie, True)
+    contexto["title"] = [
         {
             "properties": {
                 "show": _lit("true"),
                 "text": _lit(f"'{titulo}'"),
+                "titleWrap": _lit("true"),
                 "fontSize": _lit(f"{tamanho_titulo}D"),
-                "fontColor": _solido(est.primaria),
+                "fontFamily": _lit(f"'{FONTE_TITULO}'"),
+                "fontColor": _solido(est.texto),
             }
         }
     ]
-    contexto_visual["padding"] = [
-        {"properties": {lado: _lit(f"{respiro}D") for lado in ("top", "bottom", "left", "right")}}
-    ]
-    v["visualContainerObjects"] = contexto_visual
-    return _envelope(pos, v)
+    contexto["subTitle"] = [{"properties": {"show": _lit("false")}}]
+    contexto["padding"] = _respiro(respiro, respiro, respiro + 2, respiro + 2)
+    v["visualContainerObjects"] = contexto
+    return _envelope(pos, v, chave)
 
 
 def cartao(est: Estilo, pos, medida: tuple[str, str, str], titulo: str) -> dict:
     """Título no contêiner e só o valor no corpo (o rótulo da categoria repetiria o nome)."""
     objetos = {
-        "labels": [{"properties": {"fontSize": _lit("22D"), "color": _solido(est.primaria)}}],
+        "labels": [
+            {
+                "properties": {
+                    "fontFamily": _lit(FONTE_VALOR),
+                    "fontSize": _lit("26D"),
+                    "color": _solido(est.primaria),
+                }
+            }
+        ],
         "categoryLabels": [{"properties": {"show": _lit("false")}}],
     }
     return visual(est, "card", pos, {"Values": [medida]}, titulo, objetos, 11, 6)
 
 
-def seletor(est: Estilo, pos, coluna: tuple[str, str, str], titulo: str) -> dict:
+def cartao_texto(est: Estilo, pos, medida: tuple[str, str, str], titulo: str) -> dict:
+    """Cartão para medidas de texto (avisos), com fonte menor."""
     objetos = {
+        "labels": [{"properties": {"fontSize": _lit("12D"), "color": _solido(est.texto)}}],
+        "categoryLabels": [{"properties": {"show": _lit("false")}}],
+    }
+    return visual(est, "card", pos, {"Values": [medida]}, titulo, objetos, 11, 6)
+
+
+def seletor(
+    est: Estilo,
+    pos,
+    coluna: tuple[str, str, str],
+    titulo: str,
+    padrao: str | None = None,
+    chave: str | None = None,
+) -> dict:
+    """Segmentação em lista suspensa. ``padrao`` é o literal Power BI pré-selecionado
+    (ex.: ``"2025L"`` ou ``"'Flamengo'"``), com seleção única."""
+    objetos: dict[str, Any] = {
         "data": [{"properties": {"mode": _lit("'Dropdown'")}}],
         "header": [{"properties": {"show": _lit("false")}}],
     }
-    return visual(est, "slicer", pos, {"Values": [coluna]}, titulo, objetos, 11, 6)
+    if padrao is not None:
+        tabela_, campo, _ = coluna
+        condicao = {
+            "In": {
+                "Expressions": [
+                    {"Column": {"Expression": {"SourceRef": {"Source": "s"}}, "Property": campo}}
+                ],
+                "Values": [[{"Literal": {"Value": padrao}}]],
+            }
+        }
+        filtro = {
+            "Version": 2,
+            "From": [{"Name": "s", "Entity": tabela_, "Type": 0}],
+            "Where": [{"Condition": condicao}],
+        }
+        objetos["selection"] = [{"properties": {"singleSelect": _lit("true")}}]
+        objetos["general"] = [{"properties": {"filter": {"filter": filtro}}}]
+    return visual(est, "slicer", pos, {"Values": [coluna]}, titulo, objetos, 11, 6, chave=chave)
 
 
-def tabela(est: Estilo, pos, colunas: list, titulo: str, ordenar=None) -> dict:
-    objetos = {"grid": [{"properties": {"imageHeight": _lit("22D")}}]}
-    return visual(est, "tableEx", pos, {"Values": colunas}, titulo, objetos, ordenar=ordenar)
+def tabela(
+    est: Estilo,
+    pos,
+    colunas: list,
+    titulo: str,
+    ordenar=None,
+    crescente: bool = False,
+    altura_imagem: int = 22,
+    chave: str | None = None,
+) -> dict:
+    objetos = {"grid": [{"properties": {"imageHeight": _lit(f"{altura_imagem}D")}}]}
+    return visual(
+        est,
+        "tableEx",
+        pos,
+        {"Values": colunas},
+        titulo,
+        objetos,
+        ordenar=ordenar,
+        crescente=crescente,
+        chave=chave,
+    )
+
+
+def _estilo_series(series: dict[str, dict]) -> dict:
+    """Cor, espessura e traço por série de um gráfico de linhas (seletor pelo queryRef)."""
+    ponto, linhas = [], []
+    for query_ref, s in series.items():
+        sel = {"metadata": query_ref}
+        ponto.append({"properties": {"fill": _solido(s["cor"])}, "selector": sel})
+        props = {
+            "strokeWidth": _lit(f"{s.get('espessura', 2)}D"),
+            "showMarker": _lit("false"),
+            "lineStyle": _lit(f"'{s.get('traco', 'solid')}'"),
+        }
+        linhas.append({"properties": props, "selector": sel})
+    return {"dataPoint": ponto, "lineStyles": linhas}
 
 
 def navegador(est: Estilo, pos) -> dict:
@@ -325,69 +449,75 @@ def navegador(est: Estilo, pos) -> dict:
             "visualType": "pageNavigator",
             "visualContainerObjects": {
                 "background": [{"properties": {"show": _lit("false")}}],
+                "border": [{"properties": {"show": _lit("false")}}],
                 "visualHeader": [{"properties": {"show": _lit("false")}}],
             },
         },
     )
 
 
-def cabecalho_e_rodape(est: Estilo, titulo: str, subtitulo: str, rodape: str) -> tuple[list, list]:
+def moldura(est: Estilo, titulo: str, subtitulo: str, rodape: str, corpo: list[dict]) -> list[dict]:
+    """Faixa única do cabeçalho, filete amarelo, navegação, corpo e rodapé."""
     topo = [
         caixa_texto(
             est,
-            (0, 0, 900, 64),
+            (0, 0, LARGURA, 72),
             [
-                {"texto": titulo, "tamanho": 26, "cor": "#FFFFFF", "negrito": True},
-                {"texto": subtitulo, "tamanho": 13, "cor": "#9FE3CB"},
+                {"texto": titulo, "tamanho": 21, "cor": "#FFFFFF", "negrito": True},
+                {
+                    "trechos": [
+                        {
+                            "texto": "ALÉM DO PLACAR",
+                            "tamanho": 11,
+                            "cor": est.amarelo,
+                            "negrito": True,
+                        },
+                        {"texto": f"   ·   {subtitulo}", "tamanho": 11, "cor": "#D5EBE1"},
+                    ]
+                },
             ],
             fundo=est.primaria,
-            respiro=(6, 4, 24, 12),
+            respiro=(8, 4, 24, 24),
         ),
         caixa_texto(
             est,
-            (900, 0, LARGURA - 900, 64),
-            [
-                {
-                    "texto": "ALÉM DO PLACAR",
-                    "tamanho": 16,
-                    "cor": "#FFFFFF",
-                    "negrito": True,
-                    "alinhar": "right",
-                },
-                {
-                    "texto": "Inteligência esportiva · Brasileirão",
-                    "tamanho": 12,
-                    "cor": "#9FE3CB",
-                    "alinhar": "right",
-                },
-            ],
-            fundo=est.primaria,
-            respiro=(10, 4, 12, 24),
+            (0, 72, LARGURA, 4),
+            [{"texto": " ", "tamanho": 1}],
+            fundo=est.amarelo,
+            respiro=(0, 0, 0, 0),
         ),
-        navegador(est, (MARGEM, 68, LARGURA_UTIL, 36)),
+        navegador(est, (MARGEM, 82, UTIL, 32)),
     ]
     base = [
         caixa_texto(
             est,
-            (MARGEM, 698, LARGURA_UTIL, 20),
+            (MARGEM, 694, UTIL, 24),
             [{"texto": rodape, "tamanho": 10, "cor": est.suave}],
+            respiro=(3, 0, 4, 4),
         )
     ]
-    return topo, base
+    return topo + corpo + base
 
 
-def pagina(nome: str, visuais: list[dict]) -> dict:
+def pagina(nome: str, visuais: list[dict], sem_filtro: list[tuple[str, str]] = ()) -> dict:
+    """Página PBIR. ``sem_filtro`` lista pares (chave de origem, chave de destino) cuja
+    interação de filtro é desligada (ex.: segmentação de equipe que não deve filtrar a matriz)."""
     ident = _id(nome)
-    containers = [
-        {
-            "$schema": SCHEMA_VISUAL,
-            "name": _id(ident, str(i)),
-            "position": {**v["position"], "z": i, "tabOrder": i},
-            "visual": v["visual"],
-        }
-        for i, v in enumerate(visuais)
-    ]
-    corpo = {
+    nomes = {}
+    containers = []
+    for i, v in enumerate(visuais):
+        nome_visual = _id(ident, str(i))
+        if v.get("chave"):
+            nomes[v["chave"]] = nome_visual
+        containers.append(
+            {
+                "$schema": SCHEMA_VISUAL,
+                "name": nome_visual,
+                "position": {**v["position"], "z": i, "tabOrder": i},
+                "visual": v["visual"],
+            }
+        )
+    corpo: dict[str, Any] = {
         "$schema": SCHEMA_PAGINA,
         "name": ident,
         "displayName": nome,
@@ -395,14 +525,14 @@ def pagina(nome: str, visuais: list[dict]) -> dict:
         "height": ALTURA,
         "width": LARGURA,
     }
+    if sem_filtro:
+        corpo["visualInteractions"] = [
+            {"source": nomes[a], "target": nomes[b], "type": "NoFilter"} for a, b in sem_filtro
+        ]
     return {"id": ident, "pagina": corpo, "visuais": containers}
 
 
-# --- Páginas ---------------------------------------------------------------------------------
-
-
 def _linha(x: int, larguras: list[int]) -> list[int]:
-    """Posições x consecutivas com espaçamento fixo."""
     xs = []
     for w in larguras:
         xs.append(x)
@@ -410,156 +540,210 @@ def _linha(x: int, larguras: list[int]) -> list[int]:
     return xs
 
 
+def _bloco(est: Estilo, titulo: str, linhas: list[str], tamanho: int = 12) -> list[dict]:
+    return [{"texto": titulo, "tamanho": 14, "negrito": True, "cor": est.primaria}] + [
+        {"texto": x, "tamanho": tamanho} for x in linhas
+    ]
+
+
+def _decimal(valor: float, casas: int) -> str:
+    return f"{valor:.{casas}f}".replace(".", ",")
+
+
+# --- Páginas ---------------------------------------------------------------------------------
+
+
 def construir_paginas(
-    meta: dict[str, Any], tokens: dict[str, str], url_assistente: str, com_escudos: bool = False
+    meta: dict[str, Any],
+    tokens: dict[str, str],
+    url_central: str | None = None,
+    com_escudos: bool = False,
+    com_destaques: bool = False,
+    url_repositorio: str | None = None,
 ) -> list[dict]:
     est = Estilo(tokens)
     eq = c_("dim_equipes", "nome_padronizado")
-    escudo = [c_("dim_equipes", "escudo")] if com_escudos else []
     ano = c_("dim_temporadas", "ano")
-    modelo = meta["modelo_selecionado"]
+    escudo = [c_("dim_equipes", "escudo")] if com_escudos else []
+    ultimo_ano = str(meta.get("ultimo_ano", "2025"))
     rodape = (
-        f"Fonte: OpenFootball (CC0), 2018–2025 · Modelo {modelo} {meta['versao']} · "
-        f"Corte de treino {meta['corte_treino']} · Previsões são estimativas retrospectivas."
+        f"Fonte: OpenFootball (CC0) · Temporadas 2018–{ultimo_ano} · "
+        f"Última partida nos dados: {meta.get('ultima_partida', '—')} · "
+        f"Modelo: {meta.get('modelo_nome', meta['modelo_selecionado'])} ({meta['versao']}) · "
+        "Projeto Além do Placar"
     )
-    larg5 = (LARGURA_UTIL - 4 * ESPACO) // 5  # 240
-    larg4 = (LARGURA_UTIL - 3 * ESPACO) // 4  # 303
-    topo_kpi, alt_kpi = TOPO_CONTEUDO, 96
-
-    def moldura(titulo: str, sub: str, corpo: list[dict]) -> list[dict]:
-        topo, base = cabecalho_e_rodape(est, titulo, sub, rodape)
-        return topo + corpo + base
+    mae = float(meta.get("mae_holdout") or 0)
+    cobertura = meta.get("cobertura")
+    rotulos = {"labels": [{"properties": {"show": _lit("true"), "fontSize": _lit("10D")}}]}
 
     # 1. Visão Geral ------------------------------------------------------------------------
-    xs = _linha(MARGEM, [larg5] * 5)
-    kpis = [
-        cartao(est, (xs[0], topo_kpi, larg5, alt_kpi), m_("Partidas"), "Partidas"),
-        cartao(est, (xs[1], topo_kpi, larg5, alt_kpi), m_("Temporadas"), "Temporadas"),
-        cartao(est, (xs[2], topo_kpi, larg5, alt_kpi), m_("Gols por jogo"), "Gols por jogo"),
-        cartao(
-            est,
-            (xs[3], topo_kpi, larg5, alt_kpi),
-            m_("Vitórias do mandante"),
-            "Vitórias do mandante",
-        ),
-        cartao(
-            est,
-            (xs[4], topo_kpi, larg5, alt_kpi),
-            m_("MAE global selecionado"),
-            "MAE do modelo (holdout)",
-        ),
-    ]
-    y2 = topo_kpi + alt_kpi + ESPACO  # 208
+    esq = 760
+    dir_x = MARGEM + esq + ESPACO
+    dir_w = UTIL - esq - ESPACO  # 476
+    cards_y = TOPO + 72 + ESPACO
+    meia = (dir_w - ESPACO) // 2
+    alt_card = (FIM - cards_y - ESPACO) // 2
+    destaques = []
+    if com_destaques:
+        especs = [
+            ("destaque_artilheiro", "Artilheiro do campeonato"),
+            ("destaque_craque", "Craque do Brasileirão (prêmio oficial)"),
+            ("destaque_goleiro", "Melhor goleiro (prêmio oficial)"),
+            ("destaque_ataque", "Melhor ataque"),
+        ]
+        for i, (tab, titulo) in enumerate(especs):
+            x = dir_x + (i % 2) * (meia + ESPACO)
+            y = cards_y + (i // 2) * (alt_card + ESPACO)
+            destaques.append(
+                tabela(
+                    est,
+                    (x, y, meia, alt_card),
+                    [c_(tab, "imagem"), c_(tab, "nome"), c_(tab, "detalhe")],
+                    titulo,
+                    altura_imagem=64,
+                )
+            )
     geral = moldura(
+        est,
         "Visão Geral",
-        "Brasileirão Série A 2018–2025 · panorama de partidas, gols e desempenho",
-        kpis
-        + [
-            seletor(est, (MARGEM, y2, 300, 72), ano, "Temporada"),
-            seletor(est, (MARGEM + 312, y2, 300, 72), eq, "Equipe"),
-            visual(
-                est,
-                "lineChart",
-                (MARGEM + 624, y2, 624, 200),
-                {"Category": [ano], "Y": [m_("Gols por jogo")]},
-                "Gols por jogo por temporada",
-            ),
-            visual(
-                est,
-                "clusteredBarChart",
-                (MARGEM, y2 + 84, 612, FIM_CONTEUDO - (y2 + 84)),
-                {"Category": [eq], "Y": [m_("Pontos totais")]},
-                "Pontos por equipe",
-                ordenar=m_("Pontos totais"),
-            ),
+        "Classificação e destaques da temporada escolhida",
+        rodape,
+        [
             tabela(
                 est,
-                (MARGEM + 624, y2 + 212, 624, FIM_CONTEUDO - (y2 + 212)),
+                (MARGEM, TOPO, esq, FIM - TOPO),
                 [
                     *escudo,
-                    eq,
                     m_("Posição"),
-                    m_("Pontos totais"),
-                    m_("Vitórias"),
-                    m_("Saldo de gols"),
-                    m_("Aproveitamento"),
+                    eq,
+                    m_("Pontos (temporada)"),
+                    m_("Jogos (temporada)"),
+                    m_("Vitórias (temporada)"),
+                    m_("Empates (temporada)"),
+                    m_("Derrotas (temporada)"),
+                    m_("Saldo (temporada)"),
+                    m_("Aproveitamento (temporada)"),
+                    m_("Zona"),
                 ],
-                "Classificação (filtrada pela temporada)",
-                ordenar=m_("Pontos totais"),
+                "Classificação · critérios: pontos, vitórias, saldo de gols e gols marcados",
+                ordenar=m_("Posição"),
+                crescente=True,
             ),
+            seletor(est, (dir_x, TOPO, 180, 72), ano, "Temporada", padrao=f"{ultimo_ano}L"),
+            cartao_texto(
+                est,
+                (dir_x + 192, TOPO, dir_w - 192, 72),
+                m_("Aviso temporada"),
+                "Sobre esta tabela",
+            ),
+            *destaques,
         ],
     )
 
     # 2. Tendências -------------------------------------------------------------------------
-    esq = 400
+    col = 400
     tendencias = moldura(
+        est,
         "Tendências",
         "Médias móveis de pontos e aproveitamento por equipe e temporada",
+        rodape,
         [
-            seletor(est, (MARGEM, TOPO_CONTEUDO, 194, 72), ano, "Temporada"),
-            seletor(est, (MARGEM + 206, TOPO_CONTEUDO, 194, 72), eq, "Equipe (escolha uma)"),
+            seletor(est, (MARGEM, TOPO, 194, 72), ano, "Temporada"),
+            seletor(
+                est,
+                (MARGEM + 206, TOPO, 194, 72),
+                eq,
+                "Equipe",
+                padrao="'Flamengo'",
+                chave="equipe",
+            ),
             visual(
                 est,
                 "lineChart",
-                (MARGEM, TOPO_CONTEUDO + 84, esq, 228),
+                (MARGEM, TOPO + 84, col, 236),
                 {
                     "Category": [c_("analitico", "data_referencia")],
-                    "Y": [m_("Média 3 jogos"), m_("Média recente"), m_("Média 10 jogos")],
+                    "Y": [m_("Média recente"), m_("Média 10 jogos")],
                 },
-                "Média móvel de pontos (3, 5 e 10 jogos)",
+                "Média móvel de pontos da equipe escolhida",
+                objetos=_estilo_series(
+                    {
+                        f"{FATO}.Média recente": {"cor": est.destaque, "espessura": 2},
+                        f"{FATO}.Média 10 jogos": {"cor": est.amarelo, "espessura": 3},
+                    }
+                ),
             ),
             visual(
                 est,
                 "clusteredBarChart",
-                (MARGEM, TOPO_CONTEUDO + 324, esq, FIM_CONTEUDO - (TOPO_CONTEUDO + 324)),
+                (MARGEM, TOPO + 324, col, FIM - (TOPO + 324)),
                 {"Category": [eq], "Y": [m_("Média recente")]},
-                "Média recente (5 jogos) por equipe",
+                "Média dos últimos 5 jogos, todas as equipes",
                 ordenar=m_("Média recente"),
+                chave="barras",
             ),
             visual(
                 est,
                 "pivotTable",
-                (MARGEM + esq + ESPACO, TOPO_CONTEUDO, LARGURA_UTIL - esq - ESPACO, 580),
+                (MARGEM + col + ESPACO, TOPO, UTIL - col - ESPACO, FIM - TOPO),
                 {"Rows": [eq], "Columns": [ano], "Values": [m_("Aproveitamento")]},
                 "Aproveitamento por equipe e temporada",
+                chave="matriz",
             ),
         ],
     )
 
-    # 3. Estatística ------------------------------------------------------------------------
-    meio = (LARGURA_UTIL - ESPACO) // 2  # 618
-    alt_meia = (FIM_CONTEUDO - TOPO_CONTEUDO - 84 - ESPACO) // 2
-    y_a = TOPO_CONTEUDO + 84
-    estatistica = moldura(
-        "Estatística",
-        "Distribuição de resultados, mando de campo, dispersão e volatilidade",
+    # 3. Estatísticas -----------------------------------------------------------------------
+    meio = (UTIL - ESPACO) // 2
+    y_a = TOPO + 84
+    alt = (FIM - y_a - ESPACO) // 2
+    estatisticas = moldura(
+        est,
+        "Estatísticas",
+        "Resultados, pontos por jogo, dispersão e regularidade",
+        rodape,
         [
-            seletor(est, (MARGEM, TOPO_CONTEUDO, 300, 72), ano, "Temporada"),
-            seletor(est, (MARGEM + 312, TOPO_CONTEUDO, 300, 72), eq, "Equipe"),
-            visual(
+            seletor(est, (MARGEM, TOPO, 220, 72), ano, "Temporada", padrao=f"{ultimo_ano}L"),
+            caixa_texto(
                 est,
-                "clusteredColumnChart",
-                (MARGEM, y_a, meio, alt_meia),
-                {"Category": [c_(FATO, "pontos")], "Y": [m_("Observações de equipe")]},
-                "Distribuição de resultados (0, 1 e 3 pontos)",
+                (MARGEM + 232, TOPO, UTIL - 232, 72),
+                [
+                    {
+                        "texto": "Cada partida gera um resultado para cada equipe; por isso vitórias e derrotas "
+                        "têm a mesma proporção. Pontos por jogo = pontos ÷ partidas disputadas.",
+                        "tamanho": 12,
+                        "cor": est.suave,
+                    }
+                ],
+                fundo=est.superficie,
+                borda=True,
             ),
             visual(
                 est,
                 "clusteredColumnChart",
-                (MARGEM + meio + ESPACO, y_a, meio, alt_meia),
-                {"Category": [c_(FATO, "mando_campo")], "Y": [m_("Pontos por jogo")]},
-                "Pontos por jogo: mandante × visitante",
+                (MARGEM, y_a, meio, alt),
+                {"Category": [c_(FATO, "resultado_equipe")], "Y": [m_("% dos resultados")]},
+                "Distribuição de resultados",
+                objetos=rotulos,
+            ),
+            visual(
+                est,
+                "lineClusteredColumnComboChart",
+                (MARGEM + meio + ESPACO, y_a, meio, alt),
+                {"Category": [eq], "Y": [m_("Pontos por jogo")], "Y2": [m_("Média do campeonato")]},
+                "Pontos por jogo por equipe e média do campeonato",
+                ordenar=m_("Pontos por jogo"),
             ),
             visual(
                 est,
                 "scatterChart",
-                (MARGEM, y_a + alt_meia + ESPACO, meio, alt_meia),
+                (MARGEM, y_a + alt + ESPACO, meio, alt),
                 {"Category": [eq], "X": [m_("Saldo de gols")], "Y": [m_("Pontos totais")]},
                 "Saldo de gols × pontos por equipe",
             ),
             tabela(
                 est,
-                (MARGEM + meio + ESPACO, y_a + alt_meia + ESPACO, meio, alt_meia),
+                (MARGEM + meio + ESPACO, y_a + alt + ESPACO, meio, alt),
                 [
                     *escudo,
                     eq,
@@ -568,82 +752,110 @@ def construir_paginas(
                     m_("Gols por jogo"),
                     m_("Gols sofridos por jogo"),
                 ],
-                "Volatilidade e gols por equipe",
+                "Regularidade e gols por equipe",
                 ordenar=m_("Pontos por jogo"),
             ),
         ],
     )
 
-    # 4. Laboratório de Modelos -------------------------------------------------------------
-    xs = _linha(MARGEM, [larg4] * 4)
-    lab_w = 600
-    imp_x = MARGEM + lab_w + ESPACO
-    graf_w = (lab_w - ESPACO) // 2
-    y_g = topo_kpi + alt_kpi + ESPACO
-    alt_g = 220
-    lab = moldura(
-        "Laboratório de Modelos",
-        "Baseline contra modelos de Machine Learning: MAE, RMSE e importância das variáveis",
+    # 4. Modelos ----------------------------------------------------------------------------
+    texto_w = 380
+    dx = MARGEM + texto_w + ESPACO
+    dw = UTIL - texto_w - ESPACO  # 856
+    gw = (dw - ESPACO) // 2
+    pergunta = lambda t: {"texto": t, "tamanho": 13, "negrito": True, "cor": est.primaria}  # noqa: E731
+    resposta = lambda t: {"texto": t, "tamanho": 11}  # noqa: E731
+    explicacao = [
+        pergunta("O que estamos prevendo?"),
+        resposta(f"{ALVO[0]} de cada equipe, calculada logo após cada partida."),
+        pergunta("Como a previsão é feita?"),
+        resposta(
+            "Com 12 informações do desempenho recente: médias de pontos e de saldo de gols em "
+            "3, 5 e 10 jogos, oscilação, desempenho em casa e fora, jogos disputados e dias de descanso."
+        ),
+        pergunta("Quais modelos foram testados?"),
+        resposta(
+            "Duas referências simples (média dos últimos 5 jogos e média histórica) e três modelos de "
+            "Machine Learning: Regressão Ridge, Random Forest e Gradient Boosting."
+        ),
+        pergunta("Qual foi o escolhido?"),
+        resposta(
+            "A Regressão Ridge: teve o menor erro médio e o menor RMSE na validação de 2022 a 2024 e "
+            "confirmou o ganho no teste com 2025, dados que ela nunca viu."
+        ),
+        pergunta("Qual é a margem de erro?"),
+        resposta(
+            f"Em média, {_decimal(mae, 2)} ponto por jogo. Se o modelo prevê 1,6 ponto por jogo "
+            f"(8 pontos em 5 jogos), o resultado real costuma ficar a cerca de {_decimal(mae * 5, 1)} "
+            "pontos disso, para mais ou para menos."
+        ),
+        {
+            "texto": "Quanto menor o erro, mais perto da realidade. A importância de uma variável mostra "
+            "associação com a previsão, não causa.",
+            "tamanho": 10,
+            "cor": est.suave,
+        },
+    ]
+    modelos = moldura(
+        est,
+        "Modelos",
+        "Como as previsões são feitas e quão bem elas funcionam",
+        rodape,
         [
-            cartao(
+            caixa_texto(
                 est,
-                (xs[0], topo_kpi, larg4, alt_kpi),
-                m_("MAE global selecionado"),
-                "MAE do modelo (holdout)",
-            ),
-            cartao(
-                est,
-                (xs[1], topo_kpi, larg4, alt_kpi),
-                m_("MAE global baseline"),
-                "MAE do baseline (holdout)",
-            ),
-            cartao(
-                est,
-                (xs[2], topo_kpi, larg4, alt_kpi),
-                m_("Modelo selecionado"),
-                "Modelo selecionado",
-            ),
-            cartao(
-                est, (xs[3], topo_kpi, larg4, alt_kpi), m_("Corte de treino"), "Corte de treino"
-            ),
-            visual(
-                est,
-                "clusteredColumnChart",
-                (MARGEM, y_g, graf_w, alt_g),
-                {
-                    "Category": [c_("metricas", "modelo")],
-                    "Y": [m_("MAE validação"), m_("MAE holdout")],
-                },
-                "MAE por modelo",
-            ),
-            visual(
-                est,
-                "clusteredColumnChart",
-                (MARGEM + graf_w + ESPACO, y_g, graf_w, alt_g),
-                {
-                    "Category": [c_("metricas", "modelo")],
-                    "Y": [m_("RMSE validação"), m_("RMSE holdout")],
-                },
-                "RMSE por modelo",
-            ),
-            visual(
-                est,
-                "tableEx",
-                (MARGEM, y_g + alt_g + ESPACO, lab_w, FIM_CONTEUDO - (y_g + alt_g + ESPACO)),
-                {
-                    "Values": [
-                        c_("metricas", c)
-                        for c in ("fase", "modelo", "temporada", "mae", "rmse", "vies")
-                    ]
-                },
-                "Métricas por modelo, fase e temporada",
+                (MARGEM, TOPO, texto_w, FIM - TOPO),
+                explicacao,
+                fundo=est.superficie,
+                borda=True,
+                respiro=(12, 12, 16, 16),
             ),
             visual(
                 est,
                 "clusteredBarChart",
-                (imp_x, y_g, LARGURA_UTIL - lab_w - ESPACO, FIM_CONTEUDO - y_g),
-                {"Category": [c_("importancias", "atributo")], "Y": [m_("Importância")]},
-                "Importância por permutação (aumento do MAE)",
+                (dx, TOPO, gw, 200),
+                {"Category": [c_("comparacao_modelos", "nome")], "Y": [m_("MAE do modelo")]},
+                "Erro médio absoluto na validação (menor é melhor)",
+                ordenar=m_("MAE do modelo"),
+                crescente=True,
+                objetos=rotulos,
+            ),
+            visual(
+                est,
+                "clusteredBarChart",
+                (dx + gw + ESPACO, TOPO, gw, 200),
+                {"Category": [c_("comparacao_modelos", "nome")], "Y": [m_("RMSE do modelo")]},
+                "RMSE na validação (pesa mais os erros grandes)",
+                ordenar=m_("RMSE do modelo"),
+                crescente=True,
+                objetos=rotulos,
+            ),
+            tabela(
+                est,
+                (dx, TOPO + 212, dw, 160),
+                [
+                    c_("comparacao_modelos", c)
+                    for c in (
+                        "nome",
+                        "tipo",
+                        "mae_validacao",
+                        "rmse_validacao",
+                        "mae_teste",
+                        "rmse_teste",
+                        "diferenca_referencia",
+                        "selecionado",
+                    )
+                ],
+                "Comparação dos modelos (referência = média dos últimos 5 jogos)",
+                ordenar=c_("comparacao_modelos", "mae_validacao"),
+                crescente=True,
+            ),
+            visual(
+                est,
+                "clusteredBarChart",
+                (dx, TOPO + 384, dw, FIM - (TOPO + 384)),
+                {"Category": [c_("importancias", "variavel")], "Y": [m_("Importância")]},
+                "O que mais pesa na previsão (quanto o erro aumenta sem cada informação)",
                 ordenar=m_("Importância"),
             ),
         ],
@@ -651,35 +863,37 @@ def construir_paginas(
 
     # 5. Previsões --------------------------------------------------------------------------
     prev_w = 800
-    tab_x = MARGEM + prev_w + ESPACO
+    faixa = "Faixa empírica de 90%"
+    if cobertura:
+        faixa += f" (cobertura observada no teste de 2025: {_decimal(float(cobertura) * 100, 1)}%)"
     previsoes = moldura(
+        est,
         "Previsões",
-        "Média de pontos prevista para as próximas 5 partidas · intervalo de 90% · holdout 2025",
+        "Média de pontos prevista para os próximos 5 jogos · teste com 2025",
+        rodape,
         [
-            seletor(est, (MARGEM, TOPO_CONTEUDO, 300, 72), eq, "Equipe (escolha uma)"),
+            seletor(est, (MARGEM, TOPO, 300, 72), eq, "Equipe", padrao="'Flamengo'"),
             caixa_texto(
                 est,
-                (MARGEM + 312, TOPO_CONTEUDO, prev_w - 312, 72),
+                (MARGEM + 312, TOPO, prev_w - 312, 72),
                 [
                     {
-                        "texto": "Previsões retrospectivas, não certezas.",
-                        "tamanho": 12,
+                        "texto": "As previsões são estimativas calculadas a partir dos dados disponíveis. "
+                        "Os resultados reais podem ser diferentes.",
+                        "tamanho": 11,
                         "negrito": True,
                         "cor": est.alerta,
                     },
-                    {
-                        "texto": "A linha prevista deve ser lida junto com o intervalo de 90% e com o erro médio do modelo.",
-                        "tamanho": 11,
-                        "cor": est.suave,
-                    },
+                    {"texto": faixa + ".", "tamanho": 10, "cor": est.suave},
                 ],
-                fundo="#FFF6E0",
+                fundo="#FFF8E1",
                 borda=True,
+                cor_borda="#F3D98A",
             ),
             visual(
                 est,
                 "lineChart",
-                (MARGEM, TOPO_CONTEUDO + 84, prev_w, 384),
+                (MARGEM, TOPO + 84, prev_w, 384),
                 {
                     "Category": [c_("previsoes", "data_referencia")],
                     "Y": [
@@ -689,209 +903,311 @@ def construir_paginas(
                         m_("Limite superior"),
                     ],
                 },
-                "Previsto, observado e intervalo de 90%",
-            ),
-            cartao(
-                est, (MARGEM, TOPO_CONTEUDO + 480, 260, 96), m_("Média prevista"), "Média prevista"
-            ),
-            cartao(
-                est,
-                (MARGEM + 272, TOPO_CONTEUDO + 480, 260, 96),
-                m_("Média observada"),
-                "Média observada",
-            ),
-            cartao(
-                est,
-                (MARGEM + 544, TOPO_CONTEUDO + 480, 256, 96),
-                m_("Erro absoluto médio"),
-                "Erro absoluto médio",
-            ),
-            visual(
-                est,
-                "tableEx",
-                (
-                    tab_x,
-                    TOPO_CONTEUDO,
-                    LARGURA_UTIL - prev_w - ESPACO,
-                    FIM_CONTEUDO - TOPO_CONTEUDO,
+                "Previsto, real e faixa de incerteza",
+                objetos=_estilo_series(
+                    {
+                        f"{FATO}.Média prevista": {"cor": est.primaria, "espessura": 3},
+                        f"{FATO}.Média observada": {"cor": est.amarelo, "espessura": 2},
+                        f"{FATO}.Limite inferior": {
+                            "cor": CINZA_LIMITE,
+                            "espessura": 1,
+                            "traco": "dashed",
+                        },
+                        f"{FATO}.Limite superior": {
+                            "cor": CINZA_LIMITE,
+                            "espessura": 1,
+                            "traco": "dashed",
+                        },
+                    }
                 ),
-                {
-                    "Values": [
-                        c_("previsoes", c)
-                        for c in (
-                            "equipe",
-                            "data_referencia",
-                            "previsao",
-                            "limite_inferior",
-                            "limite_superior",
-                        )
-                    ]
-                },
-                "Previsões e intervalos",
+            ),
+            cartao(
+                est,
+                (MARGEM, TOPO + 472, 258, FIM - (TOPO + 472)),
+                m_("Média prevista"),
+                "Média prevista",
+            ),
+            cartao(
+                est,
+                (MARGEM + 270, TOPO + 472, 258, FIM - (TOPO + 472)),
+                m_("Média observada"),
+                "Média real",
+            ),
+            cartao(
+                est,
+                (MARGEM + 540, TOPO + 472, prev_w - 540, FIM - (TOPO + 472)),
+                m_("Erro absoluto médio"),
+                "Erro médio desta equipe",
+            ),
+            tabela(
+                est,
+                (MARGEM + prev_w + ESPACO, TOPO, UTIL - prev_w - ESPACO, FIM - TOPO),
+                [
+                    c_("previsoes", c)
+                    for c in ("data_referencia", "previsao", "limite_inferior", "limite_superior")
+                ],
+                "Previsões e faixa por data",
             ),
         ],
     )
 
-    # 6. Assistente -------------------------------------------------------------------------
-    exemplos = [
-        "Qual foi a classificação de 2024?",
-        "Compare Palmeiras e Flamengo em 2025.",
-        "Qual a maior sequência invicta da história?",
-        "Quem teve a melhor defesa em 2023?",
-        "Qual é a previsão do Flamengo?",
-        "Quais variáveis mais influenciaram o modelo?",
+    # 6. Central de Consulta ----------------------------------------------------------------
+    temas = [
+        (
+            "Campeonato",
+            ["Qual equipe teve o melhor ataque em 2025?", "Como funciona a classificação?"],
+        ),
+        (
+            "Indicadores",
+            ["O que é saldo médio de gols?", "Como interpretar o gráfico de tendências?"],
+        ),
+        ("Modelos", ["O que significa MAE?", "Qual algoritmo apresentou o menor erro?"]),
+        ("Previsões", ["Como o modelo calcula as previsões?", "Por que as previsões podem errar?"]),
+        ("Dados", ["Quais dados foram utilizados?", "Qual é a diferença entre treino e teste?"]),
+        (
+            "Metodologia",
+            ["Como foi feita a validação dos modelos?", "Quais são as limitações do projeto?"],
+        ),
     ]
-    assistente = moldura(
-        "Assistente",
-        "Pergunte em português e receba respostas com fonte, período e limitações",
+    tw = (UTIL - 2 * ESPACO) // 3
+    th = (FIM - (TOPO + 212) - ESPACO) // 2
+    caixas_temas = []
+    for i, (titulo, perguntas) in enumerate(temas):
+        x = MARGEM + (i % 3) * (tw + ESPACO)
+        y = TOPO + 212 + (i // 3) * (th + ESPACO)
+        caixas_temas.append(
+            caixa_texto(
+                est,
+                (x, y, tw, th),
+                [{"texto": titulo, "tamanho": 14, "negrito": True, "cor": est.primaria}]
+                + [{"texto": f"“{p}”", "tamanho": 12} for p in perguntas],
+                fundo=est.superficie,
+                borda=True,
+                respiro=(12, 12, 16, 16),
+            )
+        )
+    if url_central:
+        acesso = [
+            {
+                "texto": "Abrir a Central de Consulta",
+                "tamanho": 18,
+                "negrito": True,
+                "cor": "#FFFFFF",
+            },
+            {"texto": "Abre em uma nova aba do navegador.", "tamanho": 11, "cor": "#D5EBE1"},
+            {
+                "texto": "Acessar a central  →",
+                "tamanho": 15,
+                "negrito": True,
+                "cor": est.amarelo,
+                "url": url_central,
+            },
+        ]
+    else:
+        acesso = [
+            {"texto": "Central de Consulta", "tamanho": 18, "negrito": True, "cor": "#FFFFFF"},
+            {
+                "texto": "O endereço público será exibido aqui após a publicação.",
+                "tamanho": 12,
+                "cor": "#D5EBE1",
+            },
+        ]
+    central = moldura(
+        est,
+        "Central de Consulta",
+        "Respostas sobre o campeonato, os dados e os modelos deste projeto",
+        rodape,
         [
             caixa_texto(
                 est,
-                (MARGEM, TOPO_CONTEUDO, 700, 240),
+                (MARGEM, TOPO, 820, 200),
                 [
                     {
-                        "texto": "Converse com os dados",
-                        "tamanho": 22,
+                        "texto": "Tire suas dúvidas sobre o Brasileirão e o projeto",
+                        "tamanho": 20,
                         "negrito": True,
                         "cor": est.primaria,
                     },
                     {
-                        "texto": "O assistente responde perguntas sobre classificação, confrontos, mando de campo, gols, sequências, rankings e previsões do Brasileirão. Cada resposta mostra a fonte, o período e as limitações.",
-                        "tamanho": 14,
+                        "texto": "Pesquise em português sobre classificação, estatísticas das equipes, indicadores, "
+                        "modelos, métricas e limitações. As respostas vêm dos dados e da documentação do "
+                        "projeto, sempre com a origem indicada.",
+                        "tamanho": 13,
                     },
                     {
-                        "texto": "Ele usa apenas os dados deste projeto e nunca inventa números.",
-                        "tamanho": 14,
+                        "texto": "Gratuita e sem inteligência artificial paga: funciona com uma base de conhecimento "
+                        "e estatísticas calculadas a partir das partidas. Perguntas fora do tema são recusadas "
+                        "e nada é inventado.",
+                        "tamanho": 12,
                         "cor": est.suave,
                     },
                 ],
                 fundo=est.superficie,
                 borda=True,
+                respiro=(14, 12, 18, 18),
             ),
             caixa_texto(
                 est,
-                (MARGEM + 712, TOPO_CONTEUDO, LARGURA_UTIL - 712, 240),
-                [
-                    {
-                        "texto": "Abrir o assistente",
-                        "tamanho": 20,
-                        "negrito": True,
-                        "cor": "#FFFFFF",
-                    },
-                    {
-                        "texto": "Abre o site do projeto em uma nova aba.",
-                        "tamanho": 12,
-                        "cor": "#9FE3CB",
-                    },
-                    {
-                        "texto": "Clique aqui para perguntar →",
-                        "tamanho": 16,
-                        "negrito": True,
-                        "cor": "#FFFFFF",
-                        "url": url_assistente,
-                    },
-                ],
-                fundo=est.destaque_escuro,
+                (MARGEM + 832, TOPO, UTIL - 832, 200),
+                acesso,
+                fundo=est.primaria,
+                respiro=(18, 12, 20, 20),
             ),
-            caixa_texto(
-                est,
-                (MARGEM, TOPO_CONTEUDO + 252, LARGURA_UTIL, FIM_CONTEUDO - (TOPO_CONTEUDO + 252)),
-                [
-                    {
-                        "texto": "Exemplos de perguntas",
-                        "tamanho": 16,
-                        "negrito": True,
-                        "cor": est.primaria,
-                    }
-                ]
-                + [{"texto": f"•  {e}", "tamanho": 14} for e in exemplos],
-                fundo=est.superficie,
-                borda=True,
-            ),
+            *caixas_temas,
         ],
     )
 
     # 7. Metodologia ------------------------------------------------------------------------
-    def bloco(titulo: str, linhas: list[str]) -> list[dict]:
-        return [{"texto": titulo, "tamanho": 15, "negrito": True, "cor": est.primaria}] + [
-            {"texto": f"•  {x}", "tamanho": 12} for x in linhas
-        ]
-
-    alt_b = (FIM_CONTEUDO - TOPO_CONTEUDO - ESPACO) // 2
-    y_b = TOPO_CONTEUDO + alt_b + ESPACO
+    n_cards = 5 if cobertura else 4
+    larg = (UTIL - (n_cards - 1) * ESPACO) // n_cards
+    xs = _linha(MARGEM, [larg] * n_cards)
+    cards = [
+        cartao(est, (xs[0], TOPO, larg, 88), m_("Partidas"), "Partidas analisadas"),
+        cartao(est, (xs[1], TOPO, larg, 88), m_("Modelos avaliados"), "Modelos comparados"),
+        cartao(
+            est, (xs[2], TOPO, larg, 88), m_("MAE global selecionado"), "Erro médio (MAE) no teste"
+        ),
+        cartao(est, (xs[3], TOPO, larg, 88), m_("RMSE global selecionado"), "RMSE no teste"),
+    ]
+    if cobertura:
+        cards.append(
+            cartao(
+                est,
+                (xs[4], TOPO, larg, 88),
+                m_("Cobertura do intervalo"),
+                "Cobertura da faixa de 90%",
+            )
+        )
+    y1 = TOPO + 100
+    cw = (UTIL - 2 * ESPACO) // 3
+    alt_col = 218
+    etapas = [
+        "Coleta",
+        "Limpeza",
+        "Exploração",
+        "Atributos",
+        "Treino",
+        "Validação",
+        "Teste",
+        "Previsões",
+    ]
+    ew = (UTIL - 7 * 8) // 8
+    y2 = y1 + alt_col + ESPACO
+    passos = [
+        caixa_texto(
+            est,
+            (MARGEM + i * (ew + 8), y2, ew, 44),
+            [
+                {
+                    "texto": f"{i + 1} · {e}",
+                    "tamanho": 12,
+                    "negrito": True,
+                    "cor": "#FFFFFF",
+                    "alinhar": "center",
+                }
+            ],
+            fundo=est.destaque_escuro if i % 2 == 0 else est.primaria,
+            respiro=(12, 4, 4, 4),
+        )
+        for i, e in enumerate(etapas)
+    ]
+    y3 = y2 + 44 + ESPACO
+    explorar = [
+        {
+            "texto": "Explore o projeto por dentro",
+            "tamanho": 15,
+            "negrito": True,
+            "cor": est.primaria,
+        },
+        {
+            "texto": "O código, a documentação, a metodologia completa e o dicionário de dados ficam no "
+            "repositório público do projeto.",
+            "tamanho": 12,
+        },
+    ]
+    links = []
+    if url_repositorio:
+        links.append({"texto": "Acessar o GitHub", "url": url_repositorio})
+    if url_central:
+        links.append({"texto": "Abrir a Central de Consulta", "url": url_central})
+    if links:
+        trechos = []
+        for i, link in enumerate(links):
+            if i:
+                trechos.append({"texto": "     ", "tamanho": 12})
+            trechos.append({**link, "tamanho": 12, "negrito": True, "cor": est.destaque_escuro})
+        explorar.append({"trechos": trechos})
+    else:
+        explorar.append(
+            {
+                "texto": "Os links serão exibidos após a publicação do repositório.",
+                "tamanho": 11,
+                "cor": est.suave,
+            }
+        )
+    colunas_texto = [
+        (
+            "Sobre o projeto",
+            [
+                "Estudamos se o desempenho recente de uma equipe ajuda a antecipar os próximos jogos.",
+                "O dashboard mostra classificação, tendências e estatísticas, e compara previsões com o que aconteceu.",
+                "As previsões ajudam a entender tendências; não são apostas nem certezas.",
+            ],
+        ),
+        (
+            "Origem e preparação dos dados",
+            [
+                f"OpenFootball (licença CC0): Brasileirão Série A de 2018 a {ultimo_ano}, 380 partidas por temporada.",
+                "Nomes de clubes padronizados, datas e placares validados; duplicidades e placares inválidos são barrados.",
+                "Atributos calculados só com jogos já encerrados; atualização manual ao fim de cada temporada.",
+            ],
+        ),
+        (
+            "Cuidados metodológicos",
+            [
+                "Treino, validação (2022–2024) e teste (2025) separados no tempo, sem dados do futuro.",
+                "Todo modelo é comparado com uma referência simples; só vale o ganho que supera essa referência.",
+                "Uma competição e poucos jogos por equipe limitam a generalização; importância não é causa.",
+            ],
+        ),
+    ]
     metodologia = moldura(
+        est,
         "Metodologia",
-        "De onde vêm os dados, como o modelo foi avaliado e quais são os limites",
-        [
+        "Como o projeto foi construído, explicado para quem nunca estudou Ciência de Dados",
+        rodape,
+        cards
+        + [
             caixa_texto(
                 est,
-                (MARGEM, TOPO_CONTEUDO, meio, alt_b),
-                bloco(
-                    "Dados",
-                    [
-                        "Fonte: OpenFootball, licença CC0 verificada.",
-                        "Brasileirão Série A, temporadas 2018 a 2025.",
-                        "3.040 partidas, 380 por temporada, 20 clubes por temporada.",
-                        "2026 está fora do escopo.",
-                    ],
-                ),
+                (MARGEM + i * (cw + ESPACO), y1, cw, alt_col),
+                _bloco(est, titulo, linhas),
                 fundo=est.superficie,
                 borda=True,
-            ),
+                respiro=(12, 12, 16, 16),
+            )
+            for i, (titulo, linhas) in enumerate(colunas_texto)
+        ]
+        + passos
+        + [
             caixa_texto(
                 est,
-                (MARGEM + meio + ESPACO, TOPO_CONTEUDO, meio, alt_b),
-                bloco(
-                    "Modelo",
-                    [
-                        f"Modelo selecionado: {modelo}, versão {meta['versao']}.",
-                        "Alvo: média de pontos nas próximas 5 partidas.",
-                        "Validação temporal com janela expansiva; holdout exclusivo de 2025.",
-                        "Baseline: média das últimas 5 partidas. Métricas: MAE e RMSE.",
-                    ],
-                ),
-                fundo=est.superficie,
+                (MARGEM, y3, UTIL, FIM - y3),
+                explorar,
+                fundo=est.claro,
                 borda=True,
-            ),
-            caixa_texto(
-                est,
-                (MARGEM, y_b, meio, alt_b),
-                bloco(
-                    "Como ler as previsões",
-                    [
-                        "Previsões são retrospectivas e têm margem de erro.",
-                        "O intervalo de 90% é empírico e sem garantia estatística.",
-                        "Não são certezas nem recomendação de aposta.",
-                        f"Corte de treino: {meta['corte_treino']}.",
-                    ],
-                ),
-                fundo=est.superficie,
-                borda=True,
-            ),
-            caixa_texto(
-                est,
-                (MARGEM + meio + ESPACO, y_b, meio, alt_b),
-                bloco(
-                    "Limitações",
-                    [
-                        "Dados observacionais e uma única competição.",
-                        "Um holdout temporal e poucas observações por equipe.",
-                        "Importância das variáveis é preditiva, não causal.",
-                        "Sem xG: hipóteses sobre métricas avançadas não foram avaliadas.",
-                    ],
-                ),
-                fundo=est.superficie,
-                borda=True,
-            ),
+                cor_borda=est.claro,
+                respiro=(12, 10, 18, 18),
+            )
         ],
     )
 
     return [
         pagina("Visão Geral", geral),
-        pagina("Tendências", tendencias),
-        pagina("Estatística", estatistica),
-        pagina("Laboratório de Modelos", lab),
+        pagina("Tendências", tendencias, [("equipe", "barras"), ("equipe", "matriz")]),
+        pagina("Estatísticas", estatisticas),
+        pagina("Modelos", modelos),
         pagina("Previsões", previsoes),
-        pagina("Assistente", assistente),
+        pagina("Central de Consulta", central),
         pagina("Metodologia", metodologia),
     ]

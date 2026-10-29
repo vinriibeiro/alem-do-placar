@@ -16,10 +16,11 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from evaluation import powerbi_conteudo as conteudo
+from evaluation.nomes import FASES, nome_atributo, nome_modelo
 from evaluation.powerbi_layout import construir_paginas, construir_tema
 
 NOME = "AlemDoPlacar"
-URL_ASSISTENTE = "https://ALTERAR"
 TEMA_ARQUIVO = "AlemDoPlacarTheme.json"
 MODELO_BASELINE = "M00_media_recente_5"
 FATO = "fato_desempenho_equipes"
@@ -33,7 +34,9 @@ ARQUIVOS_TEMPLATE = (
 CHAVES_METADADOS = ("modelo_selecionado", "corte_treino", "versao")
 COLUNAS_METRICAS = {
     "fase": "string",
+    "fase_nome": "string",
     "modelo": "string",
+    "modelo_nome": "string",
     "temporada": "string",
     "mae": "double",
     "rmse": "double",
@@ -42,6 +45,7 @@ COLUNAS_METRICAS = {
 }
 COLUNAS_IMPORTANCIAS = {
     "atributo": "string",
+    "variavel": "string",
     "delta_mae_media": "double",
     "delta_mae_desvio": "double",
 }
@@ -63,6 +67,17 @@ _VIT_CASA = f'CALCULATE(COUNTROWS({FATO}),{FATO}[mando_campo]="mandante",{FATO}[
 _JOGOS_CASA = f'CALCULATE(COUNTROWS({FATO}),{FATO}[mando_campo]="mandante")'
 _MAE = "CALCULATE(MAX(metricas[mae]),metricas[fase]="
 _RMSE = "CALCULATE(MAX(metricas[rmse]),metricas[fase]="
+_UMA = "HASONEVALUE(dim_temporadas[ano])"
+# Desempate: pontos, vitórias, saldo de gols e gols marcados (critérios da CBF, na ordem).
+_PONTUACAO = (
+    "COALESCE([Pontos totais],0)*100000000 + COALESCE([Vitórias],0)*1000000 + "
+    "(COALESCE([Saldo de gols],0)+500)*1000 + COALESCE([Gols],0)"
+)
+_POSICAO = (
+    f"IF({_UMA} && ISINSCOPE(dim_equipes[nome_padronizado]) && [Observações de equipe] > 0, "
+    "RANKX(FILTER(ALL(dim_equipes[nome_padronizado]), [Observações de equipe] > 0), "
+    f"{_PONTUACAO},, DESC, Skip))"
+)
 MEDIDAS_DAX = [
     ("Partidas", f"DISTINCTCOUNT({FATO}[partida_id])", "#,0"),
     ("Temporadas", "DISTINCTCOUNT(dim_temporadas[ano])", "0"),
@@ -80,12 +95,6 @@ MEDIDAS_DAX = [
     ("Aproveitamento", "DIVIDE([Pontos totais],3*[Observações de equipe])", "0.0%"),
     ("Vitórias do mandante", f"DIVIDE({_VIT_CASA},{_JOGOS_CASA})", "0.0%"),
     ("Volatilidade de pontos", f"STDEV.P({FATO}[pontos])", "0.00"),
-    (
-        "Posição",
-        "IF(ISINSCOPE(dim_equipes[nome_padronizado]),"
-        "RANKX(ALL(dim_equipes[nome_padronizado]),[Pontos totais],,DESC,Dense))",
-        "0",
-    ),
     ("Média prevista", "AVERAGE(previsoes[previsao])", "0.00"),
     ("Média observada", "AVERAGE(previsoes[alvo])", "0.00"),
     ("Limite inferior", "AVERAGE(previsoes[limite_inferior])", "0.00"),
@@ -116,6 +125,43 @@ MEDIDAS_DAX = [
     ("MAE holdout", _MAE + '"holdout",metricas[temporada]="todas")', "0.000"),
     ("RMSE validação", _RMSE + '"validacao",metricas[temporada]="todas")', "0.000"),
     ("RMSE holdout", _RMSE + '"holdout",metricas[temporada]="todas")', "0.000"),
+    (
+        "RMSE global selecionado",
+        "VAR ModeloAtual = [Modelo selecionado] RETURN "
+        'CALCULATE(MAX(metricas[rmse]),metricas[fase]="holdout",'
+        'metricas[modelo]=ModeloAtual,metricas[temporada]="todas")',
+        "0.000",
+    ),
+    ("Jogos (temporada)", f"IF({_UMA},[Observações de equipe])", "0"),
+    ("Pontos (temporada)", f"IF({_UMA},[Pontos totais])", "0"),
+    ("Vitórias (temporada)", f"IF({_UMA},COALESCE([Vitórias],0))", "0"),
+    ("Empates (temporada)", f"IF({_UMA},COALESCE([Empates],0))", "0"),
+    ("Derrotas (temporada)", f"IF({_UMA},COALESCE([Derrotas],0))", "0"),
+    ("Saldo (temporada)", f"IF({_UMA},[Saldo de gols])", "+0;-0;0"),
+    ("Aproveitamento (temporada)", f"IF({_UMA},[Aproveitamento])", "0.0%"),
+    ("Posição", _POSICAO, "0"),
+    (
+        "Zona",
+        'VAR p = [Posição] RETURN SWITCH(TRUE(), ISBLANK(p), BLANK(), p <= 4, "Libertadores", '
+        'p <= 6, "Pré-Libertadores", p <= 12, "Sul-Americana", p >= 17, "Rebaixamento", "")',
+        None,
+    ),
+    (
+        "Aviso temporada",
+        f'IF({_UMA}, "Temporada " & FORMAT(SELECTEDVALUE(dim_temporadas[ano]), "0") & '
+        '" · zona pela posição; vagas extras de copas não consideradas", '
+        '"Selecione uma única temporada para ver a classificação")',
+        None,
+    ),
+    ("Média do campeonato", "CALCULATE([Pontos por jogo],ALL(dim_equipes))", "0.00"),
+    (
+        "% dos resultados",
+        f"DIVIDE([Observações de equipe],CALCULATE([Observações de equipe],ALL({FATO}[resultado_equipe])))",
+        "0.0%",
+    ),
+    ("Modelos avaliados", "COUNTROWS(comparacao_modelos)", "0"),
+    ("MAE do modelo", "AVERAGE(comparacao_modelos[mae_validacao])", "0.000"),
+    ("RMSE do modelo", "AVERAGE(comparacao_modelos[rmse_validacao])", "0.000"),
 ]
 
 
@@ -136,9 +182,12 @@ def gerar_projeto(
     *,
     fonte_dados: str = "local",
     url_base_dados: str | None = None,
-    url_assistente: str = URL_ASSISTENTE,
+    url_central: str | None = None,
+    url_repositorio: str | None = None,
     tokens: Path | None = None,
     escudos: Path | None = None,
+    destaques: Path | None = None,
+    url_assistente: str | None = None,
 ) -> Path:
     """Gera o projeto PBIP em ``pasta_saida`` e devolve o caminho do ``.pbip``.
 
@@ -151,6 +200,10 @@ def gerar_projeto(
         raise ErroProjeto("fonte_dados deve ser 'local' ou 'web'")
     if fonte_dados == "web" and not (url_base_dados or "").startswith("https://"):
         raise ErroProjeto("fonte_dados='web' exige url_base_dados começando com https://")
+    url_central = url_central or url_assistente  # compatibilidade com o nome antigo
+    for rotulo, url in (("url_central", url_central), ("url_repositorio", url_repositorio)):
+        if url and not url.startswith("https://"):
+            raise ErroProjeto(f"{rotulo} deve começar com https://")
     web = fonte_dados == "web"
     tokens_design = _ler_tokens(tokens)
     linhas_escudos = _ler_escudos(escudos) if escudos else []
@@ -162,6 +215,20 @@ def gerar_projeto(
     _validar_template(template_dir)
     _validar_saida(pasta_saida)
     meta = _ler_metadados(pasta_modelagem / "metadados.json")
+    linhas_metricas = _linhas_metricas(pasta_modelagem / "metricas.json")
+    meta |= conteudo.meta_exibicao(pasta_processados)
+    meta["modelo_nome"] = nome_modelo(meta["modelo_selecionado"])
+    selecionado_teste = next(
+        (
+            r
+            for r in linhas_metricas
+            if r["fase"] == "holdout"
+            and r["modelo"] == meta["modelo_selecionado"]
+            and r["temporada"] == "todas"
+        ),
+        None,
+    )
+    meta["mae_holdout"] = selecionado_teste["mae"] if selecionado_teste else 0
 
     def _proc(nome: str, medidas: list | None = None, arquivo: str | None = None) -> dict:
         arq = arquivo or f"{nome}.parquet"
@@ -171,15 +238,26 @@ def gerar_projeto(
     tabelas = [_proc(nome) for nome in ("dim_equipes", "dim_temporadas", "fato_partidas")]
     if linhas_escudos:
         _acrescentar_escudos(tabelas[0], linhas_escudos)
-    tabelas.append(_proc(FATO, _medidas(meta)))
+    fato = _proc(FATO, _medidas(meta))
+    _acrescentar_passo(
+        fato,
+        "Resultado",
+        'Table.AddColumn(Origem, "resultado_equipe", each if [pontos] = 3 then "Vitória" '
+        'else if [pontos] = 1 then "Empate" else "Derrota", type text)',
+        {"resultado_equipe": "string"},
+    )
+    tabelas.append(fato)
     url_prev = _url_dados(url_base_dados, "predictions/modelagem", "previsoes.parquet")
     tabelas += [
         _proc("analitico", arquivo="dataset_analitico.parquet"),
         _tabela_parquet(
             "previsoes", pasta_modelagem / "previsoes.parquet", None, url_prev if web else None
         ),
+        _tabela_registros("metricas", linhas_metricas, COLUNAS_METRICAS),
         _tabela_registros(
-            "metricas", _linhas_metricas(pasta_modelagem / "metricas.json"), COLUNAS_METRICAS
+            "comparacao_modelos",
+            conteudo.comparacao_modelos(linhas_metricas, meta["modelo_selecionado"]),
+            conteudo.COLUNAS_COMPARACAO,
         ),
         _tabela_registros(
             "importancias",
@@ -187,6 +265,19 @@ def gerar_projeto(
             COLUNAS_IMPORTANCIAS,
         ),
     ]
+    relacionamentos = list(RELACIONAMENTOS)
+    if destaques:
+        mapa_escudos = {r["equipe"]: r["escudo"] for r in linhas_escudos}
+        estat = conteudo.estatisticas_temporada(pasta_processados)
+        for nome_tab, linhas in conteudo.destaques(
+            _arquivo(destaques), estat, mapa_escudos
+        ).items():
+            tab = _tabela_registros(nome_tab, linhas, conteudo.COLUNAS_DESTAQUE)
+            for coluna in tab["columns"]:
+                if coluna["name"] in {"imagem", "escudo"}:
+                    coluna["dataCategory"] = "ImageUrl"
+            tabelas.append(tab)
+            relacionamentos.append((nome_tab, "ano", "dim_temporadas", "ano"))
     modelo = {
         "name": NOME,
         "compatibilityLevel": 1600,
@@ -194,11 +285,13 @@ def gerar_projeto(
             "culture": "pt-BR",
             "defaultPowerBIDataSourceVersion": "powerBI_V3",
             "tables": tabelas,
-            "relationships": [_relacionamento(*r) for r in RELACIONAMENTOS],
+            "relationships": [_relacionamento(*r) for r in relacionamentos],
         },
     }
-    paginas = construir_paginas(meta, tokens_design, url_assistente, bool(linhas_escudos))
-    _validar_referencias(tabelas, paginas)
+    paginas = construir_paginas(
+        meta, tokens_design, url_central, bool(linhas_escudos), bool(destaques), url_repositorio
+    )
+    _validar_referencias(tabelas, paginas, relacionamentos)
     shutil.copytree(template_dir, pasta_saida, dirs_exist_ok=True)
     _escrever_modelo(pasta_saida, modelo)
     _escrever_relatorio(pasta_saida, paginas, construir_tema(tokens_design))
@@ -220,6 +313,24 @@ def _ler_escudos(caminho: Path) -> list[dict[str, str]]:
                 raise ErroProjeto(f"URL de escudo inválida para {linha['equipe']}: {url}")
             linhas.append({"equipe": linha["equipe"].strip(), "escudo": url})
     return linhas
+
+
+def _acrescentar_passo(tabela: dict, nome: str, expressao_m: str, colunas: dict[str, str]) -> None:
+    """Acrescenta um passo ao final da consulta M (que começa em ``Origem``) e as colunas novas."""
+    expressao = tabela["partitions"][0]["source"]["expression"]
+    corpo = [linha for linha in expressao[1:] if linha.strip() not in {"in", "Origem"}]
+    corpo[-1] = corpo[-1].rstrip(",") + ","
+    tabela["partitions"][0]["source"]["expression"] = [
+        "let",
+        *corpo,
+        f"    {nome} = {expressao_m}",
+        "in",
+        f"    {nome}",
+    ]
+    for coluna, tipo in colunas.items():
+        tabela["columns"].append(
+            {"name": coluna, "dataType": tipo, "sourceColumn": coluna, "summarizeBy": "none"}
+        )
 
 
 def _acrescentar_escudos(tabela: dict, linhas: list[dict[str, str]]) -> None:
@@ -333,7 +444,9 @@ def _linhas_metricas(caminho: Path) -> list[dict[str, Any]]:
             linhas.append(
                 {
                     "fase": str(registro["fase"]),
+                    "fase_nome": FASES.get(str(registro["fase"]), str(registro["fase"])),
                     "modelo": str(registro["modelo"]),
+                    "modelo_nome": nome_modelo(str(registro["modelo"])),
                     "temporada": str(registro["temporada"]),
                     "mae": _numero(registro["mae"], "metricas.json"),
                     "rmse": _numero(registro["rmse"], "metricas.json"),
@@ -349,12 +462,13 @@ def _linhas_metricas(caminho: Path) -> list[dict[str, Any]]:
 def _linhas_importancias(caminho: Path) -> list[dict[str, Any]]:
     with _arquivo(caminho).open(encoding="utf-8-sig", newline="") as arquivo:
         leitor = csv.DictReader(arquivo)
-        faltantes = set(COLUNAS_IMPORTANCIAS) - set(leitor.fieldnames or [])
+        faltantes = set(COLUNAS_IMPORTANCIAS) - {"variavel"} - set(leitor.fieldnames or [])
         if faltantes:
             raise ErroProjeto(f"colunas ausentes em importancias.csv: {sorted(faltantes)}")
         return [
             {
                 "atributo": linha["atributo"],
+                "variavel": nome_atributo(linha["atributo"]),
                 "delta_mae_media": _numero(linha["delta_mae_media"], "importancias.csv"),
                 "delta_mae_desvio": _numero(linha["delta_mae_desvio"], "importancias.csv"),
             }
@@ -371,6 +485,8 @@ def _texto_literal(valor: object) -> str:
 
 
 def _m_valor(valor: object) -> str:
+    if valor is None:
+        return "null"
     return _texto_literal(valor) if isinstance(valor, str) else repr(valor)
 
 
@@ -473,10 +589,12 @@ def _medidas(meta: dict[str, str]) -> list[dict[str, str]]:
 # --- Escrita e validação final ----------------------------------------------------------------
 
 
-def _validar_referencias(tabelas: list[dict], paginas: list[dict]) -> None:
+def _validar_referencias(
+    tabelas: list[dict], paginas: list[dict], relacionamentos: list | None = None
+) -> None:
     colunas = {t["name"]: {c["name"] for c in t["columns"]} for t in tabelas}
     campos = {t["name"]: colunas[t["name"]] | {m["name"] for m in t["measures"]} for t in tabelas}
-    for de, ce, para, cp in RELACIONAMENTOS:
+    for de, ce, para, cp in relacionamentos or RELACIONAMENTOS:
         if ce not in colunas.get(de, set()) or cp not in colunas.get(para, set()):
             raise ErroProjeto(f"relacionamento sem coluna: {de}[{ce}] -> {para}[{cp}]")
     for tabela in tabelas:

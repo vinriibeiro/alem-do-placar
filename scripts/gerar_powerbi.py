@@ -4,7 +4,7 @@ Exemplos:
     python scripts/gerar_powerbi.py
     python scripts/gerar_powerbi.py --fonte web \
         --url-base https://raw.githubusercontent.com/USUARIO/alem-do-placar/main/data \
-        --url-assistente https://SEU-SITE/assistente
+        --url-central https://USUARIO.github.io/alem-do-placar/consulta.html
 
 A pasta de saída é recriada. Só é apagada se já contiver AlemDoPlacar.pbip (projeto gerado antes).
 """
@@ -17,14 +17,15 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "src"))
 
-from evaluation.powerbi import URL_ASSISTENTE, gerar_projeto  # noqa: E402
+from evaluation.powerbi import gerar_projeto  # noqa: E402
 
 
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--fonte", choices=("local", "web"), default="local")
     ap.add_argument("--url-base", help="URL https da pasta data/ (exigida com --fonte web)")
-    ap.add_argument("--url-assistente", default=URL_ASSISTENTE)
+    ap.add_argument("--url-central", help="URL https da Central de Consulta publicada")
+    ap.add_argument("--url-repositorio", help="URL https do repositório no GitHub")
     args = ap.parse_args(argv)
 
     saida = RAIZ / "dashboard" / "powerbi" / "AlemDoPlacar"
@@ -40,9 +41,11 @@ def main(argv: list[str] | None = None) -> None:
         RAIZ / "dashboard" / "powerbi" / "template",
         fonte_dados=args.fonte,
         url_base_dados=args.url_base,
-        url_assistente=args.url_assistente,
+        url_central=args.url_central,
+        url_repositorio=args.url_repositorio,
         tokens=RAIZ / "dashboard" / "assets" / "tema_tokens.json",
         escudos=RAIZ / "config" / "escudos.csv",
+        destaques=RAIZ / "config" / "destaques.csv",
     )
     print(pbip)
 

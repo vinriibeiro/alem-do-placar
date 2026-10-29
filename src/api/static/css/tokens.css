@@ -3,29 +3,30 @@
    para o tema do Power BI; altere os dois juntos. */
 :root {
   /* Cor */
-  --cor-primaria: #0b2545;
-  --cor-primaria-700: #12345c;
-  --cor-primaria-100: #e6edf6;
-  --cor-destaque: #0f8f68;
-  --cor-destaque-700: #0b6f50;
-  --cor-destaque-100: #e3f5ee;
-  --cor-fundo: #f6f8fa;
+  --cor-primaria: #075e45;
+  --cor-primaria-700: #054a37;
+  --cor-primaria-100: #e3f1eb;
+  --cor-destaque: #15966a;
+  --cor-destaque-700: #0e7a55;
+  --cor-destaque-100: #e4f5ee;
+  --cor-amarelo: #f3c84b;
+  --cor-fundo: #f3f5f4;
   --cor-superficie: #ffffff;
-  --cor-borda: #e1e7ee;
-  --cor-borda-forte: #c5cfda;
-  --cor-texto: #14212e;
-  --cor-texto-suave: #4f5f70;
+  --cor-borda: #dde3e1;
+  --cor-borda-forte: #c3ccc9;
+  --cor-texto: #202b29;
+  --cor-texto-suave: #55625f;
   --cor-sucesso: #1a7f4b;
   --cor-alerta: #9a6700;
   --cor-alerta-fundo: #fff6e0;
   --cor-erro: #b42318;
   --cor-erro-fundo: #fdecea;
-  --serie-1: #0b2545;
-  --serie-2: #0f8f68;
-  --serie-3: #e0a526;
-  --serie-4: #5b8def;
-  --serie-5: #c2410c;
-  --serie-6: #7a8ca3;
+  --serie-1: #075e45;
+  --serie-2: #15966a;
+  --serie-3: #f3c84b;
+  --serie-4: #202b29;
+  --serie-5: #7fb8a4;
+  --serie-6: #b98f1c;
 
   /* Tipografia */
   --fonte: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -54,8 +55,8 @@
   --raio-sm: 8px;
   --raio: 12px;
   --raio-lg: 20px;
-  --sombra-1: 0 1px 2px rgba(11, 37, 69, 0.06), 0 1px 3px rgba(11, 37, 69, 0.08);
-  --sombra-2: 0 4px 12px rgba(11, 37, 69, 0.08), 0 2px 4px rgba(11, 37, 69, 0.06);
-  --foco: 0 0 0 3px rgba(15, 143, 104, 0.45);
+  --sombra-1: 0 1px 2px rgba(7, 94, 69, 0.06), 0 1px 3px rgba(7, 94, 69, 0.08);
+  --sombra-2: 0 4px 12px rgba(7, 94, 69, 0.08), 0 2px 4px rgba(7, 94, 69, 0.06);
+  --foco: 0 0 0 3px rgba(21, 150, 106, 0.45);
   --largura: 1120px;
 }
