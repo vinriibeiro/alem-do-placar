@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "40d2c1fddbcad0cdee2e",
   "position": {
     "x": 16,
-    "y": 196,
-    "width": 800,
+    "y": 206,
+    "z": 5000,
     "height": 384,
-    "z": 5,
-    "tabOrder": 5
+    "width": 800,
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "lineChart",
@@ -28,6 +28,7 @@
               },
               "queryRef": "previsoes.data_referencia",
               "nativeQueryRef": "data_referencia",
+              "active": true,
               "displayName": "Data"
             }
           ]
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média prevista",
-              "nativeQueryRef": "Média prevista"
+              "nativeQueryRef": "Média prevista",
+              "displayName": "Previsto"
             },
             {
               "field": {
@@ -60,7 +62,8 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média observada",
-              "nativeQueryRef": "Média observada"
+              "nativeQueryRef": "Média observada",
+              "displayName": "Real"
             },
             {
               "field": {
@@ -74,7 +77,8 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Limite inferior",
-              "nativeQueryRef": "Limite inferior"
+              "nativeQueryRef": "Limite inferior",
+              "displayName": "Limite inferior (90%)"
             },
             {
               "field": {
@@ -88,11 +92,202 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Limite superior",
-              "nativeQueryRef": "Limite superior"
+              "nativeQueryRef": "Limite superior",
+              "displayName": "Limite superior (90%)"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#075e45'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média prevista"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#f3c84b'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média observada"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#AEB8B5'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Limite inferior"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#AEB8B5'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Limite superior"
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'solid'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média prevista"
+          }
+        },
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'solid'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média observada"
+          }
+        },
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dashed'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Limite inferior"
+          }
+        },
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dashed'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Limite superior"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -141,7 +336,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -151,6 +346,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -170,14 +385,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Previsto, observado e intervalo de 90%'"
+                  "Value": "'Previsto, real e faixa de incerteza'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -186,9 +415,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -215,14 +457,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "10D"
                 }
               }
             }

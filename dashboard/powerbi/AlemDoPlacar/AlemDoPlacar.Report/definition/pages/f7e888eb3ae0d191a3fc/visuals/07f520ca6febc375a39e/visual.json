@@ -1,70 +1,94 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "07f520ca6febc375a39e",
   "position": {
-    "x": 1024,
-    "y": 112,
-    "width": 240,
-    "height": 96,
-    "z": 7,
-    "tabOrder": 7
+    "x": 1032,
+    "y": 206,
+    "z": 7000,
+    "height": 235,
+    "width": 232,
+    "tabOrder": 7000
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
+                      "Entity": "destaque_craque"
                     }
                   },
-                  "Property": "MAE global selecionado"
+                  "Property": "imagem"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.MAE global selecionado",
-              "nativeQueryRef": "MAE global selecionado"
+              "queryRef": "destaque_craque.imagem",
+              "nativeQueryRef": "imagem",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "destaque_craque"
+                    }
+                  },
+                  "Property": "nome"
+                }
+              },
+              "queryRef": "destaque_craque.nome",
+              "nativeQueryRef": "nome",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "destaque_craque"
+                    }
+                  },
+                  "Property": "detalhe"
+                }
+              },
+              "queryRef": "destaque_craque.detalhe",
+              "nativeQueryRef": "detalhe",
+              "displayName": " "
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "destaque_craque"
+                  }
+                },
+                "Property": "imagem"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
       }
     },
     "objects": {
-      "labels": [
+      "grid": [
         {
           "properties": {
-            "fontSize": {
+            "imageHeight": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0b2545'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "64D"
                 }
               }
             }
@@ -119,7 +143,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -129,6 +153,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -148,14 +192,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'MAE do modelo (holdout)'"
+                  "Value": "'Craque do Brasileirão (prêmio oficial)'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -164,9 +222,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -179,28 +250,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             }

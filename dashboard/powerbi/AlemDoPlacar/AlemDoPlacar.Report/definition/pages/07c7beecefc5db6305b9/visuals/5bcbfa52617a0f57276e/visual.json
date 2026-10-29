@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5bcbfa52617a0f57276e",
   "position": {
     "x": 16,
-    "y": 592,
-    "width": 260,
-    "height": 96,
-    "z": 6,
-    "tabOrder": 6
+    "y": 594,
+    "z": 6000,
+    "height": 94,
+    "width": 258,
+    "tabOrder": 6000
   },
   "visual": {
     "visualType": "card",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média prevista",
-              "nativeQueryRef": "Média prevista"
+              "nativeQueryRef": "Média prevista",
+              "displayName": "Previsto"
             }
           ]
         }
@@ -37,10 +38,17 @@
       "labels": [
         {
           "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Bold'', wf_segoe-ui_bold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
+                  "Value": "26D"
                 }
               }
             },
@@ -49,7 +57,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#075e45'"
                     }
                   }
                 }
@@ -119,7 +127,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -129,6 +137,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -152,10 +180,24 @@
                 }
               }
             },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "fontSize": {
               "expr": {
                 "Literal": {
                   "Value": "11D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -164,9 +206,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -193,14 +248,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             }

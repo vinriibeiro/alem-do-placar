@@ -1,47 +1,47 @@
 {
   "name": "AlemDoPlacar",
   "dataColors": [
-    "#0b2545",
-    "#0f8f68",
-    "#e0a526",
-    "#5b8def",
-    "#c2410c",
-    "#7a8ca3",
-    "#9fe3cb",
-    "#f4c978",
-    "#a9c1f5",
-    "#e8a27c"
+    "#075e45",
+    "#15966a",
+    "#f3c84b",
+    "#202b29",
+    "#7fb8a4",
+    "#b98f1c",
+    "#a8d5c2",
+    "#f8dd8f",
+    "#5b6b67",
+    "#3fb58a"
   ],
   "background": "#ffffff",
-  "foreground": "#14212e",
-  "tableAccent": "#0f8f68",
+  "foreground": "#202b29",
+  "tableAccent": "#15966a",
   "good": "#1a7f4b",
-  "neutral": "#e0a526",
+  "neutral": "#f3c84b",
   "bad": "#b42318",
-  "maximum": "#0f8f68",
-  "center": "#e0a526",
+  "maximum": "#15966a",
+  "center": "#f3c84b",
   "minimum": "#b42318",
-  "null": "#c5cfda",
+  "null": "#c3ccc9",
   "textClasses": {
     "callout": {
       "fontSize": 28,
       "fontFace": "Segoe UI Semibold",
-      "color": "#0b2545"
+      "color": "#075e45"
     },
     "title": {
-      "fontSize": 13,
-      "fontFace": "Segoe UI Semibold",
-      "color": "#0b2545"
-    },
-    "header": {
       "fontSize": 12,
       "fontFace": "Segoe UI Semibold",
-      "color": "#0b2545"
+      "color": "#202b29"
+    },
+    "header": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#202b29"
     },
     "label": {
-      "fontSize": 11,
+      "fontSize": 10,
       "fontFace": "Segoe UI",
-      "color": "#4f5f70"
+      "color": "#55625f"
     }
   },
   "visualStyles": {
@@ -52,10 +52,10 @@
             "show": true,
             "fontColor": {
               "solid": {
-                "color": "#0b2545"
+                "color": "#202b29"
               }
             },
-            "fontSize": 13,
+            "fontSize": 12,
             "fontFamily": "Segoe UI Semibold"
           }
         ],
@@ -75,10 +75,16 @@
             "show": true,
             "color": {
               "solid": {
-                "color": "#e1e7ee"
+                "color": "#dde3e1"
               }
             },
-            "radius": 8
+            "radius": 8,
+            "width": 1
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
           }
         ]
       }
@@ -89,7 +95,7 @@
           {
             "color": {
               "solid": {
-                "color": "#f6f8fa"
+                "color": "#f3f5f4"
               }
             },
             "transparency": 0

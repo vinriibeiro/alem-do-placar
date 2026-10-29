@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "99c79764edd227817c44",
   "position": {
     "x": 328,
-    "y": 112,
-    "width": 488,
+    "y": 122,
+    "z": 4000,
     "height": 72,
-    "z": 4,
-    "tabOrder": 4
+    "width": 488,
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,10 +19,10 @@
               {
                 "textRuns": [
                   {
-                    "value": "Previsões retrospectivas, não certezas.",
+                    "value": "As previsões são estimativas calculadas a partir dos dados disponíveis. Os resultados reais podem ser diferentes.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "12px",
+                      "fontSize": "11px",
                       "color": "#9a6700",
                       "fontWeight": "bold"
                     }
@@ -32,11 +32,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "A linha prevista deve ser lida junto com o intervalo de 90% e com o erro médio do modelo.",
+                    "value": "Faixa empírica de 90% (cobertura observada no teste de 2025: 91,2%).",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "11px",
-                      "color": "#4f5f70"
+                      "fontSize": "10px",
+                      "color": "#55625f"
                     }
                   }
                 ]
@@ -62,7 +62,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFF6E0'"
+                      "Value": "'#FFF8E1'"
                     }
                   }
                 }
@@ -93,7 +93,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#F3D98A'"
                     }
                   }
                 }
@@ -103,6 +103,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

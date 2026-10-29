@@ -1,0 +1,64 @@
+relationship 'fato_desempenho_equipes.equipe_id-dim_equipes.equipe_id'
+	fromColumn: fato_desempenho_equipes.equipe_id
+	toColumn: dim_equipes.equipe_id
+
+relationship 'fato_partidas.temporada_id-dim_temporadas.temporada_id'
+	fromColumn: fato_partidas.temporada_id
+	toColumn: dim_temporadas.temporada_id
+
+relationship 'fato_desempenho_equipes.partida_id-fato_partidas.partida_id'
+	fromColumn: fato_desempenho_equipes.partida_id
+	toColumn: fato_partidas.partida_id
+
+relationship 'analitico.equipe-dim_equipes.nome_padronizado'
+	fromColumn: analitico.equipe
+	toColumn: dim_equipes.nome_padronizado
+
+relationship 'previsoes.equipe-dim_equipes.nome_padronizado'
+	fromColumn: previsoes.equipe
+	toColumn: dim_equipes.nome_padronizado
+
+relationship 'analitico.temporada-dim_temporadas.ano'
+	fromColumn: analitico.temporada
+	toColumn: dim_temporadas.ano
+
+relationship 'previsoes.temporada-dim_temporadas.ano'
+	fromColumn: previsoes.temporada
+	toColumn: dim_temporadas.ano
+
+relationship 'destaque_artilheiro.ano-dim_temporadas.ano'
+	fromColumn: destaque_artilheiro.ano
+	toColumn: dim_temporadas.ano
+
+relationship 'destaque_craque.ano-dim_temporadas.ano'
+	fromColumn: destaque_craque.ano
+	toColumn: dim_temporadas.ano
+
+relationship 'destaque_goleiro.ano-dim_temporadas.ano'
+	fromColumn: destaque_goleiro.ano
+	toColumn: dim_temporadas.ano
+
+relationship 'destaque_ataque.ano-dim_temporadas.ano'
+	fromColumn: destaque_ataque.ano
+	toColumn: dim_temporadas.ano
+
+relationship ccccf319-3fd9-453a-bd1c-73402d54caad
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fato_partidas.data_partida
+	toColumn: LocalDateTable_913d1849-7949-4c1e-8476-8953de4a05a5.Date
+
+relationship 24107993-8e26-41fa-8b03-2f5c94742e9c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: analitico.data_referencia
+	toColumn: LocalDateTable_48b3c0b7-babb-4d11-a3bb-fe6514093704.Date
+
+relationship 5959d6b3-8229-4c46-91b9-5e937c65c4d2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: analitico.fim_alvo
+	toColumn: LocalDateTable_f7108b8e-b345-495a-8aa7-1dbcee3bb876.Date
+
+relationship 092b5af8-d5b6-4974-8e84-2dafc38b7a05
+	joinOnDateBehavior: datePartOnly
+	fromColumn: previsoes.data_referencia
+	toColumn: LocalDateTable_edd03ee9-9015-4171-b6dd-fa0b95f1481c.Date
+

@@ -1,0 +1,98 @@
+table previsoes
+	lineageTag: 2050f1ff-7334-4ac3-aa0a-0d6a2968a15d
+
+	column equipe
+		dataType: string
+		lineageTag: 991ab1b0-ae04-4ae4-ba90-94110154e661
+		summarizeBy: none
+		sourceColumn: equipe
+
+	column temporada
+		dataType: int64
+		lineageTag: 23b4e0f4-968a-476b-96e0-7cae2aeaa49e
+		summarizeBy: none
+		sourceColumn: temporada
+
+	column data_referencia
+		dataType: dateTime
+		lineageTag: fa2819e3-a7d5-4dea-b1a5-f8a4a84a2a95
+		summarizeBy: none
+		sourceColumn: data_referencia
+
+		variation Variação
+			isDefault
+			relationship: 092b5af8-d5b6-4974-8e84-2dafc38b7a05
+			defaultHierarchy: LocalDateTable_edd03ee9-9015-4171-b6dd-fa0b95f1481c.'Hierarquia de datas'
+
+	column partida_id
+		dataType: string
+		lineageTag: d4312452-05db-4e34-a6a8-75f94d466fdc
+		summarizeBy: none
+		sourceColumn: partida_id
+
+	column alvo
+		dataType: double
+		lineageTag: 44a089af-6762-404e-ab05-7dc05d2dcf7d
+		summarizeBy: sum
+		sourceColumn: alvo
+
+		annotation SummarizationSetBy = Automatic
+
+	column previsao
+		dataType: double
+		lineageTag: e659dcc2-4b8d-4b3b-b26c-4c44e966fb93
+		summarizeBy: sum
+		sourceColumn: previsao
+
+		annotation SummarizationSetBy = Automatic
+
+	column modelo
+		dataType: string
+		lineageTag: a5836101-e10c-47f6-82e0-a43e4c5c2c1b
+		summarizeBy: none
+		sourceColumn: modelo
+
+	column versao_modelo
+		dataType: string
+		lineageTag: 1206a9c8-4fcb-4769-a886-399df3ee1ac8
+		summarizeBy: none
+		sourceColumn: versao_modelo
+
+	column data_corte_treino
+		dataType: string
+		lineageTag: 9434563c-99fd-4e9d-a8fa-c8c08b041cfe
+		summarizeBy: none
+		sourceColumn: data_corte_treino
+
+	column horizonte
+		dataType: int64
+		lineageTag: 448bca87-579b-4f77-b704-5b56d6401ddb
+		summarizeBy: sum
+		sourceColumn: horizonte
+
+		annotation SummarizationSetBy = Automatic
+
+	column limite_inferior
+		dataType: double
+		lineageTag: db51e468-c379-49e6-9024-71729c1c54d5
+		summarizeBy: sum
+		sourceColumn: limite_inferior
+
+		annotation SummarizationSetBy = Automatic
+
+	column limite_superior
+		dataType: double
+		lineageTag: 7cc8d4d8-595d-4fbb-8c20-98fcf6266dda
+		summarizeBy: sum
+		sourceColumn: limite_superior
+
+		annotation SummarizationSetBy = Automatic
+
+	partition previsoes = m
+		mode: import
+		source =
+				let
+				    Origem = Parquet.Document(File.Contents("C:\Users\Vinícius Ribeiro\Documents\Projetos\Além do Placar\data\predictions\modelagem\previsoes.parquet"))
+				in
+				    Origem
+

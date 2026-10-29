@@ -1,0 +1,65 @@
+table metricas
+	lineageTag: c7d7d4ef-0f36-4659-b040-5749c0d4c907
+
+	column fase
+		dataType: string
+		lineageTag: 7c28d794-25ea-44b1-b4d8-5c24b01438de
+		summarizeBy: none
+		sourceColumn: fase
+
+	column fase_nome
+		dataType: string
+		lineageTag: 91e4de0b-5f25-42fa-8694-23777b342bc7
+		summarizeBy: none
+		sourceColumn: fase_nome
+
+	column modelo
+		dataType: string
+		lineageTag: c7484aed-dc88-40ac-996c-1b9a6fd015e9
+		summarizeBy: none
+		sourceColumn: modelo
+
+	column modelo_nome
+		dataType: string
+		lineageTag: 986fbf20-07ec-4884-9fcd-aa97181b6b66
+		summarizeBy: none
+		sourceColumn: modelo_nome
+
+	column temporada
+		dataType: string
+		lineageTag: f1fb5953-2127-4ad0-936c-0936d9e8ce1e
+		summarizeBy: none
+		sourceColumn: temporada
+
+	column mae
+		dataType: double
+		lineageTag: bef24bcc-3ebf-4b47-9e1f-cbfa1f2333b2
+		summarizeBy: none
+		sourceColumn: mae
+
+	column rmse
+		dataType: double
+		lineageTag: ccb84b69-5d6f-4845-a5da-fe3c97e2ab17
+		summarizeBy: none
+		sourceColumn: rmse
+
+	column vies
+		dataType: double
+		lineageTag: 012596c7-79e9-4684-87c2-f171ba0a775f
+		summarizeBy: none
+		sourceColumn: vies
+
+	column n
+		dataType: int64
+		lineageTag: 640451ff-7937-4210-bb9b-1e620b1c49ad
+		summarizeBy: none
+		sourceColumn: n
+
+	partition metricas = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[fase = "holdout", fase_nome = "Teste com dados de 2025", modelo = "M00_media_recente_5", modelo_nome = "Média dos últimos 5 jogos (referência)", temporada = "2025", mae = 0.5670910402728585, rmse = 0.7225963109068712, vies = -0.0015203987931260603, n = 660], [fase = "holdout", fase_nome = "Teste com dados de 2025", modelo = "M01_ridge", modelo_nome = "Regressão Ridge", temporada = "2025", mae = 0.478089259088914, rmse = 0.5908874539026563, vies = -0.01682995916776609, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "B01_media_historica_treino", modelo_nome = "Média histórica do treino (referência)", temporada = "2022", mae = 0.5079747474747475, rmse = 0.6273020460502897, vies = 0.00037878787878788047, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "B01_media_historica_treino", modelo_nome = "Média histórica do treino (referência)", temporada = "2023", mae = 0.5086868686868687, rmse = 0.6179381575650101, vies = -0.0072727272727271955, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "B01_media_historica_treino", modelo_nome = "Média histórica do treino (referência)", temporada = "2024", mae = 0.528236914600551, rmse = 0.6492057731601742, vies = -0.01121212121212113, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M00_media_recente_5", modelo_nome = "Média dos últimos 5 jogos (referência)", temporada = "2022", mae = 0.5711363636363637, rmse = 0.73453299486049, vies = -0.004747474747474743, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M00_media_recente_5", modelo_nome = "Média dos últimos 5 jogos (referência)", temporada = "2023", mae = 0.6368925619834711, rmse = 0.7985051147186885, vies = -0.00286501377410468, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M00_media_recente_5", modelo_nome = "Média dos últimos 5 jogos (referência)", temporada = "2024", mae = 0.6043204775022957, rmse = 0.7484347217881067, vies = 0.0012825221916130901, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M01_ridge", modelo_nome = "Regressão Ridge", temporada = "2022", mae = 0.46485702470939677, rmse = 0.5769264725339903, vies = 0.0011571606674092216, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M01_ridge", modelo_nome = "Regressão Ridge", temporada = "2023", mae = 0.5030847043660998, rmse = 0.6103156210033084, vies = -0.004447860325052134, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M01_ridge", modelo_nome = "Regressão Ridge", temporada = "2024", mae = 0.4983221023712351, rmse = 0.6211233152966942, vies = -0.008932528910997554, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M02_random_forest", modelo_nome = "Random Forest", temporada = "2022", mae = 0.4765409556770059, rmse = 0.5956100638990303, vies = 0.0034448664873215924, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M02_random_forest", modelo_nome = "Random Forest", temporada = "2023", mae = 0.5129138548998773, rmse = 0.6271678085021232, vies = -0.011526075798447706, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M02_random_forest", modelo_nome = "Random Forest", temporada = "2024", mae = 0.5045539102699947, rmse = 0.6241139469845055, vies = -0.013227401894090132, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M03_hist_gradient_boosting", modelo_nome = "Gradient Boosting", temporada = "2022", mae = 0.4897286625339483, rmse = 0.6065502870317174, vies = -0.005334234841831221, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M03_hist_gradient_boosting", modelo_nome = "Gradient Boosting", temporada = "2023", mae = 0.5083852325289364, rmse = 0.6191551230751822, vies = 0.007411160588710604, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M03_hist_gradient_boosting", modelo_nome = "Gradient Boosting", temporada = "2024", mae = 0.5058343930178815, rmse = 0.6275834619530091, vies = -0.012788843558969044, n = 660], [fase = "holdout", fase_nome = "Teste com dados de 2025", modelo = "M00_media_recente_5", modelo_nome = "Média dos últimos 5 jogos (referência)", temporada = "todas", mae = 0.5670910402728585, rmse = 0.7225963109068712, vies = -0.0015203987931260603, n = 660], [fase = "holdout", fase_nome = "Teste com dados de 2025", modelo = "M01_ridge", modelo_nome = "Regressão Ridge", temporada = "todas", mae = 0.478089259088914, rmse = 0.5908874539026563, vies = -0.01682995916776609, n = 660], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "B01_media_historica_treino", modelo_nome = "Média histórica do treino (referência)", temporada = "todas", mae = 0.5149661769207223, rmse = 0.6316179117837563, vies = -0.006035353535353482, n = 1980], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M00_media_recente_5", modelo_nome = "Média dos últimos 5 jogos (referência)", temporada = "todas", mae = 0.6041164677073768, rmse = 0.7609870063605263, vies = -0.0021099887766554437, n = 1980], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M01_ridge", modelo_nome = "Regressão Ridge", temporada = "todas", mae = 0.4887546104822439, rmse = 0.6030819415735377, vies = -0.004074409522880155, n = 1980], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M02_random_forest", modelo_nome = "Random Forest", temporada = "todas", mae = 0.4980029069489593, rmse = 0.6157946159393679, vies = -0.007102870401738748, n = 1980], [fase = "validacao", fase_nome = "Validação (2022–2024)", modelo = "M03_hist_gradient_boosting", modelo_nome = "Gradient Boosting", temporada = "todas", mae = 0.5013160960269221, rmse = 0.6178234156686485, vies = -0.0035706392706965537, n = 1980]}, type table [fase = text, fase_nome = text, modelo = text, modelo_nome = text, temporada = text, mae = number, rmse = number, vies = number, n = Int64.Type])
+				in
+				    Origem
+

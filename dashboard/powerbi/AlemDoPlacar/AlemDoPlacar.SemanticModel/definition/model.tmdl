@@ -1,0 +1,35 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["dim_equipes","dim_temporadas","fato_partidas","fato_desempenho_equipes","analitico","previsoes","metricas","comparacao_modelos","importancias","destaque_artilheiro","destaque_craque","destaque_goleiro","destaque_ataque"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_equipes
+ref table dim_temporadas
+ref table fato_partidas
+ref table fato_desempenho_equipes
+ref table analitico
+ref table previsoes
+ref table metricas
+ref table comparacao_modelos
+ref table importancias
+ref table destaque_artilheiro
+ref table destaque_craque
+ref table destaque_goleiro
+ref table destaque_ataque
+ref table DateTableTemplate_58549062-eba8-4957-97d8-5b97e5662d5b
+ref table LocalDateTable_913d1849-7949-4c1e-8476-8953de4a05a5
+ref table LocalDateTable_48b3c0b7-babb-4d11-a3bb-fe6514093704
+ref table LocalDateTable_f7108b8e-b345-495a-8aa7-1dbcee3bb876
+ref table LocalDateTable_edd03ee9-9015-4171-b6dd-fa0b95f1481c
+
+ref cultureInfo pt-BR
+

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "8fccd1a93d6a750bd88a",
+  "displayName": "Modelos",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}

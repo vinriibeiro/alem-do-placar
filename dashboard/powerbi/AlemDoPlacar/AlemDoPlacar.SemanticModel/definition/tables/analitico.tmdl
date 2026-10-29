@@ -1,0 +1,201 @@
+table analitico
+	lineageTag: be31f25b-fc50-433f-9961-6e6a83648a67
+
+	column partida_id
+		dataType: string
+		lineageTag: 1a43a0c4-e1aa-4835-86a2-64442bb8806b
+		summarizeBy: none
+		sourceColumn: partida_id
+
+	column equipe
+		dataType: string
+		lineageTag: 34204436-0307-4b37-8663-31f66dfb08ca
+		summarizeBy: none
+		sourceColumn: equipe
+
+	column adversario
+		dataType: string
+		lineageTag: b0ae3ee0-cbf6-43f3-91aa-a98d71ce737c
+		summarizeBy: none
+		sourceColumn: adversario
+
+	column data_referencia
+		dataType: dateTime
+		lineageTag: 625aaa87-8b38-4646-a820-2a8623c3868a
+		summarizeBy: none
+		sourceColumn: data_referencia
+
+		variation Variação
+			isDefault
+			relationship: 24107993-8e26-41fa-8b03-2f5c94742e9c
+			defaultHierarchy: LocalDateTable_48b3c0b7-babb-4d11-a3bb-fe6514093704.'Hierarquia de datas'
+
+	column temporada
+		dataType: int64
+		lineageTag: 63733faa-aa8d-48cc-a739-7bb948456626
+		summarizeBy: none
+		sourceColumn: temporada
+
+	column mando
+		dataType: int64
+		lineageTag: 256b047d-1fe6-4008-b93d-0114c8617092
+		summarizeBy: sum
+		sourceColumn: mando
+
+		annotation SummarizationSetBy = Automatic
+
+	column pontos
+		dataType: int64
+		lineageTag: f8e7efda-c454-4488-8f23-2c52ec81f6a3
+		summarizeBy: sum
+		sourceColumn: pontos
+
+		annotation SummarizationSetBy = Automatic
+
+	column gols_pro
+		dataType: int64
+		lineageTag: af9bb1a4-0ccf-4456-b7ca-9f9a382510f4
+		summarizeBy: sum
+		sourceColumn: gols_pro
+
+		annotation SummarizationSetBy = Automatic
+
+	column gols_contra
+		dataType: int64
+		lineageTag: 2dd47bc5-3877-48a2-a9a8-1afaec1876c9
+		summarizeBy: sum
+		sourceColumn: gols_contra
+
+		annotation SummarizationSetBy = Automatic
+
+	column saldo_gols
+		dataType: int64
+		lineageTag: 9e2390fe-0a55-486a-8aae-83c27240c206
+		summarizeBy: sum
+		sourceColumn: saldo_gols
+
+		annotation SummarizationSetBy = Automatic
+
+	column rodada
+		dataType: int64
+		lineageTag: acd530f6-dfde-4a93-a17b-60009a53ed26
+		summarizeBy: sum
+		sourceColumn: rodada
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_pontos_3
+		dataType: double
+		lineageTag: 1e0f7e8d-97d7-4b9e-b09a-a5ea226e4705
+		summarizeBy: sum
+		sourceColumn: media_pontos_3
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_pontos_5
+		dataType: double
+		lineageTag: f3c68416-410b-4985-ab4c-945bb4c80c09
+		summarizeBy: sum
+		sourceColumn: media_pontos_5
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_pontos_10
+		dataType: double
+		lineageTag: 3f37b47d-0829-4c94-afd5-9c8dc297a919
+		summarizeBy: sum
+		sourceColumn: media_pontos_10
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_saldo_gols_3
+		dataType: double
+		lineageTag: 0830e5d4-a526-4ca9-bdcf-ca21dbb265d4
+		summarizeBy: sum
+		sourceColumn: media_saldo_gols_3
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_saldo_gols_5
+		dataType: double
+		lineageTag: 84e30b55-e2d7-4140-9591-56ba5fc978dc
+		summarizeBy: sum
+		sourceColumn: media_saldo_gols_5
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_saldo_gols_10
+		dataType: double
+		lineageTag: 5cefef23-adab-4537-be85-20ef8f09c2e1
+		summarizeBy: sum
+		sourceColumn: media_saldo_gols_10
+
+		annotation SummarizationSetBy = Automatic
+
+	column desvio_pontos_5
+		dataType: double
+		lineageTag: bd215c3a-1974-41a5-b2f6-d5e54c4aea7c
+		summarizeBy: sum
+		sourceColumn: desvio_pontos_5
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_pontos_mandante_historico
+		dataType: double
+		lineageTag: b1d70d16-5e99-436d-bfd5-646a25ab45ed
+		summarizeBy: sum
+		sourceColumn: media_pontos_mandante_historico
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_pontos_visitante_historico
+		dataType: double
+		lineageTag: e0c667dc-ef97-4d7d-91d8-ed5f979154b8
+		summarizeBy: sum
+		sourceColumn: media_pontos_visitante_historico
+
+		annotation SummarizationSetBy = Automatic
+
+	column jogos_acumulados
+		dataType: int64
+		lineageTag: cd22acff-58fe-42c8-aecb-40ee174c3d60
+		summarizeBy: sum
+		sourceColumn: jogos_acumulados
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_descanso
+		dataType: double
+		lineageTag: 6f78e77a-1b7b-4867-a0d1-2ae6b45c9c41
+		summarizeBy: sum
+		sourceColumn: dias_descanso
+
+		annotation SummarizationSetBy = Automatic
+
+	column media_pontos_futuros_5
+		dataType: double
+		lineageTag: b1831ac1-0085-493d-ac30-592c52df4ba6
+		summarizeBy: sum
+		sourceColumn: media_pontos_futuros_5
+
+		annotation SummarizationSetBy = Automatic
+
+	column fim_alvo
+		dataType: dateTime
+		lineageTag: bb073512-b099-49ea-ab8c-4b2201b0fe7d
+		summarizeBy: none
+		sourceColumn: fim_alvo
+
+		variation Variação
+			isDefault
+			relationship: 5959d6b3-8229-4c46-91b9-5e937c65c4d2
+			defaultHierarchy: LocalDateTable_f7108b8e-b345-495a-8aa7-1dbcee3bb876.'Hierarquia de datas'
+
+	partition analitico = m
+		mode: import
+		source =
+				let
+				    Origem = Parquet.Document(File.Contents("C:\Users\Vinícius Ribeiro\Documents\Projetos\Além do Placar\data\processed\dataset_analitico.parquet"))
+				in
+				    Origem
+

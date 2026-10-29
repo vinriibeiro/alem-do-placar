@@ -4,5 +4,17 @@
   "displayName": "Tendências",
   "displayOption": "FitToPage",
   "height": 720,
-  "width": 1280
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "0e5cc3881744829246c4",
+      "target": "3e1d45a4a015264f4b35",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0e5cc3881744829246c4",
+      "target": "c0c8ea8f1a3342408a38",
+      "type": "NoFilter"
+    }
+  ]
 }

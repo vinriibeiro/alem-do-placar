@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "3e1d45a4a015264f4b35",
   "position": {
     "x": 16,
-    "y": 436,
+    "y": 446,
+    "z": 6000,
+    "height": 242,
     "width": 400,
-    "height": 256,
-    "z": 6,
-    "tabOrder": 6
+    "tabOrder": 6000
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -28,6 +28,7 @@
               },
               "queryRef": "dim_equipes.nome_padronizado",
               "nativeQueryRef": "nome_padronizado",
+              "active": true,
               "displayName": "Equipe"
             }
           ]
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média recente",
-              "nativeQueryRef": "Média recente"
+              "nativeQueryRef": "Média recente",
+              "displayName": "Últimos 5 jogos"
             }
           ]
         }
@@ -117,7 +119,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -127,6 +129,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -146,14 +168,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Média recente (5 jogos) por equipe'"
+                  "Value": "'Média dos últimos 5 jogos, todas as equipes'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -162,9 +198,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -191,14 +240,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "10D"
                 }
               }
             }

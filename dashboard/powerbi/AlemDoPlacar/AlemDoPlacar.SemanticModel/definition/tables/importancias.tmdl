@@ -1,0 +1,35 @@
+table importancias
+	lineageTag: 5eff320a-d9d7-4893-8d96-4c734efca3f8
+
+	column atributo
+		dataType: string
+		lineageTag: 1de489c7-83f4-47d4-a5bf-8a4c95270591
+		summarizeBy: none
+		sourceColumn: atributo
+
+	column variavel
+		dataType: string
+		lineageTag: 0fe235b0-5229-43f5-aaf4-4b804243868f
+		summarizeBy: none
+		sourceColumn: variavel
+
+	column delta_mae_media
+		dataType: double
+		lineageTag: 037c9826-8bce-4966-980b-4fc1cdcc1f29
+		summarizeBy: none
+		sourceColumn: delta_mae_media
+
+	column delta_mae_desvio
+		dataType: double
+		lineageTag: 0b2453e5-6607-4021-8578-565d1110b3d7
+		summarizeBy: none
+		sourceColumn: delta_mae_desvio
+
+	partition importancias = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[atributo = "media_saldo_gols_5", variavel = "Saldo médio de gols nos últimos 5 jogos", delta_mae_media = 0.015114397142175417, delta_mae_desvio = 0.003580729119664504], [atributo = "media_pontos_visitante_historico", variavel = "Média de pontos como visitante na temporada", delta_mae_media = 0.012376872127084137, delta_mae_desvio = 0.0011494335205744122], [atributo = "media_pontos_10", variavel = "Média de pontos nos últimos 10 jogos", delta_mae_media = 0.005767414918727065, delta_mae_desvio = 0.0034365464021926286], [atributo = "media_pontos_5", variavel = "Média de pontos nos últimos 5 jogos", delta_mae_media = 0.003907851298332365, delta_mae_desvio = 0.002123326087312687], [atributo = "media_pontos_mandante_historico", variavel = "Média de pontos como mandante na temporada", delta_mae_media = 0.003101457370557148, delta_mae_desvio = 0.0016937645192118568], [atributo = "media_pontos_3", variavel = "Média de pontos nos últimos 3 jogos", delta_mae_media = 0.0020647008644862465, delta_mae_desvio = 0.0013527730181813913], [atributo = "media_saldo_gols_3", variavel = "Saldo médio de gols nos últimos 3 jogos", delta_mae_media = 0.000692606641849447, delta_mae_desvio = 0.001026619527540038], [atributo = "media_saldo_gols_10", variavel = "Saldo médio de gols nos últimos 10 jogos", delta_mae_media = 0.00028608722650630414, delta_mae_desvio = 0.0008511500533701317], [atributo = "desvio_pontos_5", variavel = "Oscilação dos pontos nos últimos 5 jogos", delta_mae_media = 0.00020642468476231857, delta_mae_desvio = 0.0005301662762630988], [atributo = "jogos_acumulados", variavel = "Jogos disputados na temporada", delta_mae_media = 2.088219764235788e-05, delta_mae_desvio = 0.00015166174504492987], [atributo = "dias_descanso", variavel = "Dias de descanso", delta_mae_media = -0.0004761370712864532, delta_mae_desvio = 0.00033513975953504193], [atributo = "mando", variavel = "Jogou em casa", delta_mae_media = -0.0005006795293713062, delta_mae_desvio = 0.0007044591786410433]}, type table [atributo = text, variavel = text, delta_mae_media = number, delta_mae_desvio = number])
+				in
+				    Origem
+

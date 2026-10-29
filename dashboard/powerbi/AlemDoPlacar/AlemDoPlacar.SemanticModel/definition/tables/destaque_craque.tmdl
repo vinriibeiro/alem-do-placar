@@ -1,0 +1,55 @@
+table destaque_craque
+	lineageTag: cf966e01-6804-47da-a9ac-84a971b1f9b1
+
+	column ano
+		dataType: int64
+		lineageTag: a710f7f6-17c4-40f5-be68-5a12dc45ae57
+		summarizeBy: none
+		sourceColumn: ano
+
+	column nome
+		dataType: string
+		lineageTag: 374bdb94-59f0-40b9-b58b-b48d0081d4db
+		summarizeBy: none
+		sourceColumn: nome
+
+	column clube
+		dataType: string
+		lineageTag: b1df883c-d4a0-4935-b1b2-ffa8958000df
+		summarizeBy: none
+		sourceColumn: clube
+
+	column imagem
+		dataType: string
+		lineageTag: aa17289c-1233-4173-86a8-a69187576ff6
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: imagem
+
+	column escudo
+		dataType: string
+		lineageTag: 84b5c5c3-340f-4de7-a095-dc2b1342b871
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: escudo
+
+	column detalhe
+		dataType: string
+		lineageTag: 254b0847-0c7f-43e8-ac38-48aeb5d67e8c
+		summarizeBy: none
+		sourceColumn: detalhe
+
+	column credito
+		dataType: string
+		lineageTag: 7e1d69d0-c40d-4fcb-8cd1-dc2d7a87c79c
+		summarizeBy: none
+		sourceColumn: credito
+
+	partition destaque_craque = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[ano = 2018, nome = "Dudu", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Dudu-Palmeiras-Cuiaba-jul-2022-5.jpg/250px-Dudu-Palmeiras-Cuiaba-jul-2022-5.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "SE Palmeiras · Prêmio Brasileirão (CBF)", credito = "Foto: SOCCER DIGITAL · CC0 · Wikimedia Commons"], [ano = 2019, nome = "Bruno Henrique", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Bruno-Henrique-Flamengo-2021-2.jpg/250px-Bruno-Henrique-Flamengo-2021-2.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "Flamengo · Prêmio Brasileirão (CBF)", credito = "Foto: autor na Wikimedia · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2020, nome = "Claudinho", clube = "RB Bragantino", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Claudinho_in_Zenit_2023.jpg/250px-Claudinho_in_Zenit_2023.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/pt/thumb/9/9e/RedBullBragantino.png/120px-RedBullBragantino.png", detalhe = "RB Bragantino · Prêmio Brasileirão (CBF)", credito = "Foto: Вячеслав Евдокимов · CC BY-SA 3.0 · Wikimedia Commons"], [ano = 2021, nome = "Hulk", clube = "Atlético Mineiro", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Spar-Zen2015_%283%29.jpg/250px-Spar-Zen2015_%283%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Clube_Atl%C3%A9tico_Mineiro_logo.svg/120px-Clube_Atl%C3%A9tico_Mineiro_logo.svg.png", detalhe = "Atlético Mineiro · Prêmio Brasileirão (CBF)", credito = "Foto: Вячеслав Евдокимов · CC BY-SA 3.0 · Wikimedia Commons"], [ano = 2022, nome = "Gustavo Scarpa", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/2022-Gustavo-Scarpa-2022.png/250px-2022-Gustavo-Scarpa-2022.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "SE Palmeiras · Prêmio Brasileirão (CBF)", credito = "Foto: ImgBB · Attribution · Wikimedia Commons"], [ano = 2023, nome = "Não informado na fonte", clube = "", imagem = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", escudo = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", detalhe = "A fonte consultada não registra este destaque na temporada.", credito = ""], [ano = 2024, nome = "Luiz Henrique", clube = "Botafogo FR", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Luiz_Henrique_Brazil_V_Morocco_13_June_2026-147.jpg/250px-Luiz_Henrique_Brazil_V_Morocco_13_June_2026-147.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Botafogo_de_Futebol_e_Regatas_logo.svg/120px-Botafogo_de_Futebol_e_Regatas_logo.svg.png", detalhe = "Botafogo FR · Prêmio Brasileirão (CBF)", credito = "Foto: Bryan Berlin · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2025, nome = "Giorgian de Arrascaeta", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Arrascaeta_Libertadores_2021.jpg/250px-Arrascaeta_Libertadores_2021.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "Flamengo · Prêmio Brasileirão (CBF)", credito = "Foto: autor na Wikimedia · CC BY-SA 4.0 · Wikimedia Commons"]}, type table [ano = Int64.Type, nome = text, clube = text, imagem = text, escudo = text, detalhe = text, credito = text])
+				in
+				    Origem
+

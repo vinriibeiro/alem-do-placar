@@ -1,0 +1,75 @@
+table fato_partidas
+	lineageTag: b8e8494f-cd0b-41b1-b103-a7e6b0d6e4cb
+
+	column partida_id
+		dataType: string
+		lineageTag: eacbe3d3-232d-4e69-8aa8-384bcce7c980
+		summarizeBy: none
+		sourceColumn: partida_id
+
+	column data_partida
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e761130c-b36e-4819-a910-625839de1f44
+		summarizeBy: none
+		sourceColumn: data_partida
+
+		variation Variação
+			isDefault
+			relationship: ccccf319-3fd9-453a-bd1c-73402d54caad
+			defaultHierarchy: LocalDateTable_913d1849-7949-4c1e-8476-8953de4a05a5.'Hierarquia de datas'
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column temporada_id
+		dataType: int64
+		lineageTag: f138c7d4-e51d-466f-9ac4-d62ff74c7471
+		summarizeBy: none
+		sourceColumn: temporada_id
+
+	column equipe_mandante_id
+		dataType: int64
+		lineageTag: fc4db4ad-f5f5-467e-af07-ca8499cb7df9
+		summarizeBy: sum
+		sourceColumn: equipe_mandante_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column equipe_visitante_id
+		dataType: int64
+		lineageTag: 8664295a-4374-45b2-a0e9-1726ad4ef16b
+		summarizeBy: sum
+		sourceColumn: equipe_visitante_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gols_mandante
+		dataType: int64
+		lineageTag: a6b2a84f-d46d-4222-93f1-b0ab37aad467
+		summarizeBy: sum
+		sourceColumn: gols_mandante
+
+		annotation SummarizationSetBy = Automatic
+
+	column gols_visitante
+		dataType: int64
+		lineageTag: bbccebe9-a362-4306-9e23-314d424df218
+		summarizeBy: sum
+		sourceColumn: gols_visitante
+
+		annotation SummarizationSetBy = Automatic
+
+	column resultado
+		dataType: string
+		lineageTag: 95a76ea4-2566-46fc-814f-a09585a2460f
+		summarizeBy: none
+		sourceColumn: resultado
+
+	partition fato_partidas = m
+		mode: import
+		source =
+				let
+				    Origem = Parquet.Document(File.Contents("C:\Users\Vinícius Ribeiro\Documents\Projetos\Além do Placar\data\processed\fato_partidas.parquet"))
+				in
+				    Origem
+

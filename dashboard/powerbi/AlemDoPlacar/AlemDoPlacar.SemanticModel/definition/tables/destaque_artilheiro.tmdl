@@ -1,0 +1,55 @@
+table destaque_artilheiro
+	lineageTag: ab2792c9-546a-4e9f-804f-627cca6302fb
+
+	column ano
+		dataType: int64
+		lineageTag: a866f6c4-0665-4eb2-9bad-106bcce06088
+		summarizeBy: none
+		sourceColumn: ano
+
+	column nome
+		dataType: string
+		lineageTag: ab18aa79-926d-4668-a9e1-0c84814baf27
+		summarizeBy: none
+		sourceColumn: nome
+
+	column clube
+		dataType: string
+		lineageTag: 7a40cc7a-986f-4fa3-8f7a-6e7e44408f81
+		summarizeBy: none
+		sourceColumn: clube
+
+	column imagem
+		dataType: string
+		lineageTag: 68fbe44c-afaf-4307-aedd-80e3fc7de787
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: imagem
+
+	column escudo
+		dataType: string
+		lineageTag: 18bbb7ee-a91b-4a2d-b9c9-6920ef2b9976
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: escudo
+
+	column detalhe
+		dataType: string
+		lineageTag: 04bbdff7-2883-49c3-8a3c-adc1d0850182
+		summarizeBy: none
+		sourceColumn: detalhe
+
+	column credito
+		dataType: string
+		lineageTag: 95807c8f-d55a-43ea-a6df-bdb91eeff831
+		summarizeBy: none
+		sourceColumn: credito
+
+	partition destaque_artilheiro = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[ano = 2018, nome = "Gabriel", clube = "Santos FC", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Gabriel_Barbosa_2022.jpg/250px-Gabriel_Barbosa_2022.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Santos_Futebol_Clube_logo_%28with_stars_and_crown%29.png/120px-Santos_Futebol_Clube_logo_%28with_stars_and_crown%29.png", detalhe = "18 gols · Santos FC", credito = "Foto: Arthur Miranda · CC0 · Wikimedia Commons"], [ano = 2019, nome = "Gabriel", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Gabriel_Barbosa_2022.jpg/250px-Gabriel_Barbosa_2022.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "25 gols · Flamengo", credito = "Foto: Arthur Miranda · CC0 · Wikimedia Commons"], [ano = 2020, nome = "Claudinho", clube = "RB Bragantino", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Claudinho_in_Zenit_2023.jpg/250px-Claudinho_in_Zenit_2023.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/pt/thumb/9/9e/RedBullBragantino.png/120px-RedBullBragantino.png", detalhe = "18 gols · RB Bragantino (empatado)", credito = "Foto: Вячеслав Евдокимов · CC BY-SA 3.0 · Wikimedia Commons"], [ano = 2020, nome = "Luciano", clube = "São Paulo FC", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Luciano-Sao-Paulo-Juventude-jun-2022_%28cropped%29.jpg/250px-Luciano-Sao-Paulo-Juventude-jun-2022_%28cropped%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/S%C3%A3o_Paulo_Futebol_Clube_logo_%282022%29.svg/120px-S%C3%A3o_Paulo_Futebol_Clube_logo_%282022%29.svg.png", detalhe = "18 gols · São Paulo FC (empatado)", credito = "Foto: SOCCER DIGITAL · Public domain · Wikimedia Commons"], [ano = 2021, nome = "Hulk", clube = "Atlético Mineiro", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Spar-Zen2015_%283%29.jpg/250px-Spar-Zen2015_%283%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Clube_Atl%C3%A9tico_Mineiro_logo.svg/120px-Clube_Atl%C3%A9tico_Mineiro_logo.svg.png", detalhe = "19 gols · Atlético Mineiro", credito = "Foto: Вячеслав Евдокимов · CC BY-SA 3.0 · Wikimedia Commons"], [ano = 2022, nome = "Germán Cano", clube = "Fluminense FC", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/German_Cano_Fluminense.jpg/250px-German_Cano_Fluminense.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Fluminense_Football_Club.svg/120px-Fluminense_Football_Club.svg.png", detalhe = "26 gols · Fluminense FC", credito = "Foto: Fernandoferreiramarchezi · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2023, nome = "Paulinho", clube = "Atlético Mineiro", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Paulinho-Palmeiras-Santos-mai26_%28cropped%29.jpg/250px-Paulinho-Palmeiras-Santos-mai26_%28cropped%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Clube_Atl%C3%A9tico_Mineiro_logo.svg/120px-Clube_Atl%C3%A9tico_Mineiro_logo.svg.png", detalhe = "20 gols · Atlético Mineiro", credito = "Foto: NullReason · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2024, nome = "Alerrandro", clube = "EC Vitória", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/S%C3%A9rie_A1_Bragantino_1x0_Corinthians_%2852632604066%29.jpg/250px-S%C3%A9rie_A1_Bragantino_1x0_Corinthians_%2852632604066%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Esporte_Clube_Vit%C3%B3ria_%282024%29.svg/120px-Esporte_Clube_Vit%C3%B3ria_%282024%29.svg.png", detalhe = "15 gols · EC Vitória (empatado)", credito = "Foto: SOCCER DIGITAL · Public domain · Wikimedia Commons"], [ano = 2024, nome = "Yuri Alberto", clube = "SC Corinthians Paulista", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Yuri_Alberto_celebra_gol_contra_o_Palmeiras_em_vit%C3%B3ria_de_2_x_0_pelo_campeonato_brasileiro_2024.jpg/250px-Yuri_Alberto_celebra_gol_contra_o_Palmeiras_em_vit%C3%B3ria_de_2_x_0_pelo_campeonato_brasileiro_2024.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/pt/thumb/b/b4/Corinthians_simbolo.png/120px-Corinthians_simbolo.png", detalhe = "15 gols · SC Corinthians Paulista (empatado)", credito = "Foto: Felipematoslima · CC0 · Wikimedia Commons"], [ano = 2025, nome = "Kaio Jorge", clube = "Cruzeiro EC", imagem = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Cruzeiro_Esporte_Clube_%28logo%29.svg/120px-Cruzeiro_Esporte_Clube_%28logo%29.svg.png", detalhe = "21 gols · Cruzeiro EC", credito = "Sem foto com licença livre disponível."]}, type table [ano = Int64.Type, nome = text, clube = text, imagem = text, escudo = text, detalhe = text, credito = text])
+				in
+				    Origem
+

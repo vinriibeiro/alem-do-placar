@@ -1,0 +1,55 @@
+table destaque_goleiro
+	lineageTag: 0b9fd9a4-95a1-4223-91c8-bc842793e247
+
+	column ano
+		dataType: int64
+		lineageTag: 2e0583e0-8015-4367-9ce6-bf0a43fa3351
+		summarizeBy: none
+		sourceColumn: ano
+
+	column nome
+		dataType: string
+		lineageTag: 6011590b-bcbe-4a77-bcfe-6dfdfb411ebd
+		summarizeBy: none
+		sourceColumn: nome
+
+	column clube
+		dataType: string
+		lineageTag: 8cadbf53-2039-486c-9866-6be558c9aef9
+		summarizeBy: none
+		sourceColumn: clube
+
+	column imagem
+		dataType: string
+		lineageTag: 3fd5c774-5647-4fec-8da8-a43355253d8d
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: imagem
+
+	column escudo
+		dataType: string
+		lineageTag: 719d2bec-54ec-49f0-9921-24796be2d187
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: escudo
+
+	column detalhe
+		dataType: string
+		lineageTag: 8c5c97bd-4155-4bf6-bb34-b49e9c36b2cd
+		summarizeBy: none
+		sourceColumn: detalhe
+
+	column credito
+		dataType: string
+		lineageTag: 70a123b3-d232-4d0e-8a23-3c5727462410
+		summarizeBy: none
+		sourceColumn: credito
+
+	partition destaque_goleiro = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[ano = 2018, nome = "Marcelo Lomba", clube = "SC Internacional", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Marcelo-Lomba-Palmeiras-Santos-jan24_%28cropped%29.jpg/250px-Marcelo-Lomba-Palmeiras-Santos-jan24_%28cropped%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Sport_Club_Internacional_logo.svg/120px-Sport_Club_Internacional_logo.svg.png", detalhe = "SC Internacional · o clube sofreu 29 gols em 38 jogos (0,76 por jogo)", credito = "Foto: NullReason · CC BY 4.0 · Wikimedia Commons"], [ano = 2019, nome = "Santos", clube = "Athletico Paranaense", imagem = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Athletico_Paranaense_%28Logo_2019%29.svg/120px-Athletico_Paranaense_%28Logo_2019%29.svg.png", detalhe = "Athletico Paranaense · o clube sofreu 32 gols em 38 jogos (0,84 por jogo)", credito = "Sem foto com licença livre disponível."], [ano = 2020, nome = "Weverton", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Weverton_Brazil_V_Morocco_13_June_2026-67_%28cropped%29.jpg/250px-Weverton_Brazil_V_Morocco_13_June_2026-67_%28cropped%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "SE Palmeiras · o clube sofreu 37 gols em 38 jogos (0,97 por jogo)", credito = "Foto: Bryan Berlin · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2021, nome = "Weverton", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Weverton_Brazil_V_Morocco_13_June_2026-67_%28cropped%29.jpg/250px-Weverton_Brazil_V_Morocco_13_June_2026-67_%28cropped%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "SE Palmeiras · o clube sofreu 43 gols em 38 jogos (1,13 por jogo)", credito = "Foto: Bryan Berlin · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2022, nome = "Weverton", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Weverton_Brazil_V_Morocco_13_June_2026-67_%28cropped%29.jpg/250px-Weverton_Brazil_V_Morocco_13_June_2026-67_%28cropped%29.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "SE Palmeiras · o clube sofreu 27 gols em 38 jogos (0,71 por jogo)", credito = "Foto: Bryan Berlin · CC BY-SA 4.0 · Wikimedia Commons"], [ano = 2023, nome = "Não informado na fonte", clube = "", imagem = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", escudo = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", detalhe = "A fonte consultada não registra este destaque na temporada.", credito = ""], [ano = 2024, nome = "John", clube = "Botafogo FR", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/JohnPe%C3%B1arolxBotafogo2024.jpg/250px-JohnPe%C3%B1arolxBotafogo2024.jpg", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Botafogo_de_Futebol_e_Regatas_logo.svg/120px-Botafogo_de_Futebol_e_Regatas_logo.svg.png", detalhe = "Botafogo FR · o clube sofreu 29 gols em 38 jogos (0,76 por jogo)", credito = "Foto: Jimmy Baikovicius · CC BY-SA 2.0 · Wikimedia Commons"], [ano = 2025, nome = "Agustín Rossi", clube = "Flamengo", imagem = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='10' fill='%23E3F1EB'/><circle cx='32' cy='24' r='11' fill='%2315966A'/><path d='M12 56c2-12 10-18 20-18s18 6 20 18z' fill='%2315966A'/></svg>", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "Flamengo · o clube sofreu 27 gols em 38 jogos (0,71 por jogo)", credito = "Sem foto com licença livre disponível."]}, type table [ano = Int64.Type, nome = text, clube = text, imagem = text, escudo = text, detalhe = text, credito = text])
+				in
+				    Origem
+

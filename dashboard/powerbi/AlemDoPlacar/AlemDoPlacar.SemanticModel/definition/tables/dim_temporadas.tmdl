@@ -1,0 +1,29 @@
+table dim_temporadas
+	lineageTag: 463f8e17-9351-4718-927c-7373373c2c54
+
+	column temporada_id
+		dataType: int64
+		lineageTag: b453ea86-d595-4bbd-ab00-9f1c0a2bb3a7
+		summarizeBy: none
+		sourceColumn: temporada_id
+
+	column ano
+		dataType: int64
+		lineageTag: a3cc48ae-b1a7-4fe4-848f-cc2684e7189a
+		summarizeBy: none
+		sourceColumn: ano
+
+	column competicao
+		dataType: string
+		lineageTag: fb21a95f-79b2-4d37-90c6-4411cee16d17
+		summarizeBy: none
+		sourceColumn: competicao
+
+	partition dim_temporadas = m
+		mode: import
+		source =
+				let
+				    Origem = Parquet.Document(File.Contents("C:\Users\Vinícius Ribeiro\Documents\Projetos\Além do Placar\data\processed\dim_temporadas.parquet"))
+				in
+				    Origem
+

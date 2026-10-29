@@ -1,20 +1,50 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "84492781451cdf40fa73",
   "position": {
     "x": 16,
-    "y": 112,
-    "width": 240,
-    "height": 96,
-    "z": 3,
-    "tabOrder": 3
+    "y": 122,
+    "z": 3000,
+    "height": 566,
+    "width": 760,
+    "tabOrder": 3000
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_equipes"
+                    }
+                  },
+                  "Property": "escudo"
+                }
+              },
+              "queryRef": "dim_equipes.escudo",
+              "nativeQueryRef": "escudo",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_equipes"
+                    }
+                  },
+                  "Property": "nome_padronizado"
+                }
+              },
+              "queryRef": "dim_equipes.nome_padronizado",
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
+            },
             {
               "field": {
                 "Measure": {
@@ -23,48 +53,147 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Partidas"
+                  "Property": "Pontos (temporada)"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Partidas",
-              "nativeQueryRef": "Partidas"
+              "queryRef": "fato_desempenho_equipes.Pontos (temporada)",
+              "nativeQueryRef": "Pontos (temporada)",
+              "displayName": "P"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Jogos (temporada)"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Jogos (temporada)",
+              "nativeQueryRef": "Jogos (temporada)",
+              "displayName": "J"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Vitórias (temporada)"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Vitórias (temporada)",
+              "nativeQueryRef": "Vitórias (temporada)",
+              "displayName": "V"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Empates (temporada)"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Empates (temporada)",
+              "nativeQueryRef": "Empates (temporada)",
+              "displayName": "E"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Derrotas (temporada)"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Derrotas (temporada)",
+              "nativeQueryRef": "Derrotas (temporada)",
+              "displayName": "D"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Saldo (temporada)"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Saldo (temporada)",
+              "nativeQueryRef": "Saldo (temporada)",
+              "displayName": "SG"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Aproveitamento (temporada)"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Aproveitamento (temporada)",
+              "nativeQueryRef": "Aproveitamento (temporada)",
+              "displayName": "Aprov."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Zona"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Zona",
+              "nativeQueryRef": "Zona",
+              "displayName": "Zona"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fato_desempenho_equipes"
+                  }
+                },
+                "Property": "Pontos (temporada)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
     "objects": {
-      "labels": [
+      "grid": [
         {
           "properties": {
-            "fontSize": {
+            "imageHeight": {
               "expr": {
                 "Literal": {
                   "Value": "22D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0b2545'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }
@@ -119,7 +248,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -129,6 +258,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -148,14 +297,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Partidas'"
+                  "Value": "'Classificação · critérios: pontos, vitórias, saldo de gols e gols marcados'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -164,9 +327,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -179,28 +355,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             }

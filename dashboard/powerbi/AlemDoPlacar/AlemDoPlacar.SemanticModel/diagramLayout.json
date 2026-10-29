@@ -1,0 +1,191 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 453.13139341156739,
+            "y": 737.94190482093427
+          },
+          "nodeIndex": "analitico",
+          "nodeLineageTag": "be31f25b-fc50-433f-9961-6e6a83648a67",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1013.3302217784913,
+            "y": 572.9809170248991
+          },
+          "nodeIndex": "comparacao_modelos",
+          "nodeLineageTag": "3db8ce33-b083-4de6-ae78-9398b44c1c47",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 779.33022177849148,
+            "y": 250.67285870607873
+          },
+          "nodeIndex": "destaque_artilheiro",
+          "nodeLineageTag": "ab2792c9-546a-4e9f-804f-627cca6302fb",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 551.37666978383345,
+            "y": -50
+          },
+          "nodeIndex": "destaque_ataque",
+          "nodeLineageTag": "3be7c585-7282-4a85-b770-223157ab6cff",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 451.07461096377187
+          },
+          "nodeIndex": "destaque_craque",
+          "nodeLineageTag": "cf966e01-6804-47da-a9ac-84a971b1f9b1",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 262.60521152701347,
+            "y": 146.90808534092639
+          },
+          "nodeIndex": "destaque_goleiro",
+          "nodeLineageTag": "0b9fd9a4-95a1-4223-91c8-bc842793e247",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 570.52703592847547,
+            "y": 1093.9224524530939
+          },
+          "nodeIndex": "dim_equipes",
+          "nodeLineageTag": "3a99cba7-31f3-457a-b719-f4374c10f9f4",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 466.09389931485953,
+            "y": 449.82701098137341
+          },
+          "nodeIndex": "dim_temporadas",
+          "nodeLineageTag": "463f8e17-9351-4718-927c-7373373c2c54",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 252.93766437335364,
+            "y": 1095.9618340497982
+          },
+          "nodeIndex": "fato_desempenho_equipes",
+          "nodeLineageTag": "14bf5524-4061-4e3a-bc6f-8c8cea1f6e2c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 163.56104399328336,
+            "y": 766.97540859916489
+          },
+          "nodeIndex": "fato_partidas",
+          "nodeLineageTag": "b8e8494f-cd0b-41b1-b103-a7e6b0d6e4cb",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1297.3302217784913,
+            "y": 634.9809170248991
+          },
+          "nodeIndex": "importancias",
+          "nodeLineageTag": "5eff320a-d9d7-4893-8d96-4c734efca3f8",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1581.3302217784913,
+            "y": 574.9809170248991
+          },
+          "nodeIndex": "metricas",
+          "nodeLineageTag": "c7d7d4ef-0f36-4659-b040-5749c0d4c907",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 742.98205790311,
+            "y": 657.58118251953817
+          },
+          "nodeIndex": "previsoes",
+          "nodeLineageTag": "2050f1ff-7334-4ac3-aa0a-0d6a2968a15d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

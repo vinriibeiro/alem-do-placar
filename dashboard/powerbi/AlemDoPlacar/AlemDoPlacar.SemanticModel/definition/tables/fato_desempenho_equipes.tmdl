@@ -1,0 +1,268 @@
+table fato_desempenho_equipes
+	lineageTag: 14bf5524-4061-4e3a-bc6f-8c8cea1f6e2c
+
+	measure 'Modelo selecionado' = "M01_ridge"
+		lineageTag: 075de990-1a46-4735-86e3-239722677a0c
+
+	measure 'Corte de treino' = "2025-03-29"
+		lineageTag: 907c7a38-be27-4428-b81f-ccf654f7ca91
+
+	measure 'Versão do modelo' = "T006-1.0"
+		lineageTag: d91735cf-867f-478d-aded-bad2b1c6e795
+
+	measure 'Notas do modelo' = "ganho mínimo de 2% no MAE médio e piora anual até 10%"
+		lineageTag: 309743ea-ef80-4cd2-91b5-83506bd641f5
+
+	measure 'Cobertura do intervalo' = 0.9121212121212121
+		formatString: 0.0%
+		lineageTag: b3bceb72-661e-473a-9d26-dcbc3fa0a0fc
+
+	measure Partidas = DISTINCTCOUNT(fato_desempenho_equipes[partida_id])
+		formatString: #,0
+		lineageTag: 0b7afbaa-be16-4735-9b92-52d82647d2d3
+
+	measure Temporadas = DISTINCTCOUNT(dim_temporadas[ano])
+		formatString: 0
+		lineageTag: 5a4725d0-e151-43a3-b2c4-7a5d405ed755
+
+	measure 'Observações de equipe' = COUNTROWS(fato_desempenho_equipes)
+		formatString: #,0
+		lineageTag: de0036d4-1eb9-4450-8f3b-b9161d46ad17
+
+	measure Gols = SUM(fato_desempenho_equipes[gols_pro])
+		formatString: #,0
+		lineageTag: 4d53fcf4-4f4e-46d1-a13a-ad9d8c2b0649
+
+	measure 'Gols sofridos' = SUM(fato_desempenho_equipes[gols_contra])
+		formatString: #,0
+		lineageTag: 4f681eff-ad64-4ad6-af09-4b995b5368e1
+
+	measure 'Saldo de gols' = SUM(fato_desempenho_equipes[saldo_gols])
+		formatString: +#,0;-#,0;0
+		lineageTag: 0155a511-9cd4-466d-8702-d460daa09eb0
+
+	measure 'Pontos totais' = SUM(fato_desempenho_equipes[pontos])
+		formatString: #,0
+		lineageTag: a06ac850-681b-494c-a991-a93a41d18c2e
+
+	measure Vitórias = CALCULATE(COUNTROWS(fato_desempenho_equipes),fato_desempenho_equipes[pontos]=3)
+		formatString: #,0
+		lineageTag: 028f9135-6490-489c-804c-45d225091f93
+
+	measure Empates = CALCULATE(COUNTROWS(fato_desempenho_equipes),fato_desempenho_equipes[pontos]=1)
+		formatString: #,0
+		lineageTag: 039961f3-652b-4086-966c-e46fdb7f0ca6
+
+	measure Derrotas = CALCULATE(COUNTROWS(fato_desempenho_equipes),fato_desempenho_equipes[pontos]=0)
+		formatString: #,0
+		lineageTag: edc31f05-eb86-4d53-be81-71de2d53f33f
+
+	measure 'Gols por jogo' = DIVIDE([Gols],[Partidas])
+		formatString: 0.00
+		lineageTag: beed034a-af65-483f-9da4-b5065276993e
+
+	measure 'Gols sofridos por jogo' = DIVIDE([Gols sofridos],[Observações de equipe])
+		formatString: 0.00
+		lineageTag: 0d819f92-d90d-4e0d-ae24-85a282ae787c
+
+	measure 'Pontos por jogo' = DIVIDE([Pontos totais],[Observações de equipe])
+		formatString: 0.00
+		lineageTag: 395330b1-45a7-4c0c-b092-276e9432603e
+
+	measure Aproveitamento = DIVIDE([Pontos totais],3*[Observações de equipe])
+		formatString: 0.0%
+		lineageTag: 51c912b9-ba64-4690-b51a-d988679d08d9
+
+	measure 'Vitórias do mandante' = DIVIDE(CALCULATE(COUNTROWS(fato_desempenho_equipes),fato_desempenho_equipes[mando_campo]="mandante",fato_desempenho_equipes[pontos]=3),CALCULATE(COUNTROWS(fato_desempenho_equipes),fato_desempenho_equipes[mando_campo]="mandante"))
+		formatString: 0.0%
+		lineageTag: 90d19e87-4b43-497f-9c3c-a31db4f5ec04
+
+	measure 'Volatilidade de pontos' = STDEV.P(fato_desempenho_equipes[pontos])
+		formatString: 0.00
+		lineageTag: 4a95d0b7-38e0-4d9f-a6a8-61503b9b2680
+
+	measure 'Média prevista' = AVERAGE(previsoes[previsao])
+		formatString: 0.00
+		lineageTag: 3ad7eac2-d36a-44d2-8a0d-316e62461820
+
+	measure 'Média observada' = AVERAGE(previsoes[alvo])
+		formatString: 0.00
+		lineageTag: eba31275-cc35-4bfd-8dfb-cda895d0d57d
+
+	measure 'Limite inferior' = AVERAGE(previsoes[limite_inferior])
+		formatString: 0.00
+		lineageTag: 9b022d06-16da-4f57-bb3b-65110d8b8a31
+
+	measure 'Limite superior' = AVERAGE(previsoes[limite_superior])
+		formatString: 0.00
+		lineageTag: ec29124c-2ee8-4ba4-b1c0-af3e51bfdca1
+
+	measure 'Erro absoluto médio' = AVERAGEX(previsoes,ABS(previsoes[previsao]-previsoes[alvo]))
+		formatString: 0.000
+		lineageTag: 31d3bcfd-6674-4973-9f5b-bdb8f6cc93d7
+
+	measure 'Média 3 jogos' = AVERAGE(analitico[media_pontos_3])
+		formatString: 0.00
+		lineageTag: 5d525918-616f-4377-97bd-9c229f21fe14
+
+	measure 'Média recente' = AVERAGE(analitico[media_pontos_5])
+		formatString: 0.00
+		lineageTag: 7b65431d-a03f-42eb-8036-aa670099c0fb
+
+	measure 'Média 10 jogos' = AVERAGE(analitico[media_pontos_10])
+		formatString: 0.00
+		lineageTag: 288c8839-329f-4b36-a141-b3f69ea27252
+
+	measure Importância = AVERAGE(importancias[delta_mae_media])
+		formatString: 0.0000
+		lineageTag: b778cb0b-d7cf-4552-a40d-7c068c27b3c5
+
+	measure 'MAE global selecionado' = VAR ModeloAtual = [Modelo selecionado] RETURN CALCULATE(MAX(metricas[mae]),metricas[fase]="holdout",metricas[modelo]=ModeloAtual,metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: e58b95fc-6056-49fb-9678-10e1b2020eb2
+
+	measure 'MAE global baseline' = CALCULATE(MAX(metricas[mae]),metricas[fase]="holdout",metricas[modelo]="M00_media_recente_5",metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: afe8c22e-6029-4ca4-8bd4-8e757eb1d6a1
+
+	measure 'MAE validação' = CALCULATE(MAX(metricas[mae]),metricas[fase]="validacao",metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: 234d4956-807d-416c-91cc-3898d7824e56
+
+	measure 'MAE holdout' = CALCULATE(MAX(metricas[mae]),metricas[fase]="holdout",metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: aefc6cd9-ae95-415f-a246-3d28f3482554
+
+	measure 'RMSE validação' = CALCULATE(MAX(metricas[rmse]),metricas[fase]="validacao",metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: ec6e4d37-e61c-4ff5-8f6b-3dc2f8443fd3
+
+	measure 'RMSE holdout' = CALCULATE(MAX(metricas[rmse]),metricas[fase]="holdout",metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: 1704839a-4b5a-41cb-a7c5-6088c3692e3d
+
+	measure 'RMSE global selecionado' = VAR ModeloAtual = [Modelo selecionado] RETURN CALCULATE(MAX(metricas[rmse]),metricas[fase]="holdout",metricas[modelo]=ModeloAtual,metricas[temporada]="todas")
+		formatString: 0.000
+		lineageTag: 4341ce96-6730-44d0-9272-f45ab27c9590
+
+	measure 'Jogos (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),[Observações de equipe])
+		formatString: 0
+		lineageTag: 5d152bf0-5a77-456f-bf1c-5a465a7c9435
+
+	measure 'Pontos (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),[Pontos totais])
+		formatString: 0
+		lineageTag: 05acf628-8e0d-4b21-bb5d-c3380a8ef5ec
+
+	measure 'Vitórias (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),COALESCE([Vitórias],0))
+		formatString: 0
+		lineageTag: 40eb6c0a-b4f3-4eb8-894e-57dddae110b6
+
+	measure 'Empates (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),COALESCE([Empates],0))
+		formatString: 0
+		lineageTag: c71fb1d5-2814-4a00-a4dc-95d4fb4282b0
+
+	measure 'Derrotas (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),COALESCE([Derrotas],0))
+		formatString: 0
+		lineageTag: 37d58635-8a9d-4f91-9450-cb3018658720
+
+	measure 'Saldo (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),[Saldo de gols])
+		formatString: +0;-0;0
+		lineageTag: 5faf3273-1828-4766-a8a9-f7c893efadb4
+
+	measure 'Aproveitamento (temporada)' = IF(HASONEVALUE(dim_temporadas[ano]),[Aproveitamento])
+		formatString: 0.0%
+		lineageTag: 1ca15567-12bb-4c99-9b86-21f8c2301204
+
+	measure Posição = IF(HASONEVALUE(dim_temporadas[ano]) && ISINSCOPE(dim_equipes[nome_padronizado]) && [Observações de equipe] > 0, RANKX(FILTER(ALL(dim_equipes[nome_padronizado]), [Observações de equipe] > 0), COALESCE([Pontos totais],0)*100000000 + COALESCE([Vitórias],0)*1000000 + (COALESCE([Saldo de gols],0)+500)*1000 + COALESCE([Gols],0),, DESC, Skip))
+		formatString: 0
+		lineageTag: 4a426897-16a2-41e8-b58f-0328289052dc
+
+	measure Zona = VAR p = [Posição] RETURN SWITCH(TRUE(), ISBLANK(p), BLANK(), p <= 4, "Libertadores", p <= 6, "Pré-Libertadores", p <= 12, "Sul-Americana", p >= 17, "Rebaixamento", "")
+		lineageTag: 380aab35-57df-4219-9c3f-7d19d8683f3f
+
+	measure 'Aviso temporada' = IF(HASONEVALUE(dim_temporadas[ano]), "Temporada " & FORMAT(SELECTEDVALUE(dim_temporadas[ano]), "0") & " · zona pela posição; vagas extras de copas não consideradas", "Selecione uma única temporada para ver a classificação")
+		lineageTag: e48bcb4a-a5a6-4fb8-b95f-93ac3f3a28bf
+
+	measure 'Média do campeonato' = CALCULATE([Pontos por jogo],ALL(dim_equipes))
+		formatString: 0.00
+		lineageTag: 12613474-a629-4ebb-aaf0-8bd295447207
+
+	measure '% dos resultados' = DIVIDE([Observações de equipe],CALCULATE([Observações de equipe],ALL(fato_desempenho_equipes[resultado_equipe])))
+		formatString: 0.0%
+		lineageTag: 46136bf4-430b-42c6-81aa-2e800fa49b41
+
+	measure 'Modelos avaliados' = COUNTROWS(comparacao_modelos)
+		formatString: 0
+		lineageTag: 78e2891e-a02d-4b56-893d-a9f428fc99ff
+
+	measure 'MAE do modelo' = AVERAGE(comparacao_modelos[mae_validacao])
+		formatString: 0.000
+		lineageTag: 8e29c4e5-c6d2-4668-ab94-e3d160cf3f3c
+
+	measure 'RMSE do modelo' = AVERAGE(comparacao_modelos[rmse_validacao])
+		formatString: 0.000
+		lineageTag: 098b2f4d-bfd9-44fe-b7a3-d00b5a67a962
+
+	column partida_id
+		dataType: string
+		lineageTag: 4efb37f1-5fbf-4c3a-9523-ae892a4d4ff1
+		summarizeBy: none
+		sourceColumn: partida_id
+
+	column equipe_id
+		dataType: int64
+		lineageTag: 6e7ac4bd-bf53-4f1c-b670-46ebb4666124
+		summarizeBy: none
+		sourceColumn: equipe_id
+
+	column pontos
+		dataType: int64
+		lineageTag: a8fab16a-d2c2-4bdc-b60c-ddca43fbfe7b
+		summarizeBy: none
+		sourceColumn: pontos
+
+	column gols_pro
+		dataType: int64
+		lineageTag: fac8706a-3cfa-471a-844f-95fffbdcefe3
+		summarizeBy: none
+		sourceColumn: gols_pro
+
+	column gols_contra
+		dataType: int64
+		lineageTag: c7cb7617-f5c6-44ef-9e50-113fd2dbbf39
+		summarizeBy: none
+		sourceColumn: gols_contra
+
+	column saldo_gols
+		dataType: int64
+		lineageTag: 3e258ca9-6b7b-4562-b734-a581eb3bf8d4
+		summarizeBy: none
+		sourceColumn: saldo_gols
+
+	column mando_campo
+		dataType: string
+		lineageTag: 3689a3b7-d2c6-4e8c-aef6-ddad5c83978b
+		summarizeBy: none
+		sourceColumn: mando_campo
+
+	column rodada
+		dataType: int64
+		lineageTag: 46037faa-fcb8-4fec-8f08-1dfbb4cc479b
+		summarizeBy: none
+		sourceColumn: rodada
+
+	column resultado_equipe
+		dataType: string
+		lineageTag: 37806658-4a9d-433f-b2cb-d5c604b10a9c
+		summarizeBy: none
+		sourceColumn: resultado_equipe
+
+	partition fato_desempenho_equipes = m
+		mode: import
+		source =
+				let
+				    Origem = Parquet.Document(File.Contents("C:\Users\Vinícius Ribeiro\Documents\Projetos\Além do Placar\data\processed\fato_desempenho_equipes.parquet")),
+				    Resultado = Table.AddColumn(Origem, "resultado_equipe", each if [pontos] = 3 then "Vitória" else if [pontos] = 1 then "Empate" else "Derrota", type text)
+				in
+				    Resultado
+

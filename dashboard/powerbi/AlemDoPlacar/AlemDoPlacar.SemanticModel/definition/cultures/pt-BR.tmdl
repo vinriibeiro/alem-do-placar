@@ -1,0 +1,914 @@
+cultureInfo pt-BR
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "destaque_craque.imagem": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_craque",
+			          "ConceptualProperty": "imagem"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_craque.nome": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_craque",
+			          "ConceptualProperty": "nome"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_craque.detalhe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_craque",
+			          "ConceptualProperty": "detalhe"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_artilheiro.imagem": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_artilheiro",
+			          "ConceptualProperty": "imagem"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_artilheiro.nome": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_artilheiro",
+			          "ConceptualProperty": "nome"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_artilheiro.detalhe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_artilheiro",
+			          "ConceptualProperty": "detalhe"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_ataque.imagem": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_ataque",
+			          "ConceptualProperty": "imagem"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_ataque.nome": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_ataque",
+			          "ConceptualProperty": "nome"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_ataque.detalhe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_ataque",
+			          "ConceptualProperty": "detalhe"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "dim_equipes.escudo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_equipes",
+			          "ConceptualProperty": "escudo"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "dim_equipes.nome_padronizado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_equipes",
+			          "ConceptualProperty": "nome_padronizado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Equipe": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.posição": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Posição"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Pos.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.pontos_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Pontos (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "P": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.jogos_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Jogos (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "J": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.vitórias_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Vitórias (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "V": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.empates_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Empates (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "E": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.derrotas_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Derrotas (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "D": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.saldo_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Saldo (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "SG": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.aproveitamento_temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Aproveitamento (temporada)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Aprov.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.zona": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Zona"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Zona": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.média_recente": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Média recente"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Últimos 5 jogos": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.média_10_jogos": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Média 10 jogos"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Últimos 10 jogos": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.volatilidade_de_pontos": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Volatilidade de pontos"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Oscilação": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.gols_por_jogo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Gols por jogo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gols marcados/jogo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.gols_sofridos_por_jogo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Gols sofridos por jogo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gols sofridos/jogo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.resultado_equipe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "resultado_equipe"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Resultado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.importância": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Importância"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Aumento do erro": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.mae_do_modelo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "MAE do modelo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Erro médio absoluto (MAE)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.rmse_do_modelo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "RMSE do modelo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "RMSE": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.média_prevista": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Média prevista"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Previsto": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.média_observada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Média observada"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Real": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.limite_inferior": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Limite inferior"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Limite inferior (90%)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fato_desempenho_equipes.limite_superior": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fato_desempenho_equipes",
+			          "ConceptualProperty": "Limite superior"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Limite superior (90%)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_temporadas.ano": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dim_temporadas",
+			          "ConceptualProperty": "ano"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Temporada": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "destaque_goleiro.imagem": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_goleiro",
+			          "ConceptualProperty": "imagem"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_goleiro.nome": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_goleiro",
+			          "ConceptualProperty": "nome"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "destaque_goleiro.detalhe": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "destaque_goleiro",
+			          "ConceptualProperty": "detalhe"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "analitico.data_referencia": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "analitico",
+			          "ConceptualProperty": "data_referencia"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Data": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "importancias.variavel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "importancias",
+			          "ConceptualProperty": "variavel"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Variável": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.nome": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "nome"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "comparacao_modelos.tipo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "tipo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tipo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.mae_validacao": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "mae_validacao"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "MAE validação": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.rmse_validacao": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "rmse_validacao"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "RMSE validação": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.mae_teste": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "mae_teste"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "MAE teste 2025": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.rmse_teste": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "rmse_teste"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "RMSE teste 2025": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.diferenca_referencia": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "diferenca_referencia"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "vs. referência": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "comparacao_modelos.selecionado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "comparacao_modelos",
+			          "ConceptualProperty": "selecionado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Escolhido": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "previsoes.data_referencia": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "previsoes",
+			          "ConceptualProperty": "data_referencia"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Data": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "previsoes.previsao": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "previsoes",
+			          "ConceptualProperty": "previsao"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Previsão": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "previsoes.limite_inferior": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "previsoes",
+			          "ConceptualProperty": "limite_inferior"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Limite inferior": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "previsoes.limite_superior": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "previsoes",
+			          "ConceptualProperty": "limite_superior"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Limite superior": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

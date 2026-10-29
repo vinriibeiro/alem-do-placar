@@ -1,70 +1,77 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "19112ae7c5f1ef06776c",
   "position": {
-    "x": 772,
-    "y": 112,
-    "width": 240,
-    "height": 96,
-    "z": 6,
-    "tabOrder": 6
+    "x": 788,
+    "y": 206,
+    "z": 6000,
+    "height": 235,
+    "width": 232,
+    "tabOrder": 6000
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
+                      "Entity": "destaque_artilheiro"
                     }
                   },
-                  "Property": "Vitórias do mandante"
+                  "Property": "imagem"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Vitórias do mandante",
-              "nativeQueryRef": "Vitórias do mandante"
+              "queryRef": "destaque_artilheiro.imagem",
+              "nativeQueryRef": "imagem",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "destaque_artilheiro"
+                    }
+                  },
+                  "Property": "nome"
+                }
+              },
+              "queryRef": "destaque_artilheiro.nome",
+              "nativeQueryRef": "nome",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "destaque_artilheiro"
+                    }
+                  },
+                  "Property": "detalhe"
+                }
+              },
+              "queryRef": "destaque_artilheiro.detalhe",
+              "nativeQueryRef": "detalhe",
+              "displayName": " "
             }
           ]
         }
       }
     },
     "objects": {
-      "labels": [
+      "grid": [
         {
           "properties": {
-            "fontSize": {
+            "imageHeight": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0b2545'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "64D"
                 }
               }
             }
@@ -119,7 +126,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -129,6 +136,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -148,14 +175,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Vitórias do mandante'"
+                  "Value": "'Artilheiro do campeonato'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -164,9 +205,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -179,28 +233,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             }

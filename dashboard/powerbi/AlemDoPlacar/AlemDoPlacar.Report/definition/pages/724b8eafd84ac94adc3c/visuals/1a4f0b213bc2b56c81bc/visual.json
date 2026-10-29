@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "1a4f0b213bc2b56c81bc",
   "position": {
     "x": 16,
-    "y": 196,
+    "y": 206,
+    "z": 5000,
+    "height": 236,
     "width": 400,
-    "height": 228,
-    "z": 5,
-    "tabOrder": 5
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "lineChart",
@@ -28,6 +28,7 @@
               },
               "queryRef": "analitico.data_referencia",
               "nativeQueryRef": "data_referencia",
+              "active": true,
               "displayName": "Data"
             }
           ]
@@ -42,25 +43,12 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Média 3 jogos"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Média 3 jogos",
-              "nativeQueryRef": "Média 3 jogos"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
                   "Property": "Média recente"
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média recente",
-              "nativeQueryRef": "Média recente"
+              "nativeQueryRef": "Média recente",
+              "displayName": "Últimos 5 jogos"
             },
             {
               "field": {
@@ -74,11 +62,110 @@
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média 10 jogos",
-              "nativeQueryRef": "Média 10 jogos"
+              "nativeQueryRef": "Média 10 jogos",
+              "displayName": "Últimos 10 jogos"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#15966a'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média recente"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#f3c84b'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média 10 jogos"
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'solid'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média recente"
+          }
+        },
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'solid'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fato_desempenho_equipes.Média 10 jogos"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -127,7 +214,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -137,6 +224,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -156,14 +263,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Média móvel de pontos (3, 5 e 10 jogos)'"
+                  "Value": "'Média móvel de pontos da equipe escolhida'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -172,9 +293,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -201,14 +335,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "10D"
                 }
               }
             }

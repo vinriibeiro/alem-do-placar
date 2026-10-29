@@ -1,0 +1,71 @@
+table comparacao_modelos
+	lineageTag: 3db8ce33-b083-4de6-ae78-9398b44c1c47
+
+	column ordem
+		dataType: int64
+		lineageTag: 985f7f0b-563e-47a9-b5d1-02276867c0f4
+		summarizeBy: none
+		sourceColumn: ordem
+
+	column modelo
+		dataType: string
+		lineageTag: 22aa4275-6a0d-407b-a949-752850b7b19a
+		summarizeBy: none
+		sourceColumn: modelo
+
+	column nome
+		dataType: string
+		lineageTag: 40c149a9-6fb5-4637-bfb9-9e98ca7c0fa6
+		summarizeBy: none
+		sourceColumn: nome
+
+	column tipo
+		dataType: string
+		lineageTag: 5cd42b98-8832-46dd-bed0-177f641a5851
+		summarizeBy: none
+		sourceColumn: tipo
+
+	column mae_validacao
+		dataType: double
+		lineageTag: 237d7a52-ec0a-475c-a7d1-5bcdb64ba709
+		summarizeBy: none
+		sourceColumn: mae_validacao
+
+	column rmse_validacao
+		dataType: double
+		lineageTag: 6a389e16-52ca-497c-9c35-76eb5dd7e413
+		summarizeBy: none
+		sourceColumn: rmse_validacao
+
+	column mae_teste
+		dataType: double
+		lineageTag: e075c38d-eb6d-45e9-a8d3-ce23b520f3a8
+		summarizeBy: none
+		sourceColumn: mae_teste
+
+	column rmse_teste
+		dataType: double
+		lineageTag: 17979981-9113-4da8-9b84-c8fb28232337
+		summarizeBy: none
+		sourceColumn: rmse_teste
+
+	column diferenca_referencia
+		dataType: string
+		lineageTag: 85ffa895-266b-46f3-8d94-9f96bd744900
+		summarizeBy: none
+		sourceColumn: diferenca_referencia
+
+	column selecionado
+		dataType: string
+		lineageTag: 9294cb87-5c57-4663-9b23-d43490ae8cff
+		summarizeBy: none
+		sourceColumn: selecionado
+
+	partition comparacao_modelos = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[ordem = 1, modelo = "M00_media_recente_5", nome = "Média dos últimos 5 jogos (referência)", tipo = "Referência", mae_validacao = 0.604, rmse_validacao = 0.761, mae_teste = 0.567, rmse_teste = 0.723, diferenca_referencia = "referência", selecionado = ""], [ordem = 2, modelo = "B01_media_historica_treino", nome = "Média histórica do treino (referência)", tipo = "Referência", mae_validacao = 0.515, rmse_validacao = 0.632, mae_teste = null, rmse_teste = null, diferenca_referencia = "-14,8% no MAE", selecionado = ""], [ordem = 3, modelo = "M01_ridge", nome = "Regressão Ridge", tipo = "Machine Learning", mae_validacao = 0.489, rmse_validacao = 0.603, mae_teste = 0.478, rmse_teste = 0.591, diferenca_referencia = "-19,1% no MAE", selecionado = "Sim"], [ordem = 4, modelo = "M02_random_forest", nome = "Random Forest", tipo = "Machine Learning", mae_validacao = 0.498, rmse_validacao = 0.616, mae_teste = null, rmse_teste = null, diferenca_referencia = "-17,6% no MAE", selecionado = ""], [ordem = 5, modelo = "M03_hist_gradient_boosting", nome = "Gradient Boosting", tipo = "Machine Learning", mae_validacao = 0.501, rmse_validacao = 0.618, mae_teste = null, rmse_teste = null, diferenca_referencia = "-17,0% no MAE", selecionado = ""]}, type table [ordem = Int64.Type, modelo = text, nome = text, tipo = text, mae_validacao = number, rmse_validacao = number, mae_teste = number, rmse_teste = number, diferenca_referencia = text, selecionado = text])
+				in
+				    Origem
+

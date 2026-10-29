@@ -1,16 +1,16 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "ee08d0d5d0bd11686df9",
   "position": {
-    "x": 16,
-    "y": 220,
-    "width": 300,
-    "height": 72,
-    "z": 8,
-    "tabOrder": 8
+    "x": 788,
+    "y": 453,
+    "z": 8000,
+    "height": 235,
+    "width": 232,
+    "tabOrder": 8000
   },
   "visual": {
-    "visualType": "slicer",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
         "Values": {
@@ -20,41 +20,58 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_temporadas"
+                      "Entity": "destaque_goleiro"
                     }
                   },
-                  "Property": "ano"
+                  "Property": "imagem"
                 }
               },
-              "queryRef": "dim_temporadas.ano",
-              "nativeQueryRef": "ano",
-              "displayName": "Temporada"
+              "queryRef": "destaque_goleiro.imagem",
+              "nativeQueryRef": "imagem",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "destaque_goleiro"
+                    }
+                  },
+                  "Property": "nome"
+                }
+              },
+              "queryRef": "destaque_goleiro.nome",
+              "nativeQueryRef": "nome",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "destaque_goleiro"
+                    }
+                  },
+                  "Property": "detalhe"
+                }
+              },
+              "queryRef": "destaque_goleiro.detalhe",
+              "nativeQueryRef": "detalhe",
+              "displayName": " "
             }
           ]
         }
       }
     },
     "objects": {
-      "data": [
+      "grid": [
         {
           "properties": {
-            "mode": {
+            "imageHeight": {
               "expr": {
                 "Literal": {
-                  "Value": "'Dropdown'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "header": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "64D"
                 }
               }
             }
@@ -109,7 +126,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#e1e7ee'"
+                      "Value": "'#dde3e1'"
                     }
                   }
                 }
@@ -119,6 +136,26 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -138,14 +175,28 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Temporada'"
+                  "Value": "'Melhor goleiro (prêmio oficial)'"
+                }
+              }
+            },
+            "titleWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "12D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             },
@@ -154,9 +205,22 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#202b29'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -169,28 +233,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "10D"
                 }
               }
             }

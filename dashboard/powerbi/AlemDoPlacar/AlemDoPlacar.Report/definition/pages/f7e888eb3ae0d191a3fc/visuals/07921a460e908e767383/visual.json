@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "07921a460e908e767383",
   "position": {
     "x": 0,
     "y": 0,
-    "width": 900,
-    "height": 64,
     "z": 0,
+    "height": 72,
+    "width": 1280,
     "tabOrder": 0
   },
   "visual": {
@@ -21,10 +21,10 @@
                   {
                     "value": "Visão Geral",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI",
-                      "fontSize": "26px",
-                      "color": "#FFFFFF",
-                      "fontWeight": "bold"
+                      "fontSize": "21px",
+                      "color": "#ffffff"
                     }
                   }
                 ]
@@ -32,11 +32,20 @@
               {
                 "textRuns": [
                   {
-                    "value": "Brasileirão Série A 2018–2025 · panorama de partidas, gols e desempenho",
+                    "value": "ALÉM DO PLACAR",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11px",
+                      "color": "#f3c84b"
+                    }
+                  },
+                  {
+                    "value": "   ·   Classificação e destaques da temporada escolhida",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "color": "#9FE3CB"
+                      "fontSize": "11px",
+                      "color": "#d5ebe1"
                     }
                   }
                 ]
@@ -62,7 +71,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#075e45'"
                     }
                   }
                 }
@@ -78,13 +87,64 @@
           }
         }
       ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#dde3e1'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "padding": [
         {
           "properties": {
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "8D"
                 }
               }
             },
@@ -105,7 +165,7 @@
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "24D"
                 }
               }
             }
@@ -113,6 +173,19 @@
         }
       ],
       "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
         {
           "properties": {
             "show": {

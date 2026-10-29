@@ -1,0 +1,55 @@
+table destaque_ataque
+	lineageTag: 3be7c585-7282-4a85-b770-223157ab6cff
+
+	column ano
+		dataType: int64
+		lineageTag: b10ec1cc-1346-4bb6-9119-a8bbb764598b
+		summarizeBy: none
+		sourceColumn: ano
+
+	column nome
+		dataType: string
+		lineageTag: 90a789cb-bbb4-4e51-a18c-c88a7dee4069
+		summarizeBy: none
+		sourceColumn: nome
+
+	column clube
+		dataType: string
+		lineageTag: 0a33cde0-bbbc-4891-8936-17d44a4cbeaa
+		summarizeBy: none
+		sourceColumn: clube
+
+	column imagem
+		dataType: string
+		lineageTag: ebe35260-f76b-43a9-9fca-cc695e764d76
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: imagem
+
+	column escudo
+		dataType: string
+		lineageTag: 40783d83-087b-480a-941b-6a3a22e30a3b
+		dataCategory: ImageUrl
+		summarizeBy: none
+		sourceColumn: escudo
+
+	column detalhe
+		dataType: string
+		lineageTag: 0dcdb8b7-be54-4915-9aab-f6264ddad6b8
+		summarizeBy: none
+		sourceColumn: detalhe
+
+	column credito
+		dataType: string
+		lineageTag: 6931ac2c-1ce8-4fb9-b9f8-c941226ac9be
+		summarizeBy: none
+		sourceColumn: credito
+
+	partition destaque_ataque = m
+		mode: import
+		source =
+				let
+				    Origem = Table.FromRecords({[ano = 2018, nome = "SE Palmeiras", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "64 gols em 38 jogos (1,68 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2019, nome = "Flamengo", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "86 gols em 38 jogos (2,26 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2020, nome = "Flamengo", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "68 gols em 38 jogos (1,79 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2021, nome = "Flamengo", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "69 gols em 38 jogos (1,82 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2022, nome = "SE Palmeiras", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "66 gols em 38 jogos (1,74 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2023, nome = "SE Palmeiras", clube = "SE Palmeiras", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg/120px-Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg.png", detalhe = "64 gols em 38 jogos (1,68 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2024, nome = "Flamengo", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "61 gols em 38 jogos (1,61 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."], [ano = 2025, nome = "Flamengo", clube = "Flamengo", imagem = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", escudo = "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/120px-Clube_de_Regatas_do_Flamengo_logo.svg.png", detalhe = "78 gols em 38 jogos (2,05 por jogo)", credito = "Calculado a partir das partidas (OpenFootball)."]}, type table [ano = Int64.Type, nome = text, clube = text, imagem = text, escudo = text, detalhe = text, credito = text])
+				in
+				    Origem
+

@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "42ecb533606abc66b3fe",
   "position": {
-    "x": 900,
-    "y": 0,
-    "width": 380,
-    "height": 64,
-    "z": 1,
-    "tabOrder": 1
+    "x": 0,
+    "y": 72,
+    "z": 1000,
+    "height": 4,
+    "width": 1280,
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,29 +19,14 @@
               {
                 "textRuns": [
                   {
-                    "value": "ALÉM DO PLACAR",
+                    "value": " ",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#FFFFFF",
-                      "fontWeight": "bold"
+                      "fontSize": "1px",
+                      "color": "#202b29"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "right"
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Inteligência esportiva · Brasileirão",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "12px",
-                      "color": "#9FE3CB"
-                    }
-                  }
-                ],
-                "horizontalTextAlignment": "right"
+                ]
               }
             ]
           }
@@ -64,7 +49,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b2545'"
+                      "Value": "'#f3c84b'"
                     }
                   }
                 }
@@ -80,34 +65,85 @@
           }
         }
       ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#dde3e1'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "padding": [
         {
           "properties": {
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "0D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "0D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "0D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "24D"
+                  "Value": "0D"
                 }
               }
             }
