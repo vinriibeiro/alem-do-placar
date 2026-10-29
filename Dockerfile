@@ -25,6 +25,7 @@ COPY --from=construtor /opt/venv /opt/venv
 # Dados e documentos lidos em tempo de execução (filtrados pelo .dockerignore).
 COPY data ./data
 COPY docs ./docs
+COPY config ./config
 USER app
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \

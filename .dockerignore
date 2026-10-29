@@ -12,6 +12,9 @@
 !data/predictions/cientifica/*.png
 !docs/model_card.md
 !docs/methodology.md
+!config/*.yaml
+!config/*.csv
+!config/*.toml
 
 # Exclusões finais (a última regra que casa vence)
 **/__pycache__

@@ -53,6 +53,10 @@ jobs:
             curl -fsS http://127.0.0.1:8000/health && break
             sleep 2
           done
-          curl -fsS http://127.0.0.1:8000/api/contexto | grep -q '"partidas"'
-          curl -fsS http://127.0.0.1:8000/ | grep -q "Além do Placar"
-          docker logs app
+          curl -fsS http://127.0.0.1:8000/health
+          curl -fsS http://127.0.0.1:8000/dados/contexto.json | grep -q '"partidas"'
+          curl -fsS http://127.0.0.1:8000/consulta | grep -q "Central de Consulta"
+
+      - name: Logs do container
+        if: always()
+        run: docker logs app || true

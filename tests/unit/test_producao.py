@@ -92,3 +92,48 @@ def test_ponto_de_entrada_usa_app_root_e_sobe_o_app(raiz, monkeypatch):
     monkeypatch.setenv("APP_ROOT", str(raiz))
     app = principal.criar()
     assert TestClient(app, base_url="http://127.0.0.1").get("/health").json()["status"] == "ok"
+
+
+def test_requirements_web_cobre_imports_da_aplicacao():
+    """A imagem só instala requirements-web.txt: todo import externo de src/api precisa estar lá."""
+    import ast
+    from pathlib import Path
+
+    raiz = Path(__file__).resolve().parents[2]
+    pacotes = {
+        linha.split(">=")[0].split("==")[0].strip().lower()
+        for linha in (raiz / "requirements-web.txt").read_text(encoding="utf-8").splitlines()
+        if linha.strip() and not linha.startswith("#")
+    }
+    nome_pacote = {
+        "yaml": "pyyaml",
+        "fastapi": "fastapi",
+        "uvicorn": "uvicorn",
+        "pandas": "pandas",
+        "numpy": "numpy",
+        "pyarrow": "pyarrow",
+        "anthropic": "anthropic",
+        "markdown": "markdown",
+        "starlette": "fastapi",
+        "pydantic": "fastapi",
+    }
+    internos = {"api", "evaluation", "processing", "ingestion", "features", "models", "validation"}
+    import sys
+
+    faltam = set()
+    for arquivo in (raiz / "src" / "api").glob("*.py"):
+        for no in ast.walk(ast.parse(arquivo.read_text(encoding="utf-8"))):
+            nomes = (
+                [a.name for a in no.names]
+                if isinstance(no, ast.Import)
+                else [no.module]
+                if isinstance(no, ast.ImportFrom) and no.module and not no.level
+                else []
+            )
+            for n in nomes:
+                topo = n.split(".")[0]
+                if topo in internos or topo in sys.stdlib_module_names or topo == "__future__":
+                    continue
+                if nome_pacote.get(topo, topo) not in pacotes:
+                    faltam.add(topo)
+    assert not faltam, f"adicione a requirements-web.txt: {sorted(faltam)}"
