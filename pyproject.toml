@@ -9,11 +9,13 @@ description = "Plataforma analítica de inteligência esportiva (futebol) — Al
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [{ name = "Vinícius Ribeiro" }]
-# Dependências de execução do pipeline (T003). Demais bibliotecas entram nas tarefas seguintes.
+# Dependências de execução: pipeline (T003) e análise exploratória (T004).
 dependencies = [
     "duckdb>=1.0",
     "pyarrow>=15.0",
     "PyYAML>=6.0",
+    "pandas>=2.2",
+    "matplotlib>=3.8",
 ]
 
 [project.optional-dependencies]
