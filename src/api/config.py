@@ -29,7 +29,12 @@ def _lista(valor: str | None) -> list[str]:
 class Config:
     def __init__(self, env: Mapping[str, str] | None = None) -> None:
         e = os.environ if env is None else env
-        self.hosts = [*HOSTS_LOCAIS, *_lista(e.get("ALLOWED_HOSTS"))]
+        # RENDER_EXTERNAL_HOSTNAME é definido automaticamente pelo Render.
+        self.hosts = [
+            *HOSTS_LOCAIS,
+            *_lista(e.get("ALLOWED_HOSTS")),
+            *_lista(e.get("RENDER_EXTERNAL_HOSTNAME")),
+        ]
         self.origens = _lista(e.get("ALLOWED_ORIGINS"))
         self.llm_key = (e.get("LLM_API_KEY") or "").strip() or None
         self.llm_modelo = e.get("LLM_MODEL") or "claude-opus-5-5"
@@ -37,4 +42,5 @@ class Config:
         self.taxa_por_min = int(e.get("RATE_LIMIT_PER_MIN") or 20)
         self.embed_url = (e.get("POWERBI_EMBED_URL") or "").strip()
         self.repo_url = (e.get("REPO_URL") or "").strip()
+        self.forcar_https = (e.get("FORCE_HTTPS") or "").lower() in {"1", "true", "yes"}
         self.confia_proxy = (e.get("TRUST_PROXY") or "").lower() in {"1", "true", "yes"}

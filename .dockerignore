@@ -1,0 +1,21 @@
+# Lista de permissão: nada entra na imagem a menos que esteja liberado abaixo.
+**
+!pyproject.toml
+!README.md
+!requirements-web.txt
+!src/**
+!data/processed/*.parquet
+!data/predictions/modelagem/previsoes.parquet
+!data/predictions/modelagem/metricas.json
+!data/predictions/modelagem/metadados.json
+!data/predictions/cientifica/importancias.csv
+!data/predictions/cientifica/*.png
+!docs/model_card.md
+!docs/methodology.md
+
+# Exclusões finais (a última regra que casa vence)
+**/__pycache__
+**/*.pyc
+**/*.egg-info
+.env
+.env.*

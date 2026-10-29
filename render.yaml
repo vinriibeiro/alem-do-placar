@@ -1,0 +1,27 @@
+# Blueprint do Render. Criar o serviço manualmente a partir deste arquivo (New > Blueprint).
+# autoDeploy está desligado de propósito: cada publicação é decidida pelo responsável.
+services:
+  - type: web
+    name: alem-do-placar
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: TRUST_PROXY
+        value: "true"
+      - key: FORCE_HTTPS
+        value: "true"
+      - key: LLM_DAILY_LIMIT
+        value: "300"
+      - key: RATE_LIMIT_PER_MIN
+        value: "20"
+      # Preencher no painel do Render (nunca no Git):
+      - key: LLM_API_KEY
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: POWERBI_EMBED_URL
+        sync: false
+      - key: REPO_URL
+        sync: false

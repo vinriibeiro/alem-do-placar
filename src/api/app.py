@@ -11,19 +11,26 @@ from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from api.assistant import BaseConsultas
-from api.config import Config
+from api.config import HOSTS_LOCAIS, Config
 from api.paginas import FIGURAS, Paginas
 from api.servico import Servico
 
 ESTATICO = Path(__file__).resolve().parent / "static"
 HOSTS_EMBED = ("https://app.powerbi.com/", "https://app.fabric.microsoft.com/")
 MAX_CORPO = 4096
+# Política de conteúdo: tudo do próprio site, fontes do Google e iframes somente do Power BI.
+CSP = (
+    "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; "
+    "font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; "
+    "frame-src https://app.powerbi.com https://app.fabric.microsoft.com; "
+    "object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+)
 
 
 class Pergunta(BaseModel):
@@ -76,12 +83,19 @@ def create_app(
 
     @app.middleware("http")
     async def protecoes(request: Request, call_next):
+        https = request.headers.get("x-forwarded-proto", request.url.scheme) == "https"
+        local = request.url.hostname in HOSTS_LOCAIS or request.url.path == "/health"
+        if config.forcar_https and not https and not local:
+            return RedirectResponse(str(request.url.replace(scheme="https")), status_code=308)
         tamanho = request.headers.get("content-length")
         if tamanho and tamanho.isdigit() and int(tamanho) > MAX_CORPO:
             return JSONResponse({"detail": "corpo muito grande"}, status_code=413)
         resposta = await call_next(request)
         if request.url.path.startswith("/static/"):
             resposta.headers.setdefault("Cache-Control", "public, max-age=3600")
+        resposta.headers.setdefault("Content-Security-Policy", CSP)
+        if https:
+            resposta.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
         resposta.headers.setdefault("X-Content-Type-Options", "nosniff")
         resposta.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
         return resposta
@@ -92,7 +106,7 @@ def create_app(
         return JSONResponse({"detail": "entrada inválida"}, status_code=422)
 
     def _rota_pagina(caminho: str, nome: str) -> None:
-        @app.get(caminho, response_class=HTMLResponse, name=nome)
+        @app.api_route(caminho, methods=["GET", "HEAD"], response_class=HTMLResponse, name=nome)
         def _pagina() -> str:
             return paginas.html[nome]
 
