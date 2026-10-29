@@ -1,0 +1,45 @@
+{
+  "versao": "T006-1.0",
+  "modelo_selecionado": "M01_ridge",
+  "motivo_selecao": "ganho mínimo de 2% no MAE médio e piora anual até 10%",
+  "seed": 42,
+  "alvo": "media_pontos_futuros_5",
+  "horizonte": 5,
+  "atributos": [
+    "media_pontos_3",
+    "media_pontos_5",
+    "media_pontos_10",
+    "media_saldo_gols_3",
+    "media_saldo_gols_5",
+    "media_saldo_gols_10",
+    "desvio_pontos_5",
+    "media_pontos_mandante_historico",
+    "media_pontos_visitante_historico",
+    "jogos_acumulados",
+    "dias_descanso",
+    "mando"
+  ],
+  "limites_previsao": [
+    0.0,
+    3.0
+  ],
+  "anos_validacao": [
+    2022,
+    2023,
+    2024
+  ],
+  "ano_holdout": 2025,
+  "corte_treino": "2025-03-29",
+  "n_treino_validacao": {
+    "2022": 2640,
+    "2023": 3300,
+    "2024": 3960
+  },
+  "n_treino_final": 4620,
+  "n_holdout": 660,
+  "mae_validacao_baseline": 0.6041164677073768,
+  "mae_validacao_selecionado": 0.48875461048224383,
+  "nivel_intervalo": 0.9,
+  "quantil_erro_absoluto": 1.0038612610041167,
+  "cobertura_holdout": 0.9121212121212121
+}

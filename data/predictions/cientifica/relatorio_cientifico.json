@@ -1,0 +1,466 @@
+{
+  "resumo": {
+    "versao_avaliacao": "T007-1.0",
+    "versao": "T006-1.0",
+    "modelo_selecionado": "M01_ridge",
+    "ano_holdout": 2025,
+    "corte_treino": "2025-03-29",
+    "periodo_holdout": {
+      "inicio": "2025-03-29",
+      "fim": "2025-11-15"
+    },
+    "seed": 42,
+    "n_repeticoes": 5,
+    "metricas_holdout": {
+      "n": 660,
+      "mae": 0.478089259088914,
+      "rmse": 0.5908874539026563,
+      "vies": -0.01682995916776609,
+      "cobertura_intervalo": 0.9121212121212121
+    },
+    "comparacao": {
+      "holdout": {
+        "selecionado": {
+          "mae": 0.478089259088914,
+          "rmse": 0.5908874539026563,
+          "vies": -0.01682995916776609,
+          "n": 660
+        },
+        "baseline": {
+          "mae": 0.5670910402728585,
+          "rmse": 0.7225963109068712,
+          "vies": -0.0015203987931260603,
+          "n": 660
+        },
+        "diferenca_mae_selecionado_menos_baseline": -0.08900178118394453
+      },
+      "validacao": {
+        "baseline_recente": {
+          "mae": 0.6041164677073768,
+          "rmse": 0.7609870063605263,
+          "vies": -0.0021099887766554437,
+          "n": 1980
+        },
+        "media_historica": {
+          "mae": 0.5149661769207223,
+          "rmse": 0.6316179117837563,
+          "vies": -0.006035353535353482,
+          "n": 1980
+        }
+      }
+    }
+  },
+  "hipoteses": [
+    {
+      "id": "H01",
+      "enunciado": "Indicadores recentes de desempenho ajudam a prever a evolução futura das equipes.",
+      "status": "observado_nesta_comparacao",
+      "evidencia": "Holdout 2025: M01_ridge MAE 0.478089 (n=660) contra M00_media_recente_5 MAE 0.567091. Resultado observado, sem generalização."
+    },
+    {
+      "id": "H02",
+      "enunciado": "Médias móveis apresentam maior capacidade preditiva que médias históricas isoladas.",
+      "status": "desfavoravel_nesta_comparacao",
+      "evidencia": "Validação: M00_media_recente_5 MAE 0.604116 contra B01_media_historica_treino MAE 0.514966. B01 é média histórica global do treino, não por clube."
+    },
+    {
+      "id": "H03",
+      "enunciado": "Diferenças entre desempenho como mandante e visitante contribuem para as previsões.",
+      "status": "nao_conclusiva",
+      "evidencia": "media_pontos_visitante_historico: delta MAE +0.012377 (desvio 0.001149); media_pontos_mandante_historico: delta MAE +0.003101 (desvio 0.001694); mando: delta MAE -0.000501 (desvio 0.000704) Importância preditiva exploratória; não é estudo causal nem ablação."
+    },
+    {
+      "id": "H04",
+      "enunciado": "Volatilidade de resultados e saldo de gols ajudam a identificar mudanças de tendência.",
+      "status": "nao_conclusiva",
+      "evidencia": "media_saldo_gols_5: delta MAE +0.015114 (desvio 0.003581); media_saldo_gols_3: delta MAE +0.000693 (desvio 0.001027); media_saldo_gols_10: delta MAE +0.000286 (desvio 0.000851); desvio_pontos_5: delta MAE +0.000206 (desvio 0.000530) Importância preditiva exploratória; não é estudo causal nem ablação."
+    },
+    {
+      "id": "H05",
+      "enunciado": "Modelos de Machine Learning podem superar modelos estatísticos baseline.",
+      "status": "favoravel_nesta_comparacao",
+      "evidencia": "Holdout 2025: M01_ridge MAE 0.478089 (n=660) contra M00_media_recente_5 MAE 0.567091. Sem generalização para outras temporadas ou competições."
+    },
+    {
+      "id": "H06",
+      "enunciado": "Métricas avançadas, como xG, quando disponíveis, podem oferecer ganhos adicionais.",
+      "status": "nao_avaliavel",
+      "evidencia": "xG não está disponível no dataset; valores ausentes não foram preenchidos com zeros."
+    }
+  ],
+  "limitacoes": [
+    "Avaliação em um único holdout temporal e uma única competição; amostra pequena por equipe.",
+    "Alvos de partidas consecutivas se sobrepõem no tempo; as observações não são independentes.",
+    "Não há intervalo estatístico, valor-p ou teste de significância para os erros.",
+    "A importância por permutação é preditiva e exploratória: não é estudo causal nem ablação, e atributos correlacionados podem dividir a importância.",
+    "Erros por equipe têm n diferente; diferenças de pontos não são ranking de mérito.",
+    "xG não está disponível; H06 não é avaliável e nenhum valor foi preenchido com zero.",
+    "Dados observacionais: resultados não são causais nem recomendações de apostas."
+  ],
+  "importancias": [
+    {
+      "atributo": "media_saldo_gols_5",
+      "delta_mae_media": 0.015114397142175417,
+      "delta_mae_desvio": 0.003580729119664504
+    },
+    {
+      "atributo": "media_pontos_visitante_historico",
+      "delta_mae_media": 0.012376872127084137,
+      "delta_mae_desvio": 0.0011494335205744122
+    },
+    {
+      "atributo": "media_pontos_10",
+      "delta_mae_media": 0.005767414918727065,
+      "delta_mae_desvio": 0.0034365464021926286
+    },
+    {
+      "atributo": "media_pontos_5",
+      "delta_mae_media": 0.003907851298332365,
+      "delta_mae_desvio": 0.002123326087312687
+    },
+    {
+      "atributo": "media_pontos_mandante_historico",
+      "delta_mae_media": 0.003101457370557148,
+      "delta_mae_desvio": 0.0016937645192118568
+    },
+    {
+      "atributo": "media_pontos_3",
+      "delta_mae_media": 0.0020647008644862465,
+      "delta_mae_desvio": 0.0013527730181813913
+    },
+    {
+      "atributo": "media_saldo_gols_3",
+      "delta_mae_media": 0.000692606641849447,
+      "delta_mae_desvio": 0.001026619527540038
+    },
+    {
+      "atributo": "media_saldo_gols_10",
+      "delta_mae_media": 0.00028608722650630414,
+      "delta_mae_desvio": 0.0008511500533701317
+    },
+    {
+      "atributo": "desvio_pontos_5",
+      "delta_mae_media": 0.00020642468476231857,
+      "delta_mae_desvio": 0.0005301662762630988
+    },
+    {
+      "atributo": "jogos_acumulados",
+      "delta_mae_media": 2.088219764235788e-05,
+      "delta_mae_desvio": 0.00015166174504492987
+    },
+    {
+      "atributo": "dias_descanso",
+      "delta_mae_media": -0.0004761370712864532,
+      "delta_mae_desvio": 0.00033513975953504193
+    },
+    {
+      "atributo": "mando",
+      "delta_mae_media": -0.0005006795293713062,
+      "delta_mae_desvio": 0.0007044591786410433
+    }
+  ],
+  "por_equipe": [
+    {
+      "equipe": "Atlético Mineiro",
+      "n": 33,
+      "mae": 0.559856119769982,
+      "rmse": 0.6529686200151192,
+      "vies": -0.0034086394218269854,
+      "cobertura_intervalo": 0.8787878787878788
+    },
+    {
+      "equipe": "Botafogo FR",
+      "n": 33,
+      "mae": 0.4315989835453114,
+      "rmse": 0.5298748510642056,
+      "vies": -0.16369573158421596,
+      "cobertura_intervalo": 0.9393939393939394
+    },
+    {
+      "equipe": "CR Vasco da Gama",
+      "n": 33,
+      "mae": 0.5953005719060039,
+      "rmse": 0.7059216182035573,
+      "vies": 0.1611276052642062,
+      "cobertura_intervalo": 0.8181818181818182
+    },
+    {
+      "equipe": "Ceará SC",
+      "n": 33,
+      "mae": 0.3223553541947355,
+      "rmse": 0.42749313383677845,
+      "vies": 0.20463908936535533,
+      "cobertura_intervalo": 0.9696969696969697
+    },
+    {
+      "equipe": "Cruzeiro EC",
+      "n": 33,
+      "mae": 0.5165712896445616,
+      "rmse": 0.611847976568416,
+      "vies": -0.30990175163005923,
+      "cobertura_intervalo": 0.9090909090909091
+    },
+    {
+      "equipe": "EC Bahia",
+      "n": 33,
+      "mae": 0.4902012751610743,
+      "rmse": 0.5839740567258208,
+      "vies": -0.2064429038632968,
+      "cobertura_intervalo": 0.9090909090909091
+    },
+    {
+      "equipe": "EC Juventude",
+      "n": 33,
+      "mae": 0.5073189628257175,
+      "rmse": 0.5839224352425798,
+      "vies": 0.19688962342913668,
+      "cobertura_intervalo": 0.9393939393939394
+    },
+    {
+      "equipe": "EC Vitória",
+      "n": 33,
+      "mae": 0.41167058624037967,
+      "rmse": 0.49167383804134684,
+      "vies": -0.024937723229268773,
+      "cobertura_intervalo": 1.0
+    },
+    {
+      "equipe": "Flamengo",
+      "n": 33,
+      "mae": 0.42636484948018627,
+      "rmse": 0.5172181223502895,
+      "vies": -0.29730764274770105,
+      "cobertura_intervalo": 0.9696969696969697
+    },
+    {
+      "equipe": "Fluminense FC",
+      "n": 33,
+      "mae": 0.42234558744977385,
+      "rmse": 0.528903474635928,
+      "vies": -0.20053898281817326,
+      "cobertura_intervalo": 0.9393939393939394
+    },
+    {
+      "equipe": "Fortaleza EC",
+      "n": 33,
+      "mae": 0.5403461433105968,
+      "rmse": 0.6651449300159133,
+      "vies": 0.09765952262794529,
+      "cobertura_intervalo": 0.8484848484848485
+    },
+    {
+      "equipe": "Grêmio",
+      "n": 33,
+      "mae": 0.3160309215092052,
+      "rmse": 0.38557348923201135,
+      "vies": 0.015229925492747097,
+      "cobertura_intervalo": 0.9696969696969697
+    },
+    {
+      "equipe": "Mirassol FC",
+      "n": 33,
+      "mae": 0.43686307215047737,
+      "rmse": 0.549339203671022,
+      "vies": -0.33187599716904753,
+      "cobertura_intervalo": 0.9090909090909091
+    },
+    {
+      "equipe": "RB Bragantino",
+      "n": 33,
+      "mae": 0.6607700183199274,
+      "rmse": 0.8145964558745525,
+      "vies": 0.05837865556232594,
+      "cobertura_intervalo": 0.8181818181818182
+    },
+    {
+      "equipe": "SC Corinthians Paulista",
+      "n": 33,
+      "mae": 0.3519053369131518,
+      "rmse": 0.4300504210618532,
+      "vies": 0.048009848244112585,
+      "cobertura_intervalo": 0.9696969696969697
+    },
+    {
+      "equipe": "SC Internacional",
+      "n": 33,
+      "mae": 0.45545867173082794,
+      "rmse": 0.5451584895060272,
+      "vies": 0.1590959549891199,
+      "cobertura_intervalo": 0.9393939393939394
+    },
+    {
+      "equipe": "SC Recife",
+      "n": 33,
+      "mae": 0.6257869119630656,
+      "rmse": 0.7171153007703653,
+      "vies": 0.5182642564271961,
+      "cobertura_intervalo": 0.8787878787878788
+    },
+    {
+      "equipe": "SE Palmeiras",
+      "n": 33,
+      "mae": 0.5742323030639341,
+      "rmse": 0.679805080933987,
+      "vies": -0.24008779155286228,
+      "cobertura_intervalo": 0.8787878787878788
+    },
+    {
+      "equipe": "Santos FC",
+      "n": 33,
+      "mae": 0.37380832840762246,
+      "rmse": 0.4535725263629173,
+      "vies": 0.0128522056349282,
+      "cobertura_intervalo": 0.9393939393939394
+    },
+    {
+      "equipe": "São Paulo FC",
+      "n": 33,
+      "mae": 0.5429998941917441,
+      "rmse": 0.7271304995811297,
+      "vies": -0.03054870637594328,
+      "cobertura_intervalo": 0.8181818181818182
+    }
+  ],
+  "por_temporada": [
+    {
+      "temporada": 2025,
+      "n": 660,
+      "mae": 0.478089259088914,
+      "rmse": 0.5908874539026563,
+      "vies": -0.01682995916776609,
+      "cobertura_intervalo": 0.9121212121212121
+    }
+  ],
+  "piores_erros": [
+    {
+      "equipe": "São Paulo FC",
+      "temporada": 2025,
+      "data_referencia": "2025-07-16 00:00:00",
+      "partida_id": "607b80433d87b813dd0c18361303ae368fb70eee63935bb0c712b400c275600b",
+      "alvo": 3.0,
+      "previsao": 1.1327330239706186,
+      "limite_inferior": 0.12887176296650193,
+      "limite_superior": 2.136594284974735,
+      "residuo": -1.8672669760293814,
+      "erro_absoluto": 1.8672669760293814,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "RB Bragantino",
+      "temporada": 2025,
+      "data_referencia": "2025-04-06 00:00:00",
+      "partida_id": "cd3bfc4790d4d6a8b7f753e58b89709e10495daa46ad13d063991612486ba5ca",
+      "alvo": 3.0,
+      "previsao": 1.1596662028490834,
+      "limite_inferior": 0.15580494184496674,
+      "limite_superior": 2.1635274638532,
+      "residuo": -1.8403337971509166,
+      "erro_absoluto": 1.8403337971509166,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "CR Vasco da Gama",
+      "temporada": 2025,
+      "data_referencia": "2025-10-26 00:00:00",
+      "partida_id": "74ee03b0e94a09cb6a7832091e55db14f6d344a8ac6869c9e540fe85860a4cfe",
+      "alvo": 0.0,
+      "previsao": 1.618684863340435,
+      "limite_inferior": 0.6148236023363183,
+      "limite_superior": 2.6225461243445514,
+      "residuo": 1.618684863340435,
+      "erro_absoluto": 1.618684863340435,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "RB Bragantino",
+      "temporada": 2025,
+      "data_referencia": "2025-07-20 00:00:00",
+      "partida_id": "3fbb5a7bb0c509922e7ce537671aa58bbe020b9c536e423d34c324429f60863f",
+      "alvo": 0.0,
+      "previsao": 1.5689832329143052,
+      "limite_inferior": 0.5651219719101885,
+      "limite_superior": 2.5728444939184216,
+      "residuo": 1.5689832329143052,
+      "erro_absoluto": 1.5689832329143052,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "RB Bragantino",
+      "temporada": 2025,
+      "data_referencia": "2025-07-16 00:00:00",
+      "partida_id": "607b80433d87b813dd0c18361303ae368fb70eee63935bb0c712b400c275600b",
+      "alvo": 0.0,
+      "previsao": 1.5550094831571333,
+      "limite_inferior": 0.5511482221530166,
+      "limite_superior": 2.5588707441612497,
+      "residuo": 1.5550094831571333,
+      "erro_absoluto": 1.5550094831571333,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "São Paulo FC",
+      "temporada": 2025,
+      "data_referencia": "2025-07-12 00:00:00",
+      "partida_id": "0c6d98b8e997ad9efdb6b5fef14e6f967182e54fff0840d89b512362a22dbc84",
+      "alvo": 2.6,
+      "previsao": 1.094403541688318,
+      "limite_inferior": 0.09054228068420134,
+      "limite_superior": 2.0982648026924346,
+      "residuo": -1.505596458311682,
+      "erro_absoluto": 1.505596458311682,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "Fortaleza EC",
+      "temporada": 2025,
+      "data_referencia": "2025-05-10 00:00:00",
+      "partida_id": "9cc049ae5a585cfcae45b0b973a24cfae295d918cbc73cd7c15e63693ad1499f",
+      "alvo": 0.0,
+      "previsao": 1.4695533464670203,
+      "limite_inferior": 0.46569208546290364,
+      "limite_superior": 2.473414607471137,
+      "residuo": 1.4695533464670203,
+      "erro_absoluto": 1.4695533464670203,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "SE Palmeiras",
+      "temporada": 2025,
+      "data_referencia": "2025-11-06 00:00:00",
+      "partida_id": "bfd048b3cbf7d913344cca5410f547bdacfc0081bcf8dc0500340e9e5fb1ddf1",
+      "alvo": 0.4,
+      "previsao": 1.857597287863529,
+      "limite_inferior": 0.8537360268594123,
+      "limite_superior": 2.8614585488676454,
+      "residuo": 1.4575972878635288,
+      "erro_absoluto": 1.4575972878635288,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "São Paulo FC",
+      "temporada": 2025,
+      "data_referencia": "2025-07-19 00:00:00",
+      "partida_id": "316210f20f50aa9c1cd0c5bc03ce5541e477fa3b99010c83cc7160ea13ce3d42",
+      "alvo": 2.6,
+      "previsao": 1.1438494626584905,
+      "limite_inferior": 0.13998820165437387,
+      "limite_superior": 2.147710723662607,
+      "residuo": -1.4561505373415096,
+      "erro_absoluto": 1.4561505373415096,
+      "dentro_intervalo": false
+    },
+    {
+      "equipe": "RB Bragantino",
+      "temporada": 2025,
+      "data_referencia": "2025-07-13 00:00:00",
+      "partida_id": "408f3dd1419efc659350a067cade9badc771fd7eb161ea0d16f8bd3de2fa6069",
+      "alvo": 0.2,
+      "previsao": 1.6184862735547487,
+      "limite_inferior": 0.6146250125506321,
+      "limite_superior": 2.622347534558865,
+      "residuo": 1.4184862735547488,
+      "erro_absoluto": 1.4184862735547488,
+      "dentro_intervalo": false
+    }
+  ]
+}

@@ -55,3 +55,28 @@ mlruns/
 
 # Power BI (cache local do Desktop)
 **/.pbi/
+
+# Artefatos finais consumidos pela API e pelo Power BI (pequenos, CC0, necessários ao deploy).
+# Mantêm fora do Git: modelo.joblib, mlruns/, data/raw e demais saídas.
+!data/processed/dim_equipes.parquet
+!data/processed/dim_temporadas.parquet
+!data/processed/fato_partidas.parquet
+!data/processed/fato_desempenho_equipes.parquet
+!data/processed/dataset_analitico.parquet
+!data/predictions/modelagem/
+data/predictions/modelagem/*
+!data/predictions/modelagem/previsoes.parquet
+!data/predictions/modelagem/metricas.json
+!data/predictions/modelagem/metadados.json
+!data/predictions/modelagem/metricas_equipe.json
+!data/predictions/cientifica/
+data/predictions/cientifica/*
+!data/predictions/cientifica/importancias.csv
+!data/predictions/cientifica/relatorio_cientifico.json
+!data/predictions/cientifica/relatorio_cientifico.md
+!data/predictions/cientifica/importancias.png
+!data/predictions/cientifica/previsto_vs_observado.png
+!data/predictions/cientifica/residuos_hist.png
+
+# Metadados de instalação editável
+*.egg-info/
