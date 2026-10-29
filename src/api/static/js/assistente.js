@@ -117,7 +117,7 @@ async function perguntar(texto) {
   } finally {
     ocupado = false;
     enviar.disabled = false;
-    campo.focus();
+    campo.focus({ preventScroll: true });
   }
 }
 

@@ -10,7 +10,7 @@ async function indicadores() {
   try {
     const c = await api("/api/contexto");
     definirTexto("kpi-partidas", fmt.inteiro(c.partidas));
-    definirTexto("kpi-partidas-nota", `${c.periodo || ""}`.replace("–", " a "));
+    definirTexto("kpi-partidas-nota", `${(c.base && c.base.periodo) || ""}`.replace("–", " a "));
     definirTexto("kpi-temporadas", fmt.inteiro(c.temporadas));
     definirTexto("kpi-temporadas-nota", `${fmt.inteiro(c.equipes.length)} equipes no histórico`);
     if (c.mae_global != null) {

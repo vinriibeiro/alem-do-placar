@@ -188,5 +188,5 @@ def test_workflow_ci_basico():
 
 def test_readme_documenta_instalacao_e_testes():
     texto = _ler("README.md")
-    trechos = [".venv", "python -m pip install -e", "python -B -m pytest", "Limites desta etapa"]
+    trechos = [".venv", "python -m pip install -e", "python -B -m pytest", "## Limitações"]
     assert [trecho for trecho in trechos if trecho not in texto] == []

@@ -1,144 +1,130 @@
 # Além do Placar
 
-Plataforma analítica de inteligência esportiva (futebol, Campeonato Brasileiro Série A) que combina engenharia de dados, estatística, Machine Learning, Power BI e um assistente de IA.
+Plataforma de inteligência esportiva sobre o **Campeonato Brasileiro Série A (2018–2025)**: engenharia de dados, estatística, Machine Learning, dashboard em Power BI e um assistente de IA que responde em português, sempre com fonte, período e limitações.
 
-**Status atual:** T001–T009 com código entregue e testado localmente (264 testes, lint limpo). Dados reais OpenFootball CC0 2018–2025 (3.040 partidas), modelo Ridge selecionado (MAE 0,478 no holdout de 2025 contra 0,567 do baseline), projeto Power BI gerado e assistente local. Ainda não publicado: o plano de lançamento está em `docs/PLANO_LANCAMENTO_WEB.md`. Revisão Codex, QA Gemini e aprovação do usuário seguem pendentes.
+![Página inicial](docs/divulgacao/captura_1_inicio.png)
 
-Referências: `docs/PRD.md` (requisitos), `docs/TASKS.md` (controle de tarefas), `docs/architecture.md` (arquitetura da fundação).
+**Demonstração pública:** a definir após a publicação (veja `docs/deploy.md`).
+
+## Resultados
+
+| Indicador | Valor |
+|---|---|
+| Partidas analisadas | 3.040 (380 por temporada, 20 clubes por temporada) |
+| Fonte | OpenFootball, licença CC0 |
+| Alvo do modelo | Média de pontos nas próximas 5 partidas de uma equipe |
+| Modelo selecionado | Ridge, escolhido por validação temporal (2022–2024) |
+| Erro no holdout de 2025 (MAE) | **0,478**, contra 0,567 do baseline de média recente |
+| Cobertura do intervalo de 90% no holdout | 91,2% |
+| Testes automatizados | 337 aprovados, lint sem pendências |
+
+O holdout de 2025 não participou da escolha do modelo. Veja os limites em [Limitações](#limitações).
+
+## O que tem no projeto
+
+| Parte | O que faz |
+|---|---|
+| **Pipeline de dados** | Coleta, padronização de equipes, validação de integridade e tabelas analíticas em Parquet, consultadas com DuckDB |
+| **Atributos e modelagem** | Médias móveis de 3, 5 e 10 jogos, mando de campo, volatilidade; baseline, Ridge, Random Forest e HistGradientBoosting com backtesting de janela expansiva |
+| **Explicabilidade** | Importância por permutação, resíduos por equipe e temporada, erros extremos e model card |
+| **Dashboard Power BI** | Sete páginas geradas por código, com tema próprio e navegação |
+| **Assistente** | Chat em português sobre classificações, confrontos, mando, gols, sequências, rankings e previsões |
+| **Site** | Início, dashboard incorporado, assistente e metodologia, com design system próprio |
+
+![Assistente](docs/divulgacao/captura_2_assistente.png)
+
+## Arquitetura
+
+```mermaid
+flowchart LR
+    A[OpenFootball CC0] --> B[Pipeline: validação e padronização]
+    B --> C[(Parquet)]
+    C --> D[Atributos temporais]
+    D --> E[Modelos e backtesting]
+    E --> F[Previsões e métricas]
+    C --> G[Catálogo de consultas]
+    F --> G
+    G --> H[Assistente: Claude escolhe a consulta]
+    C --> I[Projeto Power BI gerado por código]
+    F --> I
+    H --> J[Site FastAPI]
+    I --> J
+```
+
+Regras do assistente, definidas no PRD:
+
+- A IA nunca escreve SQL. Ela só escolhe uma consulta de um catálogo fechado e redige a resposta com os números devolvidos.
+- Se nenhuma consulta se aplica, a resposta é a frase padrão de "não calculável", e o texto do modelo é descartado.
+- Sem chave de API, ou ao atingir o teto diário, o assistente continua em modo determinístico, por palavras-chave.
+- Perguntas sobre jogos futuros, clima ou xG recebem recusa explícita. Nenhum valor é inventado.
 
 ## Como executar
 
-Com o ambiente criado (seção Ambiente virtual e Instalação):
-
-```powershell
-.\scriptsun_tests.ps1   # pytest, ruff check e ruff format --check
-.\scriptsun_local.ps1   # assistente em http://127.0.0.1:8765
-```
-
-Plano de publicação: `docs/PLANO_LANCAMENTO_WEB.md`.
-
-## Requisitos
-
-- Python 3.12 ou superior.
-- Git.
-
-## Ambiente virtual
-
-PowerShell (Windows):
+Requisitos: Python 3.12 e Git.
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-```
-
-bash (Linux/macOS):
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
+python -m pip install -e ".[test,lint]"
+python -B -m pytest          # testes (ou .\scripts\run_tests.ps1 para testes, lint e formatação)
+.\scripts\run_local.ps1      # site e assistente em http://127.0.0.1:8765
 ```
 
 O diretório `.venv/` é ignorado pelo Git.
 
-## Instalação
+Para ativar o assistente com IA, copie `.env.example` para `.env` e preencha `LLM_API_KEY`. O arquivo `.env` nunca vai para o Git.
 
-Com o ambiente virtual ativo, a partir da raiz do projeto:
-
-```powershell
-python -m pip install -e ".[test,lint]"
-```
-
-Grupos de dependências:
-
-- Execução: DuckDB, PyArrow e PyYAML no pipeline; pandas e matplotlib na análise exploratória T004, declaradas em `pyproject.toml`.
-- `test`: Pytest.
-- `lint`: Ruff (lint e formatação).
-
-O comando acima instala as dependências de execução. O controlador instalou as bibliotecas no ambiente separado e executou testes, notebook e análise real.
-
-## Testes
+Para regenerar o projeto Power BI e a imagem de compartilhamento:
 
 ```powershell
-python -B -m pytest
+.\.venv\Scripts\python.exe scripts\gerar_powerbi.py
+.\.venv\Scripts\python.exe scripts\gerar_og.py
 ```
 
-O parâmetro `-B` evita a gravação de arquivos `__pycache__`. Os testes usam arquivos sintéticos criados em diretórios temporários, bloqueiam chamadas de rede e não usam dados reais.
-
-## Lint e formatação
+Para conferir uma instância em execução contra cálculos independentes:
 
 ```powershell
-python -m ruff check .
-python -m ruff format --check .
+.\.venv\Scripts\python.exe scripts\smoke_test.py --url http://127.0.0.1:8765
 ```
-
-## Configuração
-
-1. Copie o modelo: `Copy-Item .env.example .env` (PowerShell) ou `cp .env.example .env` (bash).
-2. Preencha somente localmente os valores necessários. O arquivo `.env` nunca deve ser versionado.
-3. Parâmetros não sensíveis ficam em `config/settings.yaml`, inclusive os formatos de data do pipeline (`pipeline.formatos_data`). Credenciais são referenciadas pelo nome da variável de ambiente (`api_key_env`), nunca pelo valor.
-
-## Catálogo de fontes (T002)
-
-O arquivo `config/data_sources.toml` é o catálogo versionado das fontes candidatas do PRD (seção 3.1): Football-Data, StatsBomb Open Data e OpenFootball. Cada fonte é uma tabela `[[fontes]]` com licença, status de licença, cobertura do Brasileirão, temporadas, campos essenciais e complementares, riscos, decisão e um mapeamento preliminar dos campos do PRD (seções 3.3 e 3.4) para as colunas esperadas em cada fonte.
-
-Regras e limites:
-
-- **Registro de candidatas preservado:** em `config/data_sources.toml`, todas permanecem pendentes para manter a auditoria inicial. A execução real usa separadamente `config/approved_source.toml`, que seleciona o perfil OpenFootball CC0 auditado.
-- **Valores "a verificar":** indicam ausência de evidência. Não devem ser tratados como fatos confirmados.
-- **Licença verificada:** só é aceita com `url_termos`, `data_verificacao` e `verificador` preenchidos.
-- **Fonte principal:** só pode ser marcada como `selecionada` com licença verificada e `justificativa` preenchida. No máximo uma fonte pode ser selecionada.
-- **Verificação documental:** o controlador consultou os termos e a licença CC0 do OpenFootball; a evidência está em `docs/sources_audit.md`. O código só aplica regras formais e não substitui revisão jurídica. Outras candidatas continuam sem aprovação.
-- **Sem rede:** a validação não acessa a internet e não baixa dados.
-
-O carregamento e a validação ficam em `src/ingestion/source_catalog.py` (`carregar_catalogo`):
-
-```python
-from ingestion.source_catalog import carregar_catalogo
-
-catalogo = carregar_catalogo("config/data_sources.toml")
-```
-
-## Pipeline de coleta e tratamento (T003)
-
-Fluxo em `src/processing/pipeline.py` (`executar_pipeline`): fonte selecionada no catálogo -> leitura de um CSV local com o mapeamento da fonte -> cópia bruta em `data/raw` -> padronização (equipes por aliases, datas, gols) -> validação de integridade -> tabelas do PRD 5.1 -> Parquet em `data/processed`.
-
-- Sem fonte selecionada, ou com qualquer campo do mapeamento `a verificar`, o pipeline falha com `ColetaErro` e não grava dados.
-- Achados críticos da validação (duplicidade, mandante igual ao visitante, gols negativos ou não inteiros, pontos fora de 3/1/0, ausências obrigatórias) lançam `IntegridadeErro` antes da gravação das tabelas. Avisos (por exemplo, rodada ausente) são registrados em log.
-- As consultas (`src/processing/consultas.py`) usam DuckDB em memória, com SQL fixo e parâmetros `?`, sem criar arquivos `.duckdb`.
 
 ## Estrutura
 
 ```text
-config/            configurações externas (settings.yaml, data_sources.toml)
-data/              raw, interim, processed, predictions (conteúdo fora do Git)
-dashboard/         powerbi/ e assets/ (fases T008)
-docs/              PRD, TASKS, arquitetura
-notebooks/         análises exploratórias (fase T004)
-reports/           figures/ e metrics/
+config/            fontes de dados e parâmetros
+data/              raw, processed, predictions (somente os artefatos finais vão ao Git)
+dashboard/         projeto Power BI gerado, template e tokens de design
+docs/              PRD, tarefas, metodologia, model card, contrato da API, deploy, QA
+scripts/           execução local, geração do Power BI, teste de fumaça
 src/               ingestion, validation, processing, features, models, evaluation, api
-tests/             unit, integration, model, api
-.github/workflows/ integração contínua básica
+tests/             testes unitários e de integração
 ```
 
-## Limites desta etapa
+## Documentação
 
-- O perfil config/approved_source.toml seleciona OpenFootball CC0 para 2018–2025, com auditoria em docs/sources_audit.md. O catálogo original de candidatas continua preservado.
-- A licença CC0 do perfil OpenFootball foi verificada documentalmente. As demais candidatas não foram aprovadas.
-- O controlador validou 3.040 partidas reais entre 2018 e 2025, 380 por temporada, com 20 clubes por temporada. Não foi realizada conferência externa com a CBF.
-- O pipeline T003 foi validado nos arquivos reais fixos de OpenFootball 2018–2025 e em testes sintéticos. Dados de 2026 continuam fora do processamento.
-- Os 54 nomes encontrados no OpenFootball 2018–2025 foram conferidos e normalizados; novas variantes exigirão nova auditoria.
-- A CI executa instalação, lint, formatação e testes em Python 3.12, mas ainda não foi disparada.
+| Documento | Conteúdo |
+|---|---|
+| `docs/PRD.md` | Requisitos do produto |
+| `docs/TASKS.md` | Controle das tarefas e histórico de entregas |
+| `docs/methodology.md`, `docs/model_card.md` | Metodologia, modelo, métricas e hipóteses |
+| `docs/assistente_catalogo.md`, `docs/api_contrato.md` | Consultas do assistente e contrato da API |
+| `docs/dashboard_setup.md` | Geração e validação do Power BI |
+| `docs/deploy.md` | Publicação no Render e no Power BI |
+| `docs/roadmap.md` | Próximas melhorias |
 
-## Próximos passos
+## Limitações
 
-1. T005: atributos temporais e testes contra vazamento de informação.
-2. T006/T007: backtesting e avaliação científica com dados históricos já validados.
-3. T008/T009: dashboard e assistente local; outras fontes só serão usadas após nova auditoria.
+- Dados observacionais de uma única competição, com cerca de 33 observações por equipe no holdout. Os resultados não são causais.
+- Um único holdout temporal. Os alvos de partidas consecutivas se sobrepõem, então as observações não são independentes e não há teste de significância.
+- A hipótese de que a média móvel recente supera a média histórica **não se confirmou** na validação (MAE 0,604 contra 0,515 da média histórica global). O Ridge superou as duas referências na validação (MAE 0,489), mas o experimento não isola a contribuição de cada atributo.
+- Não há xG: a hipótese sobre métricas avançadas não pôde ser avaliada. Dados de 2026 não foram usados.
+- Previsões são estimativas retrospectivas, não certezas nem recomendação de aposta.
+- A chamada à Claude API foi testada com cliente simulado. A integração real depende de uma chave e ainda precisa de um teste manual.
+- O projeto Power BI foi gerado e testado por código, mas a abertura no Power BI Desktop depende de validação manual (`docs/qa/T008/checklist_desktop.md`).
 
-## Análise exploratória (T004)
+## Status do fluxo de trabalho
 
-Notebook em notebooks/01_exploratoria.ipynb e funções em src/evaluation/exploratoria.py. O controlador executou a análise real e salvou resultados reproduzíveis. Consulte docs/methodology.md. Fonte e período conforme docs/sources_audit.md.
+As tarefas T001 a T009 têm código entregue e testado. Revisão técnica independente, QA funcional e aprovação final do responsável pelo projeto estão pendentes, e a publicação aguarda autorização. O histórico está em `docs/TASKS.md`.
 
+## Licença
 
+Código sob licença MIT (`LICENSE`). Dados de partidas do OpenFootball em domínio público (CC0). Os arquivos de `dashboard/powerbi` mantêm os avisos de licença da Microsoft.

@@ -19,7 +19,7 @@
 ## 3. Período
 
 - Período candidato do PRD 2.2: 2015–2025.
-- Período real validado pelo controlador: **2018–2025**.
+- Período real validado: **2018–2025** (3.040 partidas, 380 por temporada, 20 clubes por temporada).
 - A temporada **2026 é reservada** para avaliação temporal final. O código a rejeita e não a processa.
 - Dados sintéticos existem apenas nos testes (`tests/unit/test_exploratoria.py`) e nunca são apresentados como dados reais.
 
@@ -56,7 +56,7 @@ Estas hipóteses são planos. **Nenhuma está confirmada nesta etapa.** Os teste
 
 - Descrição estatística **não é causalidade**. Diferenças entre equipes, temporadas ou mando não são efeitos comprovados.
 - Nenhuma conclusão sobre as hipóteses é tirada desta etapa.
-- As fontes de dados ainda não foram aprovadas (T002). Os resultados sobre dados reais dependem dessa aprovação.
+- A fonte OpenFootball (CC0) foi auditada na etapa T002 (`docs/sources_audit.md`). As outras fontes candidatas não foram aprovadas e não são usadas.
 - Ausências e anomalias são reportadas, não preenchidas.
 
 ## 8. Reprodução

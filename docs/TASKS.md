@@ -5,7 +5,7 @@
 - **Projeto:** Além do Placar — Inteligência Esportiva e Ciência de Dados
 - **Versão:** 1.0
 - **PRD de referência:** `docs/PRD.md`
-- **Status geral:** T001–T009 com código entregue (aguardando revisão Codex, QA Gemini e aprovação do usuário); T010 em desenvolvimento
+- **Status geral:** T001–T009 com código entregue; T010 com site, assistente v2, redesign do Power BI e preparação de deploy prontos (aguardando revisão Codex, QA Gemini, validação no Power BI Desktop e autorização de publicação)
 - **Tarefa atual:** T010 — QA final e publicação (plano em `docs/PLANO_LANCAMENTO_WEB.md`, fase F0 concluída em código)
 - **Responsável pelo projeto:** Vinícius Ribeiro
 - **Desenvolvimento:** Claude Code
@@ -586,6 +586,11 @@ Uma tarefa poderá receber status CONCLUÍDA somente quando:
 | 2026-10-29 | T007 | Código entregue; aguardando revisão, QA e aprovação | 03d5e80 |
 | 2026-10-29 | T008 | Código entregue; validação visual no Power BI Desktop pendente | d0656a9, 1bb01d8 |
 | 2026-10-29 | T009 | Código entregue; aguardando revisão, QA e aprovação | d962e98 |
+| 2026-10-29 | T009 v2 (F1) | Assistente com catálogo ampliado e camada Claude | a72384b |
+| 2026-10-29 | T009 (F2) | Redesign do web app | 213fc12 |
+| 2026-10-29 | T008 (F3) | Redesign do Power BI | 4ac52d2, f441db3 |
+| 2026-10-29 | T010 (F4) | Preparação de deploy | 739f084 |
+| 2026-10-29 | T010 (F5) | QA final e material de divulgação | ver `git log` da branch feature/t010-publicacao |
 
 Nenhuma tarefa foi aprovada formalmente pelo usuário. Revisões Codex e QA Gemini ainda não foram registradas em `docs/qa/`.
 
@@ -604,7 +609,18 @@ Não registrar tarefas como concluídas sem evidência.
 
 **Referência:** `docs/PLANO_LANCAMENTO_WEB.md` (fases F0 a F5, com prompts por fase).
 
-**Fase atual:** F0 (higiene e base) concluída em código. Próxima: F1 — assistente v2 com Claude.
+**Fases do plano de lançamento (código entregue em branches locais, sem push):**
+
+| Fase | Branch | Resultado |
+|---|---|---|
+| F0 higiene | feature/t010-higiene | Ambiente, docs sincronizadas, dados no Git |
+| F1 assistente v2 | feature/t009-assistente-v2 | Catálogo, camada Claude (testada com cliente simulado), limites |
+| F2 web app | feature/t009-webapp-redesign | Design system, 4 páginas, chat |
+| F3 Power BI | feature/t008-powerbi-redesign | Tema, navegação, 7 páginas, fonte web (não aberto no Desktop) |
+| F4 deploy | feature/t010-deploy | Docker, Render, CSP, CI (imagem não construída: sem Docker local) |
+| F5 QA e divulgação | feature/t010-publicacao | Teste de fumaça 35/35, README, roadmap, material de divulgação |
+
+**Pendências do responsável:** chave da Claude API, validação no Power BI Desktop, repositório público, conta Render, autorização de push e deploy, publicação do Power BI.
 
 ---
 
@@ -628,4 +644,4 @@ Trabalhe de forma eficiente, aproveitando o código existente. Evite análises r
 10. A qualidade científica tem prioridade sobre a complexidade visual.
 
 **Status do projeto:** T001–T009 entregues em código; T010 em desenvolvimento  
-**Próxima execução:** T010, fase F1 — assistente v2 (ver plano de lançamento).
+**Próxima execução:** pendências do responsável acima; depois revisão Codex e QA Gemini.

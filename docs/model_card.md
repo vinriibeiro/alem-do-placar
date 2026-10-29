@@ -1,6 +1,6 @@
 # Model Card — Além do Placar (T006–T007)
 
-**Status:** execução histórica real (T006) realizada pelo controlador, com fonte OpenFootball CC0 de 2018–2025 e holdout exclusivo de 2025. Não há dados de 2026.
+**Status:** execução histórica real (T006) realizada pelo responsável pelo projeto, com fonte OpenFootball CC0 de 2018–2025 e holdout exclusivo de 2025. Não há dados de 2026.
 
 Explicabilidade e avaliação científica (T007): código, testes e execução real entregues. Os números abaixo vêm de `data/predictions/cientifica/relatorio_cientifico.md`.
 
