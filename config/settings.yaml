@@ -1,0 +1,30 @@
+# Configurações não sensíveis do projeto. Credenciais não devem ser escritas aqui.
+
+project:
+  name: alem-do-placar
+  version: 0.1.0
+  language: pt-BR
+
+competition:
+  name: Campeonato Brasileiro Série A
+  modality: futebol
+  candidate_seasons:
+    start: 2015
+    end: 2025
+  # Temporada reservada para avaliação temporal final (PRD 2.2); não usada nesta etapa.
+  reserved_evaluation_season: 2026
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  predictions: data/predictions
+  figures: reports/figures
+  metrics: reports/metrics
+
+environment:
+  # Nome da variável de ambiente que guarda a credencial; o valor fica no .env local.
+  api_key_env: LLM_API_KEY
+
+logging:
+  level: INFO

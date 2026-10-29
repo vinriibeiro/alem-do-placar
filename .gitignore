@@ -32,3 +32,23 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Dados e artefatos grandes (a estrutura de pastas é versionada via .gitkeep)
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/predictions/*
+!data/predictions/.gitkeep
+*.parquet
+*.duckdb
+*.duckdb.wal
+*.joblib
+*.pkl
+mlruns/
+
+# Ferramentas de qualidade e notebooks
+.ruff_cache/
+.ipynb_checkpoints/
