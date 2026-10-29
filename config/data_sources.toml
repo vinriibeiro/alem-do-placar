@@ -1,0 +1,161 @@
+# Catálogo versionado das fontes de dados candidatas (T002; PRD seções 3.1 a 3.4).
+# Este arquivo não contém credenciais. Não inserir tokens, senhas ou chaves aqui.
+# Valores "a verificar" indicam ausência de evidência e não devem ser tratados como fatos.
+# Nenhuma licença foi verificada nesta etapa: a verificação depende de revisão humana.
+
+[catalogo]
+versao = "0.1.0"
+data_auditoria = "2026-10-29"
+observacao = "Auditoria inicial sem acesso à rede. Todas as fontes permanecem pendentes."
+
+[[fontes]]
+id = "football_data"
+nome = "Football-Data.co.uk"
+url = "https://www.football-data.co.uk/data.php"
+licenca = "a verificar"
+status_licenca = "pendente_verificacao"
+cobertura_brasileirao = "a verificar"
+temporadas = "a verificar"
+campos_essenciais = [
+  "Date",
+  "HomeTeam",
+  "AwayTeam",
+  "FTHG",
+  "FTAG",
+  "FTR",
+]
+campos_complementares = [
+  "HS",
+  "AS",
+  "HST",
+  "AST",
+  "HC",
+  "AC",
+  "HY",
+  "AY",
+  "HR",
+  "AR",
+]
+riscos = [
+  "Cobertura do Brasileirão não confirmada (a verificar).",
+  "Termos de redistribuição, atribuição e uso automatizado não verificados.",
+  "Nomes de colunas são preliminares e precisam de confirmação em amostra.",
+  "Identificador de partida, rodada e temporada não confirmados.",
+  "Sem xG nativo (a verificar).",
+]
+decisao = "pendente"
+
+[fontes.mapeamento]
+partida_id = "a verificar"
+data_partida = "Date"
+temporada = "a verificar"
+competicao = "a verificar"
+equipe_mandante = "HomeTeam"
+equipe_visitante = "AwayTeam"
+gols_mandante = "FTHG"
+gols_visitante = "FTAG"
+resultado = "FTR"
+rodada = "a verificar"
+finalizacoes = "mandante: HS; visitante: AS (mapeamento preliminar, a verificar)"
+finalizacoes_no_alvo = "mandante: HST; visitante: AST (mapeamento preliminar, a verificar)"
+posse_de_bola = "a verificar"
+cartoes = "HY, HR, AY, AR"
+escanteios = "HC, AC"
+xg = "a verificar"
+dias_descanso = "a verificar"
+outras_estatisticas = "HF, AF (faltas)"
+
+[[fontes]]
+id = "statsbomb_open_data"
+nome = "StatsBomb Open Data"
+url = "https://github.com/statsbomb/open-data"
+licenca = "a verificar (termos do repositório)"
+status_licenca = "pendente_verificacao"
+cobertura_brasileirao = "a verificar"
+temporadas = "a verificar"
+campos_essenciais = [
+  "match_id",
+  "match_date",
+  "season",
+  "competition",
+  "home_team",
+  "away_team",
+  "home_score",
+  "away_score",
+]
+campos_complementares = [
+  "eventos de finalização (a verificar)",
+  "shot.statsbomb_xg (a verificar)",
+  "eventos de faltas e cartões (a verificar)",
+]
+riscos = [
+  "Cobertura do Brasileirão não confirmada (a verificar).",
+  "Licença possivelmente restringe uso comercial e exige atribuição (a verificar).",
+  "Formato JSON aninhado exige normalização antes do uso.",
+  "Cobertura de temporadas possivelmente parcial (a verificar).",
+]
+decisao = "pendente"
+
+[fontes.mapeamento]
+partida_id = "match_id"
+data_partida = "match_date"
+temporada = "season"
+competicao = "competition"
+equipe_mandante = "home_team"
+equipe_visitante = "away_team"
+gols_mandante = "home_score"
+gols_visitante = "away_score"
+resultado = "derivado de home_score e away_score"
+rodada = "match_week (a verificar)"
+finalizacoes = "eventos Shot (a verificar)"
+finalizacoes_no_alvo = "eventos Shot, outcome (a verificar)"
+posse_de_bola = "a verificar"
+cartoes = "eventos de cartão (a verificar)"
+escanteios = "a verificar"
+xg = "shot.statsbomb_xg (a verificar)"
+dias_descanso = "derivado de match_date (a verificar)"
+outras_estatisticas = "a verificar"
+
+[[fontes]]
+id = "openfootball"
+nome = "OpenFootball"
+url = "https://github.com/openfootball"
+licenca = "a verificar (pode variar por repositório)"
+status_licenca = "pendente_verificacao"
+cobertura_brasileirao = "a verificar"
+temporadas = "a verificar"
+campos_essenciais = [
+  "Round",
+  "Date",
+  "team1",
+  "team2",
+  "score",
+]
+campos_complementares = []
+riscos = [
+  "Formato textual sem schema garantido; nomes de campos a confirmar.",
+  "Licença pode variar entre repositórios; cada um deve ser verificado.",
+  "Disponibilidade de estatísticas de partida além do placar: a verificar.",
+  "Cobertura do Brasileirão não confirmada (a verificar).",
+]
+decisao = "pendente"
+
+[fontes.mapeamento]
+partida_id = "a verificar"
+data_partida = "Date"
+temporada = "a verificar"
+competicao = "a verificar"
+equipe_mandante = "team1"
+equipe_visitante = "team2"
+gols_mandante = "score (a extrair)"
+gols_visitante = "score (a extrair)"
+resultado = "derivado de score"
+rodada = "Round"
+finalizacoes = "a verificar"
+finalizacoes_no_alvo = "a verificar"
+posse_de_bola = "a verificar"
+cartoes = "a verificar"
+escanteios = "a verificar"
+xg = "a verificar"
+dias_descanso = "derivado de Date (a verificar)"
+outras_estatisticas = "a verificar"
