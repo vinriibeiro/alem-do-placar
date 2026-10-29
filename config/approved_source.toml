@@ -1,0 +1,50 @@
+# Perfil aprovado de fonte (T003). Separado de config/data_sources.toml (catálogo T002, preservado).
+# Licença verificada documentalmente pelo Codex; 3040 partidas reais validadas localmente.
+# Ver docs/sources_audit.md para evidências e limites.
+
+[catalogo]
+versao = "0.1.0"
+
+[[fontes]]
+id = "openfootball_2018_2025"
+nome = "OpenFootball — Campeonato Brasileiro Série A (Football.TXT, 2018–2025)"
+url = "https://github.com/openfootball/south-america"
+licenca = "CC0-1.0"
+status_licenca = "verificada"
+cobertura_brasileirao = "Série A 2018 a 2025 na amostra auditada: 8 arquivos Football.TXT, 380 partidas por temporada (3040 no total). 2015–2017 ausente nesta revisão."
+temporadas = "2018-2025"
+campos_essenciais = ["partida_id", "data_partida", "temporada", "competicao", "equipe_mandante", "equipe_visitante", "gols_mandante", "gols_visitante", "resultado", "rodada"]
+campos_complementares = []
+riscos = [
+    "Nomes de equipes fora da tabela de aliases são mantidos como estão e exigem revisão.",
+    "Remarcações alteram a data e, portanto, o partida_id.",
+    "Campos complementares não existem no Football.TXT e ficam como nao_utilizado.",
+    "Integridade dos arquivos reais validada localmente; conferência externa com CBF não realizada.",
+    "Verificação de licença documental (Codex), sem revisão humana registrada.",
+]
+decisao = "selecionada"
+url_termos = "https://github.com/openfootball/south-america/blob/f51b2dcf5e0fab9f0abd5206ab8c24a413e67277/LICENSE.md"
+data_verificacao = "2026-10-29"
+verificador = "Codex (verificação documental)"
+justificativa = "Disponibilidade dos arquivos Football.TXT de 2018 a 2025 no commit f51b2dcf5e0fab9f0abd5206ab8c24a413e67277; licença explícita CC0-1.0 nos LICENSE.md e README oficiais, que permite processamento automatizado; adaptador validado em 3040 partidas reais, 20 clubes e 38 jogos por clube por temporada, além de testes sintéticos. Ver docs/sources_audit.md."
+
+[fontes.mapeamento]
+partida_id = "partida_id"
+data_partida = "data_partida"
+temporada = "temporada"
+competicao = "competicao"
+equipe_mandante = "equipe_mandante"
+equipe_visitante = "equipe_visitante"
+gols_mandante = "gols_mandante"
+gols_visitante = "gols_visitante"
+resultado = "derivado"
+rodada = "rodada"
+finalizacoes = "nao_utilizado"
+finalizacoes_no_alvo = "nao_utilizado"
+posse_de_bola = "nao_utilizado"
+cartoes = "nao_utilizado"
+escanteios = "nao_utilizado"
+xg = "nao_utilizado"
+dias_descanso = "nao_utilizado"
+outras_estatisticas = "nao_utilizado"
+
