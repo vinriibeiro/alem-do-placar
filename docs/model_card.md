@@ -1,6 +1,8 @@
-# Model Card — Além do Placar (T006)
+# Model Card — Além do Placar (T006–T007)
 
-**Status:** execução histórica real realizada pelo controlador, com fonte OpenFootball CC0 de 2018–2025 e holdout exclusivo de 2025. Não há dados de 2026.
+**Status:** execução histórica real (T006) realizada pelo controlador, com fonte OpenFootball CC0 de 2018–2025 e holdout exclusivo de 2025. Não há dados de 2026.
+
+Explicabilidade e avaliação científica (T007): código e testes entregues. Os números da execução T007 ainda não foram produzidos e serão preenchidos pelo controlador após a execução real.
 
 ## Modelo e alvo
 
@@ -27,9 +29,31 @@ Identificadores, pontos e gols da partida atual, rodada, alvo e `fim_alvo` não 
 
 Intervalo de 90% empírico: quantil de 90% dos erros absolutos das previsões de validação do modelo escolhido. A cobertura é medida no holdout. Não há garantia estatística, porque os alvos de partidas consecutivas se sobrepõem no tempo.
 
+## Explicabilidade e avaliação científica (T007)
+
+- **Função:** `avaliar_cientificamente` em `src/evaluation/cientifica.py` (versão `T007-1.0`). Consome a saída de `executar_backtest` e usa o modelo congelado em memória. Não há treino, reajuste nem carregamento de pickle externo.
+- **Resíduos:** resíduo = previsão − alvo. São reportados MAE, RMSE, viés, cobertura do intervalo e n, no holdout de 2025, por equipe e por temporada. Diferenças entre equipes com n diferente não são ranking de mérito.
+- **Erros extremos:** as 10 maiores observações por erro absoluto.
+- **Importância por permutação:** cada atributo é embaralhado no holdout congelado, com seed 42 e 5 repetições por padrão. ΔMAE = MAE embaralhado − MAE original. Valores negativos são mantidos. É medida preditiva e exploratória: não é estudo causal nem ablação, e atributos correlacionados podem dividir a importância. Não altera seleção, parâmetros ou treino.
+- **Comparação:** modelo selecionado contra M00 no holdout. B01 (média histórica global do treino) aparece somente na validação.
+- **Hipóteses:**
+  - H01 (indicadores recentes): resultado observado nesta comparação, sem generalização.
+  - H02 (médias móveis contra médias históricas): comparação específica de M00 contra B01 na validação. B01 não é média por clube.
+  - H03 (mando) e H04 (volatilidade e saldo de gols): não conclusivas. A importância é preditiva e exploratória.
+  - H05 (ML contra baseline): resultado observado nesta comparação, sem generalização para outras temporadas ou competições.
+  - H06 (xG): não avaliável. xG não está disponível e nenhum valor foi preenchido com zero.
+- **Não há** valor-p, intervalo estatístico nem teste de significância para os erros.
+- **Saídas** (pasta explícita): `relatorio_cientifico.json`, `relatorio_cientifico.md`, `importancias.csv`, `residuos.parquet` e três PNGs (distribuição dos resíduos, previsto versus observado com linha de identidade, importância por permutação).
+
+### Resultados da execução T007
+
+Pendente. A execução real de `avaliar_cientificamente` sobre o backtesting será registrada pelo controlador. Nenhum número da T007 foi produzido nesta entrega.
+
 ## Limitações
 
 - Dados observacionais e uma única competição; resultados não são causais.
+- Avaliação em um único holdout temporal; amostra pequena por equipe.
+- Alvos de partidas consecutivas se sobrepõem no tempo; as observações não são independentes.
 - Previsões não são certezas nem recomendações de apostas.
 - Qualquer resultado depende da fonte OpenFootball CC0 auditada (T002–T003).
 
@@ -54,6 +78,5 @@ Modelo selecionado na validação: **M01_ridge**. MAE médio de validação 0.48
 
 ```powershell
 python -m pip install -e ".[test,lint]"
-python -B -m pytest tests/unit/test_backtesting.py tests/unit/test_experimentos.py
+python -B -m pytest tests/unit/test_backtesting.py tests/unit/test_experimentos.py tests/unit/test_cientifica.py
 ```
-
