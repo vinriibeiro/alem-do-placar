@@ -2,45 +2,69 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "07f520ca6febc375a39e",
   "position": {
-    "x": 16,
-    "y": 208,
-    "width": 300,
-    "height": 56,
+    "x": 1024,
+    "y": 112,
+    "width": 240,
+    "height": 96,
     "z": 7,
     "tabOrder": 7
   },
   "visual": {
-    "visualType": "slicer",
+    "visualType": "card",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_temporadas"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "ano"
+                  "Property": "MAE global selecionado"
                 }
               },
-              "queryRef": "dim_temporadas.ano",
-              "nativeQueryRef": "ano"
+              "queryRef": "fato_desempenho_equipes.MAE global selecionado",
+              "nativeQueryRef": "MAE global selecionado"
             }
           ]
         }
       }
     },
     "objects": {
-      "data": [
+      "labels": [
         {
           "properties": {
-            "mode": {
+            "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "'Dropdown'"
+                  "Value": "22D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -124,14 +148,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Temporada'"
+                  "Value": "'MAE do modelo (holdout)'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -155,28 +179,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

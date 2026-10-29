@@ -2,82 +2,65 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "0e5cc3881744829246c4",
   "position": {
-    "x": 16,
-    "y": 180,
-    "width": 400,
-    "height": 244,
+    "x": 222,
+    "y": 112,
+    "width": 194,
+    "height": 72,
     "z": 4,
     "tabOrder": 4
   },
   "visual": {
-    "visualType": "lineChart",
+    "visualType": "slicer",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "analitico"
+                      "Entity": "dim_equipes"
                     }
                   },
-                  "Property": "data_referencia"
+                  "Property": "nome_padronizado"
                 }
               },
-              "queryRef": "analitico.data_referencia",
-              "nativeQueryRef": "data_referencia"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Média 3 jogos"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Média 3 jogos",
-              "nativeQueryRef": "Média 3 jogos"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Média recente"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Média recente",
-              "nativeQueryRef": "Média recente"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Média 10 jogos"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Média 10 jogos",
-              "nativeQueryRef": "Média 10 jogos"
+              "queryRef": "dim_equipes.nome_padronizado",
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -155,14 +138,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Média móvel de pontos (3, 5 e 10 jogos)'"
+                  "Value": "'Equipe (escolha uma)'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -186,28 +169,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

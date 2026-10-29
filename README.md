@@ -127,4 +127,4 @@ As tarefas T001 a T009 têm código entregue e testado. Revisão técnica indepe
 
 ## Licença
 
-Código sob licença MIT (`LICENSE`). Dados de partidas do OpenFootball em domínio público (CC0). Os arquivos de `dashboard/powerbi` mantêm os avisos de licença da Microsoft.
+Código sob licença MIT (`LICENSE`). Dados de partidas do OpenFootball em domínio público (CC0). Os arquivos de `dashboard/powerbi` mantêm os avisos de licença da Microsoft. Os escudos são marcas dos clubes, exibidos a partir da Wikimedia apenas para identificação, sem fins comerciais.

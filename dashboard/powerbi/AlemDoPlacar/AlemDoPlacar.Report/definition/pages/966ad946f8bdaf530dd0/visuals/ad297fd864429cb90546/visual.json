@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "ad297fd864429cb90546",
   "position": {
-    "x": 646,
+    "x": 16,
     "y": 408,
     "width": 618,
     "height": 284,
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Limitações",
+                    "value": "Como ler as previsões",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "15px",
@@ -32,7 +32,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Dados observacionais e uma única competição.",
+                    "value": "•  Previsões são retrospectivas e têm margem de erro.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -44,7 +44,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Um holdout temporal e poucas observações por equipe.",
+                    "value": "•  O intervalo de 90% é empírico e sem garantia estatística.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -56,7 +56,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Importância das variáveis é preditiva, não causal.",
+                    "value": "•  Não são certezas nem recomendação de aposta.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -68,7 +68,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Sem xG: hipóteses sobre métricas avançadas não foram avaliadas.",
+                    "value": "•  Corte de treino: 2025-03-29.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -139,6 +139,53 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

@@ -2,18 +2,18 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "91804edf46b9015fce3e",
   "position": {
-    "x": 640,
-    "y": 420,
-    "width": 624,
-    "height": 272,
+    "x": 16,
+    "y": 304,
+    "width": 612,
+    "height": 388,
     "z": 11,
     "tabOrder": 11
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "clusteredBarChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
           "projections": [
             {
               "field": {
@@ -27,22 +27,13 @@
                 }
               },
               "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Posição"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Posição",
-              "nativeQueryRef": "Posição"
-            },
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
             {
               "field": {
                 "Measure": {
@@ -56,51 +47,27 @@
               },
               "queryRef": "fato_desempenho_equipes.Pontos totais",
               "nativeQueryRef": "Pontos totais"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Vitórias"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Vitórias",
-              "nativeQueryRef": "Vitórias"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Saldo de gols"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Saldo de gols",
-              "nativeQueryRef": "Saldo de gols"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Aproveitamento"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Aproveitamento",
-              "nativeQueryRef": "Aproveitamento"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fato_desempenho_equipes"
+                  }
+                },
+                "Property": "Pontos totais"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
       }
     },
     "visualContainerObjects": {
@@ -179,7 +146,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Classificação (filtrada pela temporada)'"
+                  "Value": "'Pontos por equipe'"
                 }
               }
             },

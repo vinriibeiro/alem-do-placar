@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "88977743341f0b816ca2",
   "position": {
-    "x": 646,
+    "x": 16,
     "y": 112,
     "width": 618,
     "height": 284,
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Modelo",
+                    "value": "Dados",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "15px",
@@ -32,7 +32,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Modelo selecionado: M01_ridge, versão T006-1.0.",
+                    "value": "•  Fonte: OpenFootball, licença CC0 verificada.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -44,7 +44,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Alvo: média de pontos nas próximas 5 partidas.",
+                    "value": "•  Brasileirão Série A, temporadas 2018 a 2025.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -56,7 +56,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Validação temporal com janela expansiva; holdout exclusivo de 2025.",
+                    "value": "•  3.040 partidas, 380 por temporada, 20 clubes por temporada.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -68,7 +68,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Baseline: média das últimas 5 partidas. Métricas: MAE e RMSE.",
+                    "value": "•  2026 está fora do escopo.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "12px",
@@ -139,6 +139,53 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

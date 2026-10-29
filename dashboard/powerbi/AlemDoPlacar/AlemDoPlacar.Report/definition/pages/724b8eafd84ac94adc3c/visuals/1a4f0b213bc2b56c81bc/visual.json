@@ -3,14 +3,14 @@
   "name": "1a4f0b213bc2b56c81bc",
   "position": {
     "x": 16,
-    "y": 436,
+    "y": 196,
     "width": 400,
-    "height": 256,
+    "height": 228,
     "z": 5,
     "tabOrder": 5
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "lineChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_equipes"
+                      "Entity": "analitico"
                     }
                   },
-                  "Property": "nome_padronizado"
+                  "Property": "data_referencia"
                 }
               },
-              "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
+              "queryRef": "analitico.data_referencia",
+              "nativeQueryRef": "data_referencia",
+              "displayName": "Data"
             }
           ]
         },
@@ -41,11 +42,39 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
+                  "Property": "Média 3 jogos"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Média 3 jogos",
+              "nativeQueryRef": "Média 3 jogos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
                   "Property": "Média recente"
                 }
               },
               "queryRef": "fato_desempenho_equipes.Média recente",
               "nativeQueryRef": "Média recente"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Média 10 jogos"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Média 10 jogos",
+              "nativeQueryRef": "Média 10 jogos"
             }
           ]
         }
@@ -127,7 +156,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Média recente (5 jogos) por equipe'"
+                  "Value": "'Média móvel de pontos (3, 5 e 10 jogos)'"
                 }
               }
             },

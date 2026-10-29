@@ -2,9 +2,9 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "e7ab99b461b045c2d51d",
   "position": {
-    "x": 728,
+    "x": 16,
     "y": 112,
-    "width": 536,
+    "width": 700,
     "height": 240,
     "z": 3,
     "tabOrder": 3
@@ -19,11 +19,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Abrir o assistente",
+                    "value": "Converse com os dados",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "20px",
-                      "color": "#FFFFFF",
+                      "fontSize": "22px",
+                      "color": "#0b2545",
                       "fontWeight": "bold"
                     }
                   }
@@ -32,11 +32,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Abre o site do projeto em uma nova aba.",
+                    "value": "O assistente responde perguntas sobre classificação, confrontos, mando de campo, gols, sequências, rankings e previsões do Brasileirão. Cada resposta mostra a fonte, o período e as limitações.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "12px",
-                      "color": "#9FE3CB"
+                      "fontSize": "14px",
+                      "color": "#14212e"
                     }
                   }
                 ]
@@ -44,15 +44,12 @@
               {
                 "textRuns": [
                   {
-                    "value": "Clique aqui para perguntar →",
+                    "value": "Ele usa apenas os dados deste projeto e nunca inventa números.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#FFFFFF",
-                      "fontWeight": "bold",
-                      "textDecoration": "underline"
-                    },
-                    "url": "https://ALTERAR"
+                      "fontSize": "14px",
+                      "color": "#4f5f70"
+                    }
                   }
                 ]
               }
@@ -77,7 +74,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0b6f50'"
+                      "Value": "'#ffffff'"
                     }
                   }
                 }
@@ -87,6 +84,84 @@
               "expr": {
                 "Literal": {
                   "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

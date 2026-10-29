@@ -2,96 +2,49 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "99c79764edd227817c44",
   "position": {
-    "x": 16,
-    "y": 180,
-    "width": 800,
-    "height": 400,
+    "x": 328,
+    "y": 112,
+    "width": 488,
+    "height": 72,
     "z": 4,
     "tabOrder": 4
   },
   "visual": {
-    "visualType": "lineChart",
-    "query": {
-      "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "previsoes"
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Previsões retrospectivas, não certezas.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12px",
+                      "color": "#9a6700",
+                      "fontWeight": "bold"
                     }
-                  },
-                  "Property": "data_referencia"
-                }
+                  }
+                ]
               },
-              "queryRef": "previsoes.data_referencia",
-              "nativeQueryRef": "data_referencia"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
+              {
+                "textRuns": [
+                  {
+                    "value": "A linha prevista deve ser lida junto com o intervalo de 90% e com o erro médio do modelo.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11px",
+                      "color": "#4f5f70"
                     }
-                  },
-                  "Property": "Média prevista"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Média prevista",
-              "nativeQueryRef": "Média prevista"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Média observada"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Média observada",
-              "nativeQueryRef": "Média observada"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Limite inferior"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Limite inferior",
-              "nativeQueryRef": "Limite inferior"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Limite superior"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Limite superior",
-              "nativeQueryRef": "Limite superior"
-            }
-          ]
+                  }
+                ]
+              }
+            ]
+          }
         }
-      }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -109,7 +62,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#ffffff'"
+                      "Value": "'#FFF6E0'"
                     }
                   }
                 }
@@ -156,44 +109,6 @@
           }
         }
       ],
-      "title": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Previsto, observado e intervalo de 90%'"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "13D"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0b2545'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ],
       "padding": [
         {
           "properties": {
@@ -214,14 +129,27 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "12D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

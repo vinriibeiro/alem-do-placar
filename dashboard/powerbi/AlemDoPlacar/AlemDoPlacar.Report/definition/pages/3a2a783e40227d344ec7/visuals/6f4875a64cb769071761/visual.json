@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "6f4875a64cb769071761",
   "position": {
-    "x": 16,
-    "y": 442,
+    "x": 646,
+    "y": 196,
     "width": 618,
-    "height": 250,
+    "height": 242,
     "z": 6,
     "tabOrder": 6
   },
   "visual": {
-    "visualType": "scatterChart",
+    "visualType": "clusteredColumnChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,32 +20,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_equipes"
-                    }
-                  },
-                  "Property": "nome_padronizado"
-                }
-              },
-              "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
-            }
-          ]
-        },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Saldo de gols"
+                  "Property": "mando_campo"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Saldo de gols",
-              "nativeQueryRef": "Saldo de gols"
+              "queryRef": "fato_desempenho_equipes.mando_campo",
+              "nativeQueryRef": "mando_campo",
+              "displayName": "Mando"
             }
           ]
         },
@@ -59,11 +42,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Pontos totais"
+                  "Property": "Pontos por jogo"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Pontos totais",
-              "nativeQueryRef": "Pontos totais"
+              "queryRef": "fato_desempenho_equipes.Pontos por jogo",
+              "nativeQueryRef": "Pontos por jogo"
             }
           ]
         }
@@ -145,7 +128,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Saldo de gols × pontos por equipe'"
+                  "Value": "'Pontos por jogo: mandante × visitante'"
                 }
               }
             },

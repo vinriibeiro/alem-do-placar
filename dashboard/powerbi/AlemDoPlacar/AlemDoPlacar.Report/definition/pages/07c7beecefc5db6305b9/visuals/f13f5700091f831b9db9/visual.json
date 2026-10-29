@@ -2,36 +2,97 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "f13f5700091f831b9db9",
   "position": {
-    "x": 16,
-    "y": 698,
-    "width": 1248,
-    "height": 20,
+    "x": 828,
+    "y": 112,
+    "width": 436,
+    "height": 580,
     "z": 9,
     "tabOrder": 9
   },
   "visual": {
-    "visualType": "textbox",
-    "objects": {
-      "general": [
-        {
-          "properties": {
-            "paragraphs": [
-              {
-                "textRuns": [
-                  {
-                    "value": "Fonte: OpenFootball (CC0), 2018–2025 · Modelo M01_ridge T006-1.0 · Corte de treino 2025-03-29 · Previsões são estimativas retrospectivas.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "10px",
-                      "color": "#4f5f70"
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "previsoes"
                     }
-                  }
-                ]
-              }
-            ]
-          }
+                  },
+                  "Property": "equipe"
+                }
+              },
+              "queryRef": "previsoes.equipe",
+              "nativeQueryRef": "equipe",
+              "displayName": "Equipe"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "previsoes"
+                    }
+                  },
+                  "Property": "data_referencia"
+                }
+              },
+              "queryRef": "previsoes.data_referencia",
+              "nativeQueryRef": "data_referencia",
+              "displayName": "Data"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "previsoes"
+                    }
+                  },
+                  "Property": "previsao"
+                }
+              },
+              "queryRef": "previsoes.previsao",
+              "nativeQueryRef": "previsao",
+              "displayName": "Previsão"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "previsoes"
+                    }
+                  },
+                  "Property": "limite_inferior"
+                }
+              },
+              "queryRef": "previsoes.limite_inferior",
+              "nativeQueryRef": "limite_inferior",
+              "displayName": "Limite inferior"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "previsoes"
+                    }
+                  },
+                  "Property": "limite_superior"
+                }
+              },
+              "queryRef": "previsoes.limite_superior",
+              "nativeQueryRef": "limite_superior",
+              "displayName": "Limite superior"
+            }
+          ]
         }
-      ]
+      }
     },
     "visualContainerObjects": {
       "background": [
@@ -40,7 +101,128 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Previsões e intervalos'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
                 }
               }
             }

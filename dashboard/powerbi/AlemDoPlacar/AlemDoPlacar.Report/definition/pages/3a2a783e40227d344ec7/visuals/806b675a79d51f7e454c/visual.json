@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "806b675a79d51f7e454c",
   "position": {
-    "x": 646,
-    "y": 180,
+    "x": 16,
+    "y": 196,
     "width": 618,
-    "height": 250,
+    "height": 242,
     "z": 5,
     "tabOrder": 5
   },
@@ -23,11 +23,12 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "mando_campo"
+                  "Property": "pontos"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.mando_campo",
-              "nativeQueryRef": "mando_campo"
+              "queryRef": "fato_desempenho_equipes.pontos",
+              "nativeQueryRef": "pontos",
+              "displayName": "Pontos no jogo"
             }
           ]
         },
@@ -41,11 +42,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Pontos por jogo"
+                  "Property": "Observações de equipe"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Pontos por jogo",
-              "nativeQueryRef": "Pontos por jogo"
+              "queryRef": "fato_desempenho_equipes.Observações de equipe",
+              "nativeQueryRef": "Observações de equipe"
             }
           ]
         }
@@ -127,7 +128,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Pontos por jogo: mandante × visitante'"
+                  "Value": "'Distribuição de resultados (0, 1 e 3 pontos)'"
                 }
               }
             },

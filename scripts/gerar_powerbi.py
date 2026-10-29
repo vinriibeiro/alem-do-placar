@@ -42,6 +42,7 @@ def main(argv: list[str] | None = None) -> None:
         url_base_dados=args.url_base,
         url_assistente=args.url_assistente,
         tokens=RAIZ / "dashboard" / "assets" / "tema_tokens.json",
+        escudos=RAIZ / "config" / "escudos.csv",
     )
     print(pbip)
 

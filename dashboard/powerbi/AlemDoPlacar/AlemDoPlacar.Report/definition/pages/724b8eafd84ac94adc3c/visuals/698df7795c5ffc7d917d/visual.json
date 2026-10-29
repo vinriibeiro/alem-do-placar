@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "698df7795c5ffc7d917d",
   "position": {
-    "x": 222,
+    "x": 16,
     "y": 112,
     "width": 194,
-    "height": 56,
+    "height": 72,
     "z": 3,
     "tabOrder": 3
   },
@@ -20,14 +20,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_equipes"
+                      "Entity": "dim_temporadas"
                     }
                   },
-                  "Property": "nome_padronizado"
+                  "Property": "ano"
                 }
               },
-              "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
+              "queryRef": "dim_temporadas.ano",
+              "nativeQueryRef": "ano",
+              "displayName": "Temporada"
             }
           ]
         }
@@ -41,6 +42,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -124,14 +138,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Equipe'"
+                  "Value": "'Temporada'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -155,28 +169,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

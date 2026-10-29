@@ -39,6 +39,14 @@ Os tokens de cor vêm de `dashboard/assets/tema_tokens.json`, gerado pelo site (
 
 As pastas de entrada são somente lidas. A saída deve estar ausente ou vazia.
 
+## Escudos dos clubes
+
+`config/escudos.csv` liga cada equipe à imagem principal do artigo do clube na Wikipédia em português (miniatura PNG hospedada pela Wikimedia). O gerador junta essa URL à dimensão de equipes no Power Query, com categoria de dado `ImageUrl`, e as tabelas da Visão Geral e da Estatística mostram o escudo ao lado do nome.
+
+- Para atualizar ou incluir um clube: edite o dicionário em `scripts/obter_escudos.py` e rode `python scripts/obter_escudos.py`. Confira as imagens antes de commitar.
+- Os escudos são marcas registradas dos clubes. O projeto só aponta para as imagens da Wikimedia, para identificação visual e sem fins comerciais; nenhum arquivo de escudo é redistribuído no repositório.
+- O Power BI busca as imagens na internet. Sem conexão, a coluna aparece vazia e o restante funciona.
+
 ## Layout (canvas 1280 x 720)
 
 Todas as páginas seguem a mesma estrutura:

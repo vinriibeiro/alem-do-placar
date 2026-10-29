@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "68005794dfc40db0bbae",
   "position": {
-    "x": 961,
+    "x": 646,
     "y": 112,
     "width": 303,
-    "height": 84,
+    "height": 96,
     "z": 5,
     "tabOrder": 5
   },
@@ -23,11 +23,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Corte de treino"
+                  "Property": "Modelo selecionado"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Corte de treino",
-              "nativeQueryRef": "Corte de treino"
+              "queryRef": "fato_desempenho_equipes.Modelo selecionado",
+              "nativeQueryRef": "Modelo selecionado"
             }
           ]
         }
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "26D"
+                  "Value": "22D"
                 }
               }
             },
@@ -52,6 +52,19 @@
                       "Value": "'#0b2545'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -135,14 +148,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Corte de treino'"
+                  "Value": "'Modelo selecionado'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -166,28 +179,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

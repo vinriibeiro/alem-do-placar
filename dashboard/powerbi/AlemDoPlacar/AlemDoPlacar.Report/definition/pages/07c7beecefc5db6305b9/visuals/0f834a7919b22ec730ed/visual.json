@@ -2,92 +2,75 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "0f834a7919b22ec730ed",
   "position": {
-    "x": 828,
-    "y": 112,
-    "width": 436,
-    "height": 580,
+    "x": 560,
+    "y": 592,
+    "width": 256,
+    "height": 96,
     "z": 8,
     "tabOrder": 8
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "card",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "previsoes"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "equipe"
+                  "Property": "Erro absoluto médio"
                 }
               },
-              "queryRef": "previsoes.equipe",
-              "nativeQueryRef": "equipe"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "previsoes"
-                    }
-                  },
-                  "Property": "data_referencia"
-                }
-              },
-              "queryRef": "previsoes.data_referencia",
-              "nativeQueryRef": "data_referencia"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "previsoes"
-                    }
-                  },
-                  "Property": "previsao"
-                }
-              },
-              "queryRef": "previsoes.previsao",
-              "nativeQueryRef": "previsao"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "previsoes"
-                    }
-                  },
-                  "Property": "limite_inferior"
-                }
-              },
-              "queryRef": "previsoes.limite_inferior",
-              "nativeQueryRef": "limite_inferior"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "previsoes"
-                    }
-                  },
-                  "Property": "limite_superior"
-                }
-              },
-              "queryRef": "previsoes.limite_superior",
-              "nativeQueryRef": "limite_superior"
+              "queryRef": "fato_desempenho_equipes.Erro absoluto médio",
+              "nativeQueryRef": "Erro absoluto médio"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "22D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -165,14 +148,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Previsões e intervalos'"
+                  "Value": "'Erro absoluto médio'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -196,28 +179,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

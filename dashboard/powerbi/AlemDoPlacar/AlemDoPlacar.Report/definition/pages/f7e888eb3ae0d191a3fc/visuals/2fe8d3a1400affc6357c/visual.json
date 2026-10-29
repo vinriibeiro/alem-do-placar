@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "2fe8d3a1400affc6357c",
   "position": {
-    "x": 16,
-    "y": 276,
-    "width": 612,
-    "height": 416,
+    "x": 640,
+    "y": 220,
+    "width": 624,
+    "height": 200,
     "z": 10,
     "tabOrder": 10
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "lineChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_equipes"
+                      "Entity": "dim_temporadas"
                     }
                   },
-                  "Property": "nome_padronizado"
+                  "Property": "ano"
                 }
               },
-              "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
+              "queryRef": "dim_temporadas.ano",
+              "nativeQueryRef": "ano",
+              "displayName": "Temporada"
             }
           ]
         },
@@ -41,11 +42,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Pontos totais"
+                  "Property": "Gols por jogo"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Pontos totais",
-              "nativeQueryRef": "Pontos totais"
+              "queryRef": "fato_desempenho_equipes.Gols por jogo",
+              "nativeQueryRef": "Gols por jogo"
             }
           ]
         }
@@ -127,7 +128,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Pontos por equipe'"
+                  "Value": "'Gols por jogo por temporada'"
                 }
               }
             },

@@ -138,6 +138,7 @@ def gerar_projeto(
     url_base_dados: str | None = None,
     url_assistente: str = URL_ASSISTENTE,
     tokens: Path | None = None,
+    escudos: Path | None = None,
 ) -> Path:
     """Gera o projeto PBIP em ``pasta_saida`` e devolve o caminho do ``.pbip``.
 
@@ -152,6 +153,7 @@ def gerar_projeto(
         raise ErroProjeto("fonte_dados='web' exige url_base_dados começando com https://")
     web = fonte_dados == "web"
     tokens_design = _ler_tokens(tokens)
+    linhas_escudos = _ler_escudos(escudos) if escudos else []
     saida_resolvida = pasta_saida.resolve()
     for entrada in (pasta_processados, pasta_modelagem, pasta_cientifica, template_dir):
         origem_resolvida = entrada.resolve()
@@ -167,6 +169,8 @@ def gerar_projeto(
         return _tabela_parquet(nome, pasta_processados / arq, medidas, url)
 
     tabelas = [_proc(nome) for nome in ("dim_equipes", "dim_temporadas", "fato_partidas")]
+    if linhas_escudos:
+        _acrescentar_escudos(tabelas[0], linhas_escudos)
     tabelas.append(_proc(FATO, _medidas(meta)))
     url_prev = _url_dados(url_base_dados, "predictions/modelagem", "previsoes.parquet")
     tabelas += [
@@ -193,12 +197,57 @@ def gerar_projeto(
             "relationships": [_relacionamento(*r) for r in RELACIONAMENTOS],
         },
     }
-    paginas = construir_paginas(meta, tokens_design, url_assistente)
+    paginas = construir_paginas(meta, tokens_design, url_assistente, bool(linhas_escudos))
     _validar_referencias(tabelas, paginas)
     shutil.copytree(template_dir, pasta_saida, dirs_exist_ok=True)
     _escrever_modelo(pasta_saida, modelo)
     _escrever_relatorio(pasta_saida, paginas, construir_tema(tokens_design))
     return pasta_saida / f"{NOME}.pbip"
+
+
+def _ler_escudos(caminho: Path) -> list[dict[str, str]]:
+    """Lê ``equipe,escudo_url`` (colunas extras são ignoradas). Só aceita URLs https."""
+    with _arquivo(caminho).open(encoding="utf-8", newline="") as f:
+        leitor = csv.DictReader(f)
+        if not {"equipe", "escudo_url"} <= set(leitor.fieldnames or []):
+            raise ErroProjeto(f"escudos.csv precisa das colunas equipe e escudo_url: {caminho}")
+        linhas = []
+        for linha in leitor:
+            url = (linha["escudo_url"] or "").strip()
+            if not url:
+                continue
+            if not url.startswith("https://") or '"' in url:
+                raise ErroProjeto(f"URL de escudo inválida para {linha['equipe']}: {url}")
+            linhas.append({"equipe": linha["equipe"].strip(), "escudo": url})
+    return linhas
+
+
+def _acrescentar_escudos(tabela: dict, linhas: list[dict[str, str]]) -> None:
+    """Junta a coluna ``escudo`` (URL de imagem) à dimensão de equipes no Power Query."""
+    registros = ", ".join(
+        f"[equipe = {_texto_literal(r['equipe'])}, escudo = {_texto_literal(r['escudo'])}]"
+        for r in linhas
+    )
+    expressao = tabela["partitions"][0]["source"]["expression"]
+    origem = next(linha for linha in expressao if linha.strip().startswith("Origem ="))
+    tabela["partitions"][0]["source"]["expression"] = [
+        "let",
+        origem + ",",
+        f"    Escudos = Table.FromRecords({{{registros}}}, type table [equipe = text, escudo = text]),",
+        '    Unido = Table.NestedJoin(Origem, {"nome_padronizado"}, Escudos, {"equipe"}, "esc", JoinKind.LeftOuter),',
+        '    Final = Table.ExpandTableColumn(Unido, "esc", {"escudo"})',
+        "in",
+        "    Final",
+    ]
+    tabela["columns"].append(
+        {
+            "name": "escudo",
+            "dataType": "string",
+            "sourceColumn": "escudo",
+            "summarizeBy": "none",
+            "dataCategory": "ImageUrl",
+        }
+    )
 
 
 def _ler_tokens(caminho: Path | None) -> dict[str, str]:

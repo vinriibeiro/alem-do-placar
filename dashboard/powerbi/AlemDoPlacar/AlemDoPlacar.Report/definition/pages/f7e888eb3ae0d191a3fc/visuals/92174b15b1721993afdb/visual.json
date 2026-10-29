@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "92174b15b1721993afdb",
   "position": {
-    "x": 520,
+    "x": 268,
     "y": 112,
     "width": 240,
-    "height": 84,
+    "height": 96,
     "z": 4,
     "tabOrder": 4
   },
@@ -23,11 +23,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Gols por jogo"
+                  "Property": "Temporadas"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Gols por jogo",
-              "nativeQueryRef": "Gols por jogo"
+              "queryRef": "fato_desempenho_equipes.Temporadas",
+              "nativeQueryRef": "Temporadas"
             }
           ]
         }
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "26D"
+                  "Value": "22D"
                 }
               }
             },
@@ -52,6 +52,19 @@
                       "Value": "'#0b2545'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -135,14 +148,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Gols por jogo'"
+                  "Value": "'Temporadas'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -166,28 +179,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

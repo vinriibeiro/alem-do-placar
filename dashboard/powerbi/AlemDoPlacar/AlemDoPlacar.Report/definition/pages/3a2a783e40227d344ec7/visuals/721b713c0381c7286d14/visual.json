@@ -4,7 +4,7 @@
   "position": {
     "x": 0,
     "y": 0,
-    "width": 1280,
+    "width": 900,
     "height": 64,
     "z": 0,
     "tabOrder": 0
@@ -22,7 +22,7 @@
                     "value": "Estatística",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "22px",
+                      "fontSize": "26px",
                       "color": "#FFFFFF",
                       "fontWeight": "bold"
                     }
@@ -35,7 +35,7 @@
                     "value": "Distribuição de resultados, mando de campo, dispersão e volatilidade",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "12px",
+                      "fontSize": "13px",
                       "color": "#9FE3CB"
                     }
                   }
@@ -72,6 +72,53 @@
               "expr": {
                 "Literal": {
                   "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "24D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

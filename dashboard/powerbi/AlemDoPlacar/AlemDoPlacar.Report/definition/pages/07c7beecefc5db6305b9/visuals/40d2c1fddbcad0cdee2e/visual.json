@@ -3,17 +3,36 @@
   "name": "40d2c1fddbcad0cdee2e",
   "position": {
     "x": 16,
-    "y": 592,
-    "width": 260,
-    "height": 84,
+    "y": 196,
+    "width": 800,
+    "height": 384,
     "z": 5,
     "tabOrder": 5
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "lineChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "previsoes"
+                    }
+                  },
+                  "Property": "data_referencia"
+                }
+              },
+              "queryRef": "previsoes.data_referencia",
+              "nativeQueryRef": "data_referencia",
+              "displayName": "Data"
+            }
+          ]
+        },
+        "Y": {
           "projections": [
             {
               "field": {
@@ -28,36 +47,52 @@
               },
               "queryRef": "fato_desempenho_equipes.Média prevista",
               "nativeQueryRef": "Média prevista"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Média observada"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Média observada",
+              "nativeQueryRef": "Média observada"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Limite inferior"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Limite inferior",
+              "nativeQueryRef": "Limite inferior"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Limite superior"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Limite superior",
+              "nativeQueryRef": "Limite superior"
             }
           ]
         }
       }
-    },
-    "objects": {
-      "labels": [
-        {
-          "properties": {
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "26D"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0b2545'"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -135,7 +170,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Média prevista'"
+                  "Value": "'Previsto, observado e intervalo de 90%'"
                 }
               }
             },

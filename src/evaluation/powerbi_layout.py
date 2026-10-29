@@ -122,13 +122,38 @@ def m_(nome: str) -> tuple[str, str, str]:
     return (FATO, nome, "Measure")
 
 
-def _projecao(ref: tuple[str, str, str]) -> dict:
+ROTULOS = {
+    "nome_padronizado": "Equipe",
+    "equipe": "Equipe",
+    "escudo": "Escudo",
+    "ano": "Temporada",
+    "temporada": "Temporada",
+    "data_referencia": "Data",
+    "previsao": "Previsão",
+    "limite_inferior": "Limite inferior",
+    "limite_superior": "Limite superior",
+    "fase": "Fase",
+    "modelo": "Modelo",
+    "mae": "MAE",
+    "rmse": "RMSE",
+    "vies": "Viés",
+    "atributo": "Variável",
+    "mando_campo": "Mando",
+    "pontos": "Pontos no jogo",
+}
+
+
+def _campo(ref: tuple[str, str, str]) -> dict:
     tabela, campo, tipo = ref
-    return {
-        "field": {tipo: {"Expression": {"SourceRef": {"Entity": tabela}}, "Property": campo}},
-        "queryRef": f"{tabela}.{campo}",
-        "nativeQueryRef": campo,
-    }
+    return {tipo: {"Expression": {"SourceRef": {"Entity": tabela}}, "Property": campo}}
+
+
+def _projecao(ref: tuple[str, str, str]) -> dict:
+    tabela, campo, _ = ref
+    proj = {"field": _campo(ref), "queryRef": f"{tabela}.{campo}", "nativeQueryRef": campo}
+    if campo in ROTULOS:
+        proj["displayName"] = ROTULOS[campo]
+    return proj
 
 
 def _envelope(pos: tuple[int, int, int, int], visual: dict) -> dict:
@@ -183,8 +208,12 @@ def caixa_texto(
     paragrafos: list[dict],
     fundo: str | None = None,
     borda: bool = False,
+    respiro: tuple[int, int, int, int] = (8, 8, 12, 12),
 ) -> dict:
-    """``paragrafos``: lista de dicts com ``texto``, ``tamanho``, ``cor``, ``negrito``, ``url``."""
+    """``paragrafos``: dicts com ``texto``, ``tamanho``, ``cor``, ``negrito``, ``url``, ``alinhar``.
+
+    ``respiro`` é o espaçamento interno (cima, baixo, esquerda, direita) em px.
+    """
     blocos = []
     for p in paragrafos:
         estilo = {
@@ -199,13 +228,31 @@ def caixa_texto(
         execucao: dict[str, Any] = {"value": p["texto"], "textStyle": estilo}
         if p.get("url"):
             execucao["url"] = p["url"]
-        blocos.append({"textRuns": [execucao]})
+        bloco: dict[str, Any] = {"textRuns": [execucao]}
+        if p.get("alinhar"):
+            bloco["horizontalTextAlignment"] = p["alinhar"]
+        blocos.append(bloco)
+    contexto = (
+        _fundo(est, fundo, borda)
+        if (fundo or borda)
+        else {"background": [{"properties": {"show": _lit("false")}}]}
+    )
+    cima, baixo, esq, dir_ = respiro
+    contexto["padding"] = [
+        {
+            "properties": {
+                "top": _lit(f"{cima}D"),
+                "bottom": _lit(f"{baixo}D"),
+                "left": _lit(f"{esq}D"),
+                "right": _lit(f"{dir_}D"),
+            }
+        }
+    ]
+    contexto["visualHeader"] = [{"properties": {"show": _lit("false")}}]
     visual: dict[str, Any] = {
         "visualType": "textbox",
         "objects": {"general": [{"properties": {"paragraphs": blocos}}]},
-        "visualContainerObjects": _fundo(est, fundo, borda)
-        if (fundo or borda)
-        else {"background": [{"properties": {"show": _lit("false")}}]},
+        "visualContainerObjects": contexto,
     }
     return _envelope(pos, visual)
 
@@ -217,9 +264,18 @@ def visual(
     papeis: dict[str, list],
     titulo: str,
     objetos: dict | None = None,
+    tamanho_titulo: int = 13,
+    respiro: int = 8,
+    ordenar: tuple[str, str, str] | None = None,
 ) -> dict:
     estado = {p: {"projections": [_projecao(r) for r in refs]} for p, refs in papeis.items()}
-    v: dict[str, Any] = {"visualType": tipo, "query": {"queryState": estado}}
+    consulta: dict[str, Any] = {"queryState": estado}
+    if ordenar:
+        consulta["sortDefinition"] = {
+            "sort": [{"field": _campo(ordenar), "direction": "Descending"}],
+            "isDefaultSort": True,
+        }
+    v: dict[str, Any] = {"visualType": tipo, "query": consulta}
     if objetos:
         v["objects"] = objetos
     contexto_visual = _fundo(est, None, True)
@@ -228,35 +284,38 @@ def visual(
             "properties": {
                 "show": _lit("true"),
                 "text": _lit(f"'{titulo}'"),
-                "fontSize": _lit("13D"),
+                "fontSize": _lit(f"{tamanho_titulo}D"),
                 "fontColor": _solido(est.primaria),
             }
         }
     ]
     contexto_visual["padding"] = [
-        {"properties": {lado: _lit("8D") for lado in ("top", "bottom", "left", "right")}}
+        {"properties": {lado: _lit(f"{respiro}D") for lado in ("top", "bottom", "left", "right")}}
     ]
     v["visualContainerObjects"] = contexto_visual
     return _envelope(pos, v)
 
 
 def cartao(est: Estilo, pos, medida: tuple[str, str, str], titulo: str) -> dict:
+    """Título no contêiner e só o valor no corpo (o rótulo da categoria repetiria o nome)."""
     objetos = {
-        "labels": [
-            {
-                "properties": {
-                    "fontSize": _lit("26D"),
-                    "color": _solido(est.primaria),
-                }
-            }
-        ]
+        "labels": [{"properties": {"fontSize": _lit("22D"), "color": _solido(est.primaria)}}],
+        "categoryLabels": [{"properties": {"show": _lit("false")}}],
     }
-    return visual(est, "card", pos, {"Values": [medida]}, titulo, objetos)
+    return visual(est, "card", pos, {"Values": [medida]}, titulo, objetos, 11, 6)
 
 
 def seletor(est: Estilo, pos, coluna: tuple[str, str, str], titulo: str) -> dict:
-    objetos = {"data": [{"properties": {"mode": _lit("'Dropdown'")}}]}
-    return visual(est, "slicer", pos, {"Values": [coluna]}, titulo, objetos)
+    objetos = {
+        "data": [{"properties": {"mode": _lit("'Dropdown'")}}],
+        "header": [{"properties": {"show": _lit("false")}}],
+    }
+    return visual(est, "slicer", pos, {"Values": [coluna]}, titulo, objetos, 11, 6)
+
+
+def tabela(est: Estilo, pos, colunas: list, titulo: str, ordenar=None) -> dict:
+    objetos = {"grid": [{"properties": {"imageHeight": _lit("22D")}}]}
+    return visual(est, "tableEx", pos, {"Values": colunas}, titulo, objetos, ordenar=ordenar)
 
 
 def navegador(est: Estilo, pos) -> dict:
@@ -264,7 +323,10 @@ def navegador(est: Estilo, pos) -> dict:
         pos,
         {
             "visualType": "pageNavigator",
-            "visualContainerObjects": {"background": [{"properties": {"show": _lit("false")}}]},
+            "visualContainerObjects": {
+                "background": [{"properties": {"show": _lit("false")}}],
+                "visualHeader": [{"properties": {"show": _lit("false")}}],
+            },
         },
     )
 
@@ -273,12 +335,34 @@ def cabecalho_e_rodape(est: Estilo, titulo: str, subtitulo: str, rodape: str) ->
     topo = [
         caixa_texto(
             est,
-            (0, 0, LARGURA, 64),
+            (0, 0, 900, 64),
             [
-                {"texto": titulo, "tamanho": 22, "cor": "#FFFFFF", "negrito": True},
-                {"texto": subtitulo, "tamanho": 12, "cor": "#9FE3CB"},
+                {"texto": titulo, "tamanho": 26, "cor": "#FFFFFF", "negrito": True},
+                {"texto": subtitulo, "tamanho": 13, "cor": "#9FE3CB"},
             ],
             fundo=est.primaria,
+            respiro=(6, 4, 24, 12),
+        ),
+        caixa_texto(
+            est,
+            (900, 0, LARGURA - 900, 64),
+            [
+                {
+                    "texto": "ALÉM DO PLACAR",
+                    "tamanho": 16,
+                    "cor": "#FFFFFF",
+                    "negrito": True,
+                    "alinhar": "right",
+                },
+                {
+                    "texto": "Inteligência esportiva · Brasileirão",
+                    "tamanho": 12,
+                    "cor": "#9FE3CB",
+                    "alinhar": "right",
+                },
+            ],
+            fundo=est.primaria,
+            respiro=(10, 4, 12, 24),
         ),
         navegador(est, (MARGEM, 68, LARGURA_UTIL, 36)),
     ]
@@ -327,10 +411,11 @@ def _linha(x: int, larguras: list[int]) -> list[int]:
 
 
 def construir_paginas(
-    meta: dict[str, Any], tokens: dict[str, str], url_assistente: str
+    meta: dict[str, Any], tokens: dict[str, str], url_assistente: str, com_escudos: bool = False
 ) -> list[dict]:
     est = Estilo(tokens)
     eq = c_("dim_equipes", "nome_padronizado")
+    escudo = [c_("dim_equipes", "escudo")] if com_escudos else []
     ano = c_("dim_temporadas", "ano")
     modelo = meta["modelo_selecionado"]
     rodape = (
@@ -339,7 +424,7 @@ def construir_paginas(
     )
     larg5 = (LARGURA_UTIL - 4 * ESPACO) // 5  # 240
     larg4 = (LARGURA_UTIL - 3 * ESPACO) // 4  # 303
-    topo_kpi, alt_kpi = TOPO_CONTEUDO, 84
+    topo_kpi, alt_kpi = TOPO_CONTEUDO, 96
 
     def moldura(titulo: str, sub: str, corpo: list[dict]) -> list[dict]:
         topo, base = cabecalho_e_rodape(est, titulo, sub, rodape)
@@ -361,7 +446,7 @@ def construir_paginas(
             est,
             (xs[4], topo_kpi, larg5, alt_kpi),
             m_("MAE global selecionado"),
-            "Erro do modelo (MAE, holdout)",
+            "MAE do modelo (holdout)",
         ),
     ]
     y2 = topo_kpi + alt_kpi + ESPACO  # 208
@@ -370,8 +455,8 @@ def construir_paginas(
         "Brasileirão Série A 2018–2025 · panorama de partidas, gols e desempenho",
         kpis
         + [
-            seletor(est, (MARGEM, y2, 300, 56), ano, "Temporada"),
-            seletor(est, (MARGEM + 312, y2, 300, 56), eq, "Equipe"),
+            seletor(est, (MARGEM, y2, 300, 72), ano, "Temporada"),
+            seletor(est, (MARGEM + 312, y2, 300, 72), eq, "Equipe"),
             visual(
                 est,
                 "lineChart",
@@ -382,25 +467,25 @@ def construir_paginas(
             visual(
                 est,
                 "clusteredBarChart",
-                (MARGEM, y2 + 68, 612, FIM_CONTEUDO - (y2 + 68)),
+                (MARGEM, y2 + 84, 612, FIM_CONTEUDO - (y2 + 84)),
                 {"Category": [eq], "Y": [m_("Pontos totais")]},
                 "Pontos por equipe",
+                ordenar=m_("Pontos totais"),
             ),
-            visual(
+            tabela(
                 est,
-                "tableEx",
                 (MARGEM + 624, y2 + 212, 624, FIM_CONTEUDO - (y2 + 212)),
-                {
-                    "Values": [
-                        eq,
-                        m_("Posição"),
-                        m_("Pontos totais"),
-                        m_("Vitórias"),
-                        m_("Saldo de gols"),
-                        m_("Aproveitamento"),
-                    ]
-                },
+                [
+                    *escudo,
+                    eq,
+                    m_("Posição"),
+                    m_("Pontos totais"),
+                    m_("Vitórias"),
+                    m_("Saldo de gols"),
+                    m_("Aproveitamento"),
+                ],
                 "Classificação (filtrada pela temporada)",
+                ordenar=m_("Pontos totais"),
             ),
         ],
     )
@@ -411,12 +496,12 @@ def construir_paginas(
         "Tendências",
         "Médias móveis de pontos e aproveitamento por equipe e temporada",
         [
-            seletor(est, (MARGEM, TOPO_CONTEUDO, 194, 56), ano, "Temporada"),
-            seletor(est, (MARGEM + 206, TOPO_CONTEUDO, 194, 56), eq, "Equipe"),
+            seletor(est, (MARGEM, TOPO_CONTEUDO, 194, 72), ano, "Temporada"),
+            seletor(est, (MARGEM + 206, TOPO_CONTEUDO, 194, 72), eq, "Equipe (escolha uma)"),
             visual(
                 est,
                 "lineChart",
-                (MARGEM, TOPO_CONTEUDO + 68, esq, 244),
+                (MARGEM, TOPO_CONTEUDO + 84, esq, 228),
                 {
                     "Category": [c_("analitico", "data_referencia")],
                     "Y": [m_("Média 3 jogos"), m_("Média recente"), m_("Média 10 jogos")],
@@ -429,6 +514,7 @@ def construir_paginas(
                 (MARGEM, TOPO_CONTEUDO + 324, esq, FIM_CONTEUDO - (TOPO_CONTEUDO + 324)),
                 {"Category": [eq], "Y": [m_("Média recente")]},
                 "Média recente (5 jogos) por equipe",
+                ordenar=m_("Média recente"),
             ),
             visual(
                 est,
@@ -442,14 +528,14 @@ def construir_paginas(
 
     # 3. Estatística ------------------------------------------------------------------------
     meio = (LARGURA_UTIL - ESPACO) // 2  # 618
-    alt_meia = (FIM_CONTEUDO - TOPO_CONTEUDO - 68 - ESPACO) // 2
-    y_a = TOPO_CONTEUDO + 68
+    alt_meia = (FIM_CONTEUDO - TOPO_CONTEUDO - 84 - ESPACO) // 2
+    y_a = TOPO_CONTEUDO + 84
     estatistica = moldura(
         "Estatística",
         "Distribuição de resultados, mando de campo, dispersão e volatilidade",
         [
-            seletor(est, (MARGEM, TOPO_CONTEUDO, 300, 56), ano, "Temporada"),
-            seletor(est, (MARGEM + 312, TOPO_CONTEUDO, 300, 56), eq, "Equipe"),
+            seletor(est, (MARGEM, TOPO_CONTEUDO, 300, 72), ano, "Temporada"),
+            seletor(est, (MARGEM + 312, TOPO_CONTEUDO, 300, 72), eq, "Equipe"),
             visual(
                 est,
                 "clusteredColumnChart",
@@ -471,20 +557,19 @@ def construir_paginas(
                 {"Category": [eq], "X": [m_("Saldo de gols")], "Y": [m_("Pontos totais")]},
                 "Saldo de gols × pontos por equipe",
             ),
-            visual(
+            tabela(
                 est,
-                "tableEx",
                 (MARGEM + meio + ESPACO, y_a + alt_meia + ESPACO, meio, alt_meia),
-                {
-                    "Values": [
-                        eq,
-                        m_("Pontos por jogo"),
-                        m_("Volatilidade de pontos"),
-                        m_("Gols por jogo"),
-                        m_("Gols sofridos por jogo"),
-                    ]
-                },
+                [
+                    *escudo,
+                    eq,
+                    m_("Pontos por jogo"),
+                    m_("Volatilidade de pontos"),
+                    m_("Gols por jogo"),
+                    m_("Gols sofridos por jogo"),
+                ],
                 "Volatilidade e gols por equipe",
+                ordenar=m_("Pontos por jogo"),
             ),
         ],
     )
@@ -495,7 +580,7 @@ def construir_paginas(
     imp_x = MARGEM + lab_w + ESPACO
     graf_w = (lab_w - ESPACO) // 2
     y_g = topo_kpi + alt_kpi + ESPACO
-    alt_g = 230
+    alt_g = 220
     lab = moldura(
         "Laboratório de Modelos",
         "Baseline contra modelos de Machine Learning: MAE, RMSE e importância das variáveis",
@@ -559,6 +644,7 @@ def construir_paginas(
                 (imp_x, y_g, LARGURA_UTIL - lab_w - ESPACO, FIM_CONTEUDO - y_g),
                 {"Category": [c_("importancias", "atributo")], "Y": [m_("Importância")]},
                 "Importância por permutação (aumento do MAE)",
+                ordenar=m_("Importância"),
             ),
         ],
     )
@@ -570,10 +656,10 @@ def construir_paginas(
         "Previsões",
         "Média de pontos prevista para as próximas 5 partidas · intervalo de 90% · holdout 2025",
         [
-            seletor(est, (MARGEM, TOPO_CONTEUDO, 300, 56), eq, "Equipe"),
+            seletor(est, (MARGEM, TOPO_CONTEUDO, 300, 72), eq, "Equipe (escolha uma)"),
             caixa_texto(
                 est,
-                (MARGEM + 312, TOPO_CONTEUDO, prev_w - 312, 56),
+                (MARGEM + 312, TOPO_CONTEUDO, prev_w - 312, 72),
                 [
                     {
                         "texto": "Previsões retrospectivas, não certezas.",
@@ -593,7 +679,7 @@ def construir_paginas(
             visual(
                 est,
                 "lineChart",
-                (MARGEM, TOPO_CONTEUDO + 68, prev_w, 400),
+                (MARGEM, TOPO_CONTEUDO + 84, prev_w, 384),
                 {
                     "Category": [c_("previsoes", "data_referencia")],
                     "Y": [
@@ -606,17 +692,17 @@ def construir_paginas(
                 "Previsto, observado e intervalo de 90%",
             ),
             cartao(
-                est, (MARGEM, TOPO_CONTEUDO + 480, 260, 84), m_("Média prevista"), "Média prevista"
+                est, (MARGEM, TOPO_CONTEUDO + 480, 260, 96), m_("Média prevista"), "Média prevista"
             ),
             cartao(
                 est,
-                (MARGEM + 272, TOPO_CONTEUDO + 480, 260, 84),
+                (MARGEM + 272, TOPO_CONTEUDO + 480, 260, 96),
                 m_("Média observada"),
                 "Média observada",
             ),
             cartao(
                 est,
-                (MARGEM + 544, TOPO_CONTEUDO + 480, 256, 84),
+                (MARGEM + 544, TOPO_CONTEUDO + 480, 256, 96),
                 m_("Erro absoluto médio"),
                 "Erro absoluto médio",
             ),

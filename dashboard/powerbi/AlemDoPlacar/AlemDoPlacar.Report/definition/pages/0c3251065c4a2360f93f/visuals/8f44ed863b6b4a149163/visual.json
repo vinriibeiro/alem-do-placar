@@ -2,36 +2,18 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "8f44ed863b6b4a149163",
   "position": {
-    "x": 16,
-    "y": 208,
-    "width": 294,
-    "height": 230,
+    "x": 961,
+    "y": 112,
+    "width": 303,
+    "height": 96,
     "z": 6,
     "tabOrder": 6
   },
   "visual": {
-    "visualType": "clusteredColumnChart",
+    "visualType": "card",
     "query": {
       "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "metricas"
-                    }
-                  },
-                  "Property": "modelo"
-                }
-              },
-              "queryRef": "metricas.modelo",
-              "nativeQueryRef": "modelo"
-            }
-          ]
-        },
-        "Y": {
+        "Values": {
           "projections": [
             {
               "field": {
@@ -41,29 +23,54 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "MAE validação"
+                  "Property": "Corte de treino"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.MAE validação",
-              "nativeQueryRef": "MAE validação"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "MAE holdout"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.MAE holdout",
-              "nativeQueryRef": "MAE holdout"
+              "queryRef": "fato_desempenho_equipes.Corte de treino",
+              "nativeQueryRef": "Corte de treino"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "22D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -141,14 +148,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'MAE por modelo'"
+                  "Value": "'Corte de treino'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -172,28 +179,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

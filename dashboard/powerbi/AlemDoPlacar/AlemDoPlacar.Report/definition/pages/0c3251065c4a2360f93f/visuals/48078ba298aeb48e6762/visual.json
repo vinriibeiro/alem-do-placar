@@ -2,50 +2,108 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "48078ba298aeb48e6762",
   "position": {
-    "x": 628,
-    "y": 208,
-    "width": 636,
-    "height": 484,
+    "x": 16,
+    "y": 452,
+    "width": 600,
+    "height": 240,
     "z": 9,
     "tabOrder": 9
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "importancias"
+                      "Entity": "metricas"
                     }
                   },
-                  "Property": "atributo"
+                  "Property": "fase"
                 }
               },
-              "queryRef": "importancias.atributo",
-              "nativeQueryRef": "atributo"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
+              "queryRef": "metricas.fase",
+              "nativeQueryRef": "fase",
+              "displayName": "Fase"
+            },
             {
               "field": {
-                "Measure": {
+                "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
+                      "Entity": "metricas"
                     }
                   },
-                  "Property": "Importância"
+                  "Property": "modelo"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Importância",
-              "nativeQueryRef": "Importância"
+              "queryRef": "metricas.modelo",
+              "nativeQueryRef": "modelo",
+              "displayName": "Modelo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "metricas"
+                    }
+                  },
+                  "Property": "temporada"
+                }
+              },
+              "queryRef": "metricas.temporada",
+              "nativeQueryRef": "temporada",
+              "displayName": "Temporada"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "metricas"
+                    }
+                  },
+                  "Property": "mae"
+                }
+              },
+              "queryRef": "metricas.mae",
+              "nativeQueryRef": "mae",
+              "displayName": "MAE"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "metricas"
+                    }
+                  },
+                  "Property": "rmse"
+                }
+              },
+              "queryRef": "metricas.rmse",
+              "nativeQueryRef": "rmse",
+              "displayName": "RMSE"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "metricas"
+                    }
+                  },
+                  "Property": "vies"
+                }
+              },
+              "queryRef": "metricas.vies",
+              "nativeQueryRef": "vies",
+              "displayName": "Viés"
             }
           ]
         }
@@ -127,7 +185,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Importância por permutação (aumento do MAE)'"
+                  "Value": "'Métricas por modelo, fase e temporada'"
                 }
               }
             },

@@ -2,54 +2,65 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "c6ab133c65e5834a4891",
   "position": {
-    "x": 16,
-    "y": 180,
-    "width": 618,
-    "height": 250,
+    "x": 328,
+    "y": 112,
+    "width": 300,
+    "height": 72,
     "z": 4,
     "tabOrder": 4
   },
   "visual": {
-    "visualType": "clusteredColumnChart",
+    "visualType": "slicer",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
+                      "Entity": "dim_equipes"
                     }
                   },
-                  "Property": "pontos"
+                  "Property": "nome_padronizado"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.pontos",
-              "nativeQueryRef": "pontos"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Observações de equipe"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Observações de equipe",
-              "nativeQueryRef": "Observações de equipe"
+              "queryRef": "dim_equipes.nome_padronizado",
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -127,14 +138,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Distribuição de resultados (0, 1 e 3 pontos)'"
+                  "Value": "'Equipe'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -158,28 +169,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

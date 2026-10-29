@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "19112ae7c5f1ef06776c",
   "position": {
-    "x": 1024,
+    "x": 772,
     "y": 112,
     "width": 240,
-    "height": 84,
+    "height": 96,
     "z": 6,
     "tabOrder": 6
   },
@@ -23,11 +23,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "MAE global selecionado"
+                  "Property": "Vitórias do mandante"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.MAE global selecionado",
-              "nativeQueryRef": "MAE global selecionado"
+              "queryRef": "fato_desempenho_equipes.Vitórias do mandante",
+              "nativeQueryRef": "Vitórias do mandante"
             }
           ]
         }
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "26D"
+                  "Value": "22D"
                 }
               }
             },
@@ -52,6 +52,19 @@
                       "Value": "'#0b2545'"
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -135,14 +148,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Erro do modelo (MAE, holdout)'"
+                  "Value": "'Vitórias do mandante'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -166,28 +179,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }

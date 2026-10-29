@@ -2,46 +2,62 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "7bdeb19af009dd3a4c00",
   "position": {
-    "x": 328,
+    "x": 16,
     "y": 112,
-    "width": 488,
-    "height": 56,
+    "width": 300,
+    "height": 72,
     "z": 3,
     "tabOrder": 3
   },
   "visual": {
-    "visualType": "textbox",
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_equipes"
+                    }
+                  },
+                  "Property": "nome_padronizado"
+                }
+              },
+              "queryRef": "dim_equipes.nome_padronizado",
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
+            }
+          ]
+        }
+      }
+    },
     "objects": {
-      "general": [
+      "data": [
         {
           "properties": {
-            "paragraphs": [
-              {
-                "textRuns": [
-                  {
-                    "value": "Previsões retrospectivas, não certezas.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "12px",
-                      "color": "#9a6700",
-                      "fontWeight": "bold"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "A linha prevista deve ser lida junto com o intervalo de 90% e com o erro médio do modelo.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "11px",
-                      "color": "#4f5f70"
-                    }
-                  }
-                ]
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
               }
-            ]
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ]
@@ -62,7 +78,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFF6E0'"
+                      "Value": "'#ffffff'"
                     }
                   }
                 }
@@ -103,6 +119,78 @@
               "expr": {
                 "Literal": {
                   "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Equipe (escolha uma)'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
                 }
               }
             }

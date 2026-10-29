@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "3cb90c76db12d940c0ed",
   "position": {
-    "x": 16,
-    "y": 364,
-    "width": 1248,
-    "height": 328,
+    "x": 728,
+    "y": 112,
+    "width": 536,
+    "height": 240,
     "z": 4,
     "tabOrder": 4
   },
@@ -19,11 +19,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "Exemplos de perguntas",
+                    "value": "Abrir o assistente",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#0b2545",
+                      "fontSize": "20px",
+                      "color": "#FFFFFF",
                       "fontWeight": "bold"
                     }
                   }
@@ -32,11 +32,11 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Qual foi a classificação de 2024?",
+                    "value": "Abre o site do projeto em uma nova aba.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "14px",
-                      "color": "#14212e"
+                      "fontSize": "12px",
+                      "color": "#9FE3CB"
                     }
                   }
                 ]
@@ -44,60 +44,15 @@
               {
                 "textRuns": [
                   {
-                    "value": "•  Compare Palmeiras e Flamengo em 2025.",
+                    "value": "Clique aqui para perguntar →",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "14px",
-                      "color": "#14212e"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "•  Qual a maior sequência invicta da história?",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "14px",
-                      "color": "#14212e"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "•  Quem teve a melhor defesa em 2023?",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "14px",
-                      "color": "#14212e"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "•  Qual é a previsão do Flamengo?",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "14px",
-                      "color": "#14212e"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "•  Quais variáveis mais influenciaram o modelo?",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "14px",
-                      "color": "#14212e"
-                    }
+                      "fontSize": "16px",
+                      "color": "#FFFFFF",
+                      "fontWeight": "bold",
+                      "textDecoration": "underline"
+                    },
+                    "url": "https://ALTERAR"
                   }
                 ]
               }
@@ -122,7 +77,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#ffffff'"
+                      "Value": "'#0b6f50'"
                     }
                   }
                 }
@@ -138,31 +93,47 @@
           }
         }
       ],
-      "border": [
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
         {
           "properties": {
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#e1e7ee'"
-                    }
-                  }
-                }
-              }
-            },
-            "radius": {
-              "expr": {
-                "Literal": {
-                  "Value": "8D"
+                  "Value": "false"
                 }
               }
             }

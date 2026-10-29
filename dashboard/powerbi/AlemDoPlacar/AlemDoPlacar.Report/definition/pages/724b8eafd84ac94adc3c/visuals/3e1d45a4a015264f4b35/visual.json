@@ -2,18 +2,18 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "3e1d45a4a015264f4b35",
   "position": {
-    "x": 428,
-    "y": 112,
-    "width": 836,
-    "height": 580,
+    "x": 16,
+    "y": 436,
+    "width": 400,
+    "height": 256,
     "z": 6,
     "tabOrder": 6
   },
   "visual": {
-    "visualType": "pivotTable",
+    "visualType": "clusteredBarChart",
     "query": {
       "queryState": {
-        "Rows": {
+        "Category": {
           "projections": [
             {
               "field": {
@@ -27,29 +27,12 @@
                 }
               },
               "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
             }
           ]
         },
-        "Columns": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_temporadas"
-                    }
-                  },
-                  "Property": "ano"
-                }
-              },
-              "queryRef": "dim_temporadas.ano",
-              "nativeQueryRef": "ano"
-            }
-          ]
-        },
-        "Values": {
+        "Y": {
           "projections": [
             {
               "field": {
@@ -59,14 +42,32 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Aproveitamento"
+                  "Property": "Média recente"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Aproveitamento",
-              "nativeQueryRef": "Aproveitamento"
+              "queryRef": "fato_desempenho_equipes.Média recente",
+              "nativeQueryRef": "Média recente"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fato_desempenho_equipes"
+                  }
+                },
+                "Property": "Média recente"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
       }
     },
     "visualContainerObjects": {
@@ -145,7 +146,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Aproveitamento por equipe e temporada'"
+                  "Value": "'Média recente (5 jogos) por equipe'"
                 }
               }
             },

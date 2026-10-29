@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "0ba1c410d4be2046824a",
   "position": {
-    "x": 322,
-    "y": 208,
+    "x": 16,
+    "y": 220,
     "width": 294,
-    "height": 230,
+    "height": 220,
     "z": 7,
     "tabOrder": 7
   },
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "metricas.modelo",
-              "nativeQueryRef": "modelo"
+              "nativeQueryRef": "modelo",
+              "displayName": "Modelo"
             }
           ]
         },
@@ -41,11 +42,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "RMSE validação"
+                  "Property": "MAE validação"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.RMSE validação",
-              "nativeQueryRef": "RMSE validação"
+              "queryRef": "fato_desempenho_equipes.MAE validação",
+              "nativeQueryRef": "MAE validação"
             },
             {
               "field": {
@@ -55,11 +56,11 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "RMSE holdout"
+                  "Property": "MAE holdout"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.RMSE holdout",
-              "nativeQueryRef": "RMSE holdout"
+              "queryRef": "fato_desempenho_equipes.MAE holdout",
+              "nativeQueryRef": "MAE holdout"
             }
           ]
         }
@@ -141,7 +142,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'RMSE por modelo'"
+                  "Value": "'MAE por modelo'"
                 }
               }
             },

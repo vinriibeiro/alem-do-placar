@@ -2,54 +2,65 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "19d44d2eba20d04ada5c",
   "position": {
-    "x": 640,
-    "y": 208,
-    "width": 624,
-    "height": 200,
+    "x": 328,
+    "y": 220,
+    "width": 300,
+    "height": 72,
     "z": 9,
     "tabOrder": 9
   },
   "visual": {
-    "visualType": "lineChart",
+    "visualType": "slicer",
     "query": {
       "queryState": {
-        "Category": {
+        "Values": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_temporadas"
+                      "Entity": "dim_equipes"
                     }
                   },
-                  "Property": "ano"
+                  "Property": "nome_padronizado"
                 }
               },
-              "queryRef": "dim_temporadas.ano",
-              "nativeQueryRef": "ano"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Gols por jogo"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Gols por jogo",
-              "nativeQueryRef": "Gols por jogo"
+              "queryRef": "dim_equipes.nome_padronizado",
+              "nativeQueryRef": "nome_padronizado",
+              "displayName": "Equipe"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "background": [
@@ -127,14 +138,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Gols por jogo por temporada'"
+                  "Value": "'Equipe'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "11D"
                 }
               }
             },
@@ -158,28 +169,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "8D"
+                  "Value": "6D"
                 }
               }
             }
