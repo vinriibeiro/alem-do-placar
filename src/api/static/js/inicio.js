@@ -1,4 +1,4 @@
-import { api, definirTexto, el, fmt, iniciarPagina, $ } from "./comum.js";
+import { definirTexto, el, fmt, iniciarPagina, obter, $ } from "./comum.js";
 
 iniciarPagina();
 
@@ -8,7 +8,7 @@ function marcarIndisponivel(ids) {
 
 async function indicadores() {
   try {
-    const c = await api("/api/contexto");
+    const c = await obter("contexto");
     definirTexto("kpi-partidas", fmt.inteiro(c.partidas));
     definirTexto("kpi-partidas-nota", `${(c.base && c.base.periodo) || ""}`.replace("–", " a "));
     definirTexto("kpi-temporadas", fmt.inteiro(c.temporadas));
@@ -30,12 +30,12 @@ async function indicadores() {
 async function sugestoes() {
   const alvo = $("#sugestoes");
   try {
-    const { sugestoes: lista } = await api("/api/sugestoes");
+    const { sugestoes: lista } = await obter("sugestoes");
     for (const pergunta of lista.slice(0, 6)) {
-      alvo.append(el("a", { classe: "chip", href: `/assistente?q=${encodeURIComponent(pergunta)}`, texto: pergunta }));
+      alvo.append(el("a", { classe: "chip", href: `consulta.html?q=${encodeURIComponent(pergunta)}`, texto: pergunta }));
     }
   } catch {
-    alvo.append(el("a", { classe: "chip", href: "/assistente", texto: "Abrir o assistente" }));
+    alvo.append(el("a", { classe: "chip", href: "consulta.html", texto: "Abrir a Central de Consulta" }));
   }
 }
 

@@ -78,9 +78,21 @@ function iniciarMenu() {
   });
 }
 
+/** Lê um arquivo de dados públicos (``dados/<nome>.json``), servido pelo site estático ou pela API. */
+export async function obter(nome) {
+  let resposta;
+  try {
+    resposta = await fetch(`dados/${nome}.json`);
+  } catch {
+    throw new ErroApi(0, "Sem conexão.");
+  }
+  if (!resposta.ok) throw new ErroApi(resposta.status, "Dados indisponíveis.");
+  return resposta.json();
+}
+
 async function iniciarRodape() {
   try {
-    const cfg = await api("/api/config");
+    const cfg = await obter("config");
     if (cfg && cfg.repo_url) {
       const item = document.getElementById("rodape-repo");
       const link = item && item.querySelector("a");

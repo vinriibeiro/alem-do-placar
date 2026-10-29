@@ -100,7 +100,7 @@ def test_paginas_html_com_navegacao_e_identidade(cliente):
     for rota, titulo in (
         ("/", "Além do Placar"),
         ("/dashboard", "Dashboard"),
-        ("/assistente", "Assistente"),
+        ("/consulta", "Central de Consulta"),
         ("/metodologia", "Metodologia"),
     ):
         r = cliente.get(rota)

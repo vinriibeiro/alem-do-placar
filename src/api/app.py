@@ -5,17 +5,19 @@ permitidos vêm da configuração (padrão: somente locais). POST com ``Origin``
 rejeitado, há limite de taxa por IP, teto diário de chamadas ao LLM e limite de tamanho do corpo.
 """
 
+import json
 from collections.abc import Mapping
 from pathlib import Path
 from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
+from api import central
 from api.assistant import BaseConsultas
 from api.config import HOSTS_LOCAIS, Config
 from api.paginas import FIGURAS, Paginas
@@ -27,7 +29,9 @@ MAX_CORPO = 4096
 # Política de conteúdo: tudo do próprio site, fontes do Google e iframes somente do Power BI.
 CSP = (
     "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; "
-    "font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; "
+    "font-src https://fonts.gstatic.com; "
+    "img-src 'self' data: https://upload.wikimedia.org https://thumb.wikimedia.org; "
+    "connect-src 'self'; "
     "frame-src https://app.powerbi.com https://app.fabric.microsoft.com; "
     "object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
 )
@@ -112,11 +116,43 @@ def create_app(
 
     for caminho, nome in (
         ("/", "inicio"),
+        ("/index.html", "inicio"),
         ("/dashboard", "dashboard"),
-        ("/assistente", "assistente"),
+        ("/dashboard.html", "dashboard"),
+        ("/consulta", "consulta"),
+        ("/consulta.html", "consulta"),
         ("/metodologia", "metodologia"),
+        ("/metodologia.html", "metodologia"),
     ):
         _rota_pagina(caminho, nome)
+
+    @app.get("/assistente")
+    def assistente_antigo() -> RedirectResponse:
+        return RedirectResponse("consulta", status_code=301)
+
+    def _config_publica() -> dict:
+        embed = config.embed_url if config.embed_url.startswith(HOSTS_EMBED) else ""
+        repo = config.repo_url if config.repo_url.startswith("https://") else ""
+        return {"powerbi_embed_url": embed, "repo_url": repo, "versao": "0.1.0"}
+
+    try:
+        dados_publicos = {
+            nome: json.dumps(valor, ensure_ascii=False, separators=(",", ":"))
+            for nome, valor in central.montar(Path(raiz), _config_publica()).items()
+        }
+    except (OSError, ValueError, KeyError, StopIteration):
+        # Instalação sem dados completos: só a configuração fica disponível.
+        dados_publicos = {"config": json.dumps(_config_publica())}
+
+    @app.get("/dados/{nome}.json")
+    def dados(nome: str) -> Response:
+        if nome not in dados_publicos:
+            return JSONResponse({"detail": "não encontrado"}, status_code=404)
+        return Response(
+            dados_publicos[nome],
+            media_type="application/json",
+            headers={"Cache-Control": "public, max-age=600"},
+        )
 
     app.mount("/static", StaticFiles(directory=ESTATICO), name="static")
 
@@ -128,9 +164,7 @@ def create_app(
 
     @app.get("/api/config")
     def configuracao() -> dict:
-        embed = config.embed_url if config.embed_url.startswith(HOSTS_EMBED) else ""
-        repo = config.repo_url if config.repo_url.startswith("https://") else ""
-        return {"powerbi_embed_url": embed, "repo_url": repo, "versao": "0.1.0"}
+        return _config_publica()
 
     @app.get("/health")
     def saude() -> dict:

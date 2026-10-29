@@ -63,7 +63,7 @@ def test_host_do_render_e_aceito_automaticamente(raiz):
 
 def test_head_nas_paginas_para_previews_de_links(raiz):
     c = _cli(raiz)
-    for rota in ("/", "/dashboard", "/assistente", "/metodologia"):
+    for rota in ("/", "/dashboard", "/consulta", "/metodologia"):
         r = c.head(rota)
         assert r.status_code == 200 and r.content == b""
 

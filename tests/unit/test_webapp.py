@@ -32,16 +32,17 @@ def _cli(raiz, **env):
 
 def test_html_referencia_apenas_arquivos_existentes(raiz):
     c = _cli(raiz)
-    for rota in ("/", "/dashboard", "/assistente", "/metodologia"):
+    for rota in ("/", "/dashboard", "/consulta", "/metodologia"):
         html = c.get(rota).text
-        for ref in re.findall(r'(?:src|href)="(/static/[^"]+)"', html):
+        for ref in re.findall(r'(?:src|href)="(static/[^"]+)"', html):
+            ref = "/" + ref
             assert c.get(ref).status_code == 200, ref
     assert (ESTATICOS / "img" / "og.png").is_file()
 
 
 def test_nenhum_html_ou_js_usa_innerhtml_nem_script_inline(raiz):
     c = _cli(raiz)
-    for rota in ("/", "/dashboard", "/assistente", "/metodologia"):
+    for rota in ("/", "/dashboard", "/consulta", "/metodologia"):
         html = c.get(rota).text
         assert "innerHTML" not in html
         assert not re.search(r"<script(?![^>]*\bsrc=)[^>]*>", html)
@@ -72,7 +73,7 @@ def test_contexto_traz_numeros_para_os_kpis(raiz):
 def test_metodologia_renderiza_documentos_e_figuras(raiz):
     html = _cli(raiz).get("/metodologia").text
     assert "<table>" in html and "Model Card" in html and "Limites" in html
-    assert "/figuras/importancias.png" in html and "/figuras/residuos_hist.png" not in html
+    assert 'src="figuras/importancias.png"' in html and "figuras/residuos_hist.png" not in html
 
 
 def test_figuras_somente_da_lista_branca(raiz):
@@ -99,3 +100,24 @@ def test_metodologia_sem_documentos_nao_quebra(tmp_path):
 def test_dashboard_embeda_somente_via_config(raiz):
     html = _cli(raiz, POWERBI_EMBED_URL="https://app.powerbi.com/view?r=abc").get("/dashboard").text
     assert "app.powerbi.com" not in html  # a URL só chega pelo /api/config, nunca no HTML
+
+
+def test_paginas_usam_links_relativos_para_funcionar_no_github_pages(raiz):
+    html = _cli(raiz).get("/").text
+    assert 'href="consulta.html"' in html and 'href="dashboard.html"' in html
+    assert 'href="/' not in html.replace('href="/"', "") and 'src="/' not in html
+
+
+def test_rotas_html_e_redirecionamento_do_assistente(raiz):
+    c = _cli(raiz)
+    for rota in ("/index.html", "/dashboard.html", "/consulta.html", "/metodologia.html"):
+        assert c.get(rota).status_code == 200, rota
+    r = c.get("/assistente", follow_redirects=False)
+    assert r.status_code == 301 and r.headers["location"] == "consulta"
+
+
+def test_dados_da_central_servidos_em_json(raiz):
+    c = _cli(raiz)
+    cfg = c.get("/dados/config.json")
+    assert cfg.status_code == 200 and cfg.json()["powerbi_embed_url"] == ""
+    assert c.get("/dados/inexistente.json").status_code == 404

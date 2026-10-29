@@ -25,10 +25,10 @@ PAGINAS = {
         "Dashboard — Além do Placar",
         "Relatório interativo em Power BI com visão geral, tendências, estatística, modelos e previsões.",
     ),
-    "assistente": (
-        "Assistente — Além do Placar",
-        "Pergunte em português sobre classificações, confrontos, gols, sequências e previsões do "
-        "Brasileirão. Respostas com fonte, período e limitações.",
+    "consulta": (
+        "Central de Consulta — Além do Placar",
+        "Pergunte sobre o Brasileirão, os indicadores, os dados e os modelos do projeto. Respostas "
+        "com a origem de cada número, sem inteligência artificial paga.",
     ),
     "metodologia": (
         "Metodologia — Além do Placar",
@@ -84,7 +84,7 @@ def montar_metodologia(raiz_docs: Path, figuras_existentes: set[str]) -> str:
         sumario.extend(itens)
         if prefixo == "modelo" and figuras_existentes:
             figs = "".join(
-                f'<figure><img src="/figuras/{nome}" alt="{legenda}" loading="lazy">'
+                f'<figure><img src="figuras/{nome}" alt="{legenda}" loading="lazy">'
                 f"<figcaption>{legenda}</figcaption></figure>"
                 for nome, legenda in FIGURAS.items()
                 if nome in figuras_existentes

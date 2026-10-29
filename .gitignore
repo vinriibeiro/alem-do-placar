@@ -80,3 +80,6 @@ data/predictions/cientifica/*
 
 # Metadados de instalação editável
 *.egg-info/
+
+# Site estático gerado por scripts/build_site.py
+site/

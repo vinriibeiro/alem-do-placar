@@ -1,0 +1,40 @@
+<section class="consulta-hero">
+  <div class="conteiner">
+    <span class="hero__eyebrow">Central de Consulta</span>
+    <h1>O que você quer saber sobre o Brasileirão?</h1>
+    <p>Classificação, estatísticas das equipes, indicadores, modelos e metodologia. As respostas vêm dos dados e da documentação deste projeto, sempre com a origem.</p>
+    <form class="busca" id="form" role="search" autocomplete="off">
+      <label class="somente-leitor" for="pergunta">Sua pergunta</label>
+      <input id="pergunta" type="search" maxlength="300" placeholder="Ex.: Qual equipe teve o melhor ataque em 2025?" required>
+      <button class="btn btn--primario" type="submit">Consultar</button>
+    </form>
+    <div class="filtros-linha">
+      <label for="ano">Temporada</label>
+      <select id="ano"><option value="">Qualquer</option></select>
+      <label for="equipe">Equipe</label>
+      <select id="equipe"><option value="">Qualquer</option></select>
+    </div>
+  </div>
+</section>
+
+<div class="conteiner consulta">
+  <section class="consulta__principal" aria-label="Resultado">
+    <div id="estado" class="estado" aria-live="polite">Carregando os dados do projeto…</div>
+    <div id="resultado" aria-live="polite"></div>
+    <div class="sugestoes-bloco" id="bloco-sugestoes" hidden>
+      <h2>Experimente perguntar</h2>
+      <div class="chips" id="sugestoes"></div>
+    </div>
+  </section>
+  <aside class="consulta__lateral" aria-label="Assuntos">
+    <div class="card">
+      <h2 class="lateral__titulo">Assuntos</h2>
+      <div id="categorias"></div>
+    </div>
+    <div class="card" id="historico-card" hidden>
+      <h2 class="lateral__titulo">Nesta sessão</h2>
+      <ul class="historico" id="historico"></ul>
+    </div>
+    <p class="nota">Sem inteligência artificial paga: as estatísticas são calculadas no seu navegador a partir das partidas, e as explicações vêm da documentação do projeto. Perguntas fora do tema são recusadas.</p>
+  </aside>
+</div>

@@ -1,0 +1,484 @@
+# Base de conhecimento da Central de Consulta.
+# Valores entre chaves ({mae_teste}, {n_partidas}...) são preenchidos com os dados reais na geração
+# (src/api/central.py). Não escreva números à mão aqui: use uma chave ou explique sem número.
+# Campos: id, categoria, titulo, perguntas (formas de perguntar), palavras (termos de busca),
+# resposta, fonte, relacionados (ids), pagina (link interno) e sugerir (aparece nas sugestões).
+
+itens:
+  - id: projeto
+    categoria: Projeto
+    titulo: O que é o Além do Placar
+    perguntas: ["O que é este projeto?", "Para que serve o dashboard?", "Qual problema o projeto estuda?"]
+    palavras: [projeto, objetivo, dashboard, serve, problema, estuda, alem, placar, sobre]
+    resposta: >
+      É um projeto de Ciência de Dados e Business Intelligence sobre o Campeonato Brasileiro Série A.
+      Ele analisa {n_partidas} partidas de {ano_inicial} a {ano_final} para responder se o desempenho
+      recente de uma equipe ajuda a antecipar os próximos jogos. O dashboard mostra classificação,
+      tendências, estatísticas e previsões, e esta central explica cada parte.
+    fonte: README e documentação do projeto
+    relacionados: [dados, metodologia-etapas, limitacoes]
+    pagina: index.html
+    sugerir: false
+
+  - id: dados
+    categoria: Dados
+    titulo: Quais dados foram utilizados
+    perguntas: ["Quais dados foram utilizados?", "De onde vêm os dados?", "Qual é a fonte dos dados?"]
+    palavras: [dados, fonte, origem, openfootball, utilizados, base, onde, vem, licenca]
+    resposta: >
+      Os resultados das partidas vêm do OpenFootball, uma base aberta com licença CC0 (domínio público).
+      São {n_partidas} partidas do Brasileirão Série A, de {ano_inicial} a {ano_final}, com {n_equipes}
+      clubes diferentes ao longo das temporadas. Artilheiros e prêmios individuais vêm das páginas de cada
+      temporada na Wikipédia em português, e os escudos e fotos vêm da Wikimedia.
+    fonte: docs/sources_audit.md
+    relacionados: [temporadas, atualizacao, preparacao]
+    pagina: metodologia.html
+    sugerir: true
+
+  - id: temporadas
+    categoria: Dados
+    titulo: Temporadas disponíveis
+    perguntas: ["Quais temporadas estão disponíveis?", "Tem dados de 2026?", "Qual período é analisado?"]
+    palavras: [temporadas, disponiveis, periodo, anos, 2026, quais, analisado]
+    resposta: >
+      Há {n_temporadas} temporadas completas, de {ano_inicial} a {ano_final}, com 380 partidas cada.
+      A temporada de 2026 não está nos dados: ela foi reservada para uma avaliação futura do modelo.
+    fonte: Dados do projeto (OpenFootball)
+    relacionados: [dados, atualizacao]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: atualizacao
+    categoria: Dados
+    titulo: Atualização dos dados
+    perguntas: ["Com que frequência os dados são atualizados?", "Os dados são atualizados em tempo real?"]
+    palavras: [atualizacao, atualizados, frequencia, tempo, real, recente, ultima]
+    resposta: >
+      Os dados não são em tempo real. O pipeline é executado manualmente ao fim de cada temporada,
+      e a data da última partida aparece no rodapé do dashboard.
+    fonte: docs/TASKS.md e pipeline do projeto
+    relacionados: [dados, temporadas]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: preparacao
+    categoria: Dados
+    titulo: Preparação dos dados
+    perguntas: ["Como os dados foram tratados?", "Como foi feita a limpeza dos dados?", "Como os nomes dos clubes foram padronizados?"]
+    palavras: [limpeza, tratamento, preparacao, padronizacao, nomes, ausentes, duplicadas, validacao, tratados]
+    resposta: >
+      Os nomes dos clubes foram padronizados (por exemplo, variações do mesmo clube viram um só nome),
+      datas e placares foram validados e partidas duplicadas ou com placar inválido são barradas antes
+      de qualquer cálculo. Cada partida vira duas linhas, uma por equipe, com pontos 3, 1 ou 0.
+      Valores ausentes no início da temporada (quando ainda não há 5 jogos, por exemplo) são preenchidos
+      com a mediana do treino dentro do próprio modelo.
+    fonte: src/processing e src/features
+    relacionados: [atributos, vazamento]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: classificacao
+    categoria: Campeonato
+    titulo: Como funciona a classificação
+    perguntas: ["Como funciona a classificação?", "Quais são os critérios de desempate?", "Como a tabela é ordenada?"]
+    palavras: [classificacao, tabela, criterios, desempate, ordenada, pontos, vitoria, empate, funciona]
+    resposta: >
+      Cada vitória vale 3 pontos, o empate vale 1 e a derrota 0. A tabela é ordenada por pontos e, em
+      caso de empate, por número de vitórias, saldo de gols e gols marcados, que são os primeiros critérios
+      da CBF. Os critérios seguintes (confronto direto e cartões) não estão nos dados e não são aplicados.
+      As zonas seguem a posição: 1º a 4º Libertadores, 5º e 6º pré-Libertadores, 7º a 12º Sul-Americana e
+      17º a 20º rebaixamento. Vagas extras por títulos de copas não são consideradas.
+    fonte: Regulamento da CBF e dados do projeto
+    relacionados: [aproveitamento, saldo-gols]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: saldo-gols
+    categoria: Indicadores
+    titulo: Saldo de gols
+    perguntas: ["O que é saldo de gols?", "Como se calcula o saldo?"]
+    palavras: [saldo, gols, diferenca, marcados, sofridos, sg]
+    resposta: >
+      Saldo de gols é a diferença entre gols marcados e gols sofridos. Um time que marcou 60 e sofreu 40
+      tem saldo +20. É o terceiro critério de desempate da classificação.
+    fonte: Definição usada no projeto
+    relacionados: [saldo-medio, classificacao]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: saldo-medio
+    categoria: Indicadores
+    titulo: Saldo médio de gols
+    perguntas: ["O que é saldo médio de gols?", "O que significa saldo médio nos últimos 5 jogos?"]
+    palavras: [saldo, medio, media, ultimos, jogos, recente, cinco]
+    resposta: >
+      É a média do saldo de gols (gols marcados menos sofridos) nos jogos mais recentes da equipe na
+      temporada. O modelo usa janelas de 3, 5 e 10 jogos. O saldo médio nos últimos 5 jogos foi a
+      informação que mais pesou nas previsões.
+    fonte: src/features/temporais.py
+    relacionados: [importancia, atributos]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: aproveitamento
+    categoria: Indicadores
+    titulo: Aproveitamento
+    perguntas: ["O que é aproveitamento?", "Como se calcula o aproveitamento?"]
+    palavras: [aproveitamento, percentual, porcentagem, pontos, possiveis]
+    resposta: >
+      Aproveitamento é a porcentagem dos pontos possíveis que a equipe conquistou: pontos ganhos divididos
+      por 3 vezes o número de jogos. Quem fez 57 pontos em 38 jogos teve 50% de aproveitamento.
+    fonte: Definição usada no projeto
+    relacionados: [pontos-por-jogo, classificacao]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: pontos-por-jogo
+    categoria: Indicadores
+    titulo: Pontos por jogo
+    perguntas: ["O que é pontos por jogo?", "Como é calculada a média de pontos por partida?"]
+    palavras: [pontos, jogo, partida, media, calculada, por]
+    resposta: >
+      Pontos por jogo é o total de pontos dividido pelo número de partidas disputadas. Varia de 0 a 3.
+      É a mesma escala que o modelo prevê para os próximos 5 jogos.
+    fonte: Definição usada no projeto
+    relacionados: [aproveitamento, alvo]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: tendencias
+    categoria: Indicadores
+    titulo: Como interpretar o gráfico de tendências
+    perguntas: ["Como interpretar o gráfico de tendências?", "O que é média móvel?", "Como ler a página de tendências?"]
+    palavras: [tendencias, grafico, media, movel, interpretar, ler, curva, linha, matriz]
+    resposta: >
+      A linha mostra a média de pontos da equipe nos últimos 5 e nos últimos 10 jogos, recalculada a cada
+      partida. Quando a linha sobe, a equipe está pontuando mais que antes; quando cai, está em queda.
+      A linha de 10 jogos é mais suave e mostra a tendência; a de 5 reage mais rápido. A matriz ao lado mostra
+      o aproveitamento de cada equipe em cada temporada.
+    fonte: Página Tendências do dashboard
+    relacionados: [aproveitamento, oscilacao]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: oscilacao
+    categoria: Indicadores
+    titulo: Oscilação e regularidade
+    perguntas: ["O que é oscilação dos pontos?", "O que significa consistência?", "O que é volatilidade?"]
+    palavras: [oscilacao, volatilidade, consistencia, regularidade, desvio, irregular, consistente]
+    resposta: >
+      A oscilação é o desvio-padrão dos pontos por jogo. Quanto menor, mais regular a equipe: ela tende a
+      repetir resultados parecidos. Regularidade não é o mesmo que bom desempenho: um time que perde quase
+      sempre também é regular.
+    fonte: src/features/temporais.py
+    relacionados: [tendencias]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: mando
+    categoria: Indicadores
+    titulo: Mando de campo
+    perguntas: ["O que é mando de campo?", "Jogar em casa faz diferença?"]
+    palavras: [mando, campo, casa, fora, mandante, visitante]
+    resposta: >
+      Mandante é quem joga em casa. Nos dados, os mandantes fazem em média mais pontos por jogo que os
+      visitantes. Pergunte "como as equipes vão como mandante e visitante?" para ver os números, geral ou de
+      uma equipe.
+    fonte: Dados do projeto
+    relacionados: [pontos-por-jogo]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: alvo
+    categoria: Modelos
+    titulo: O que o modelo prevê
+    perguntas: ["O que o modelo prevê?", "Qual é a variável-alvo?", "O que estamos tentando prever?"]
+    palavras: [preve, prever, alvo, variavel, objetivo, previsao, estamos]
+    resposta: >
+      O modelo prevê a média de pontos que uma equipe vai fazer nos próximos 5 jogos da mesma temporada,
+      calculada logo depois de cada partida. Por exemplo, 2,0 significa cerca de 10 pontos em 5 jogos.
+    fonte: docs/model_card.md
+    relacionados: [como-preve, mae]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: como-preve
+    categoria: Previsões
+    titulo: Como o modelo calcula as previsões
+    perguntas: ["Como o modelo calcula as previsões?", "Como a previsão é feita?", "Quais informações o modelo usa?"]
+    palavras: [como, calcula, previsoes, previsao, feita, informacoes, usa, modelo, entradas]
+    resposta: >
+      Depois de cada partida, o modelo olha 12 informações do desempenho recente da equipe: médias de pontos
+      e de saldo de gols nos últimos 3, 5 e 10 jogos, a oscilação dos pontos, o desempenho em casa e fora,
+      os jogos disputados, os dias de descanso e se o jogo foi em casa. A {modelo_nome} combina essas
+      informações com pesos aprendidos nas temporadas anteriores e produz a média de pontos esperada para os
+      próximos 5 jogos.
+    fonte: src/features/temporais.py e src/models/backtesting.py
+    relacionados: [atributos, alvo, faixa]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: atributos
+    categoria: Modelos
+    titulo: Variáveis utilizadas
+    perguntas: ["Quais variáveis o modelo usa?", "Quais são os atributos?", "O que é engenharia de atributos?"]
+    palavras: [variaveis, atributos, features, engenharia, entradas, informacoes]
+    resposta: >
+      São 12 variáveis, todas calculadas por equipe e temporada em ordem cronológica: média de pontos e saldo
+      médio de gols nos últimos 3, 5 e 10 jogos; oscilação dos pontos nos últimos 5; média de pontos como
+      mandante e como visitante na temporada; jogos disputados; dias de descanso; e se a equipe jogou em casa.
+      Engenharia de atributos é o trabalho de transformar os resultados brutos nessas informações.
+    fonte: docs/data_dictionary.md
+    relacionados: [importancia, vazamento]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: modelos-testados
+    categoria: Modelos
+    titulo: Modelos testados
+    perguntas: ["Quais modelos foram testados?", "Quais algoritmos foram usados?"]
+    palavras: [modelos, testados, algoritmos, usados, ridge, random, forest, gradient, boosting, regressao]
+    resposta: >
+      Foram comparados {n_modelos} modelos: duas referências simples (a média dos últimos 5 jogos e a média
+      histórica do treino) e três de Machine Learning: Regressão Ridge (uma regressão linear com controle
+      de exageros), Random Forest (muitas árvores de decisão votando juntas) e Gradient Boosting (árvores
+      que corrigem os erros umas das outras).
+    fonte: src/models/backtesting.py
+    relacionados: [melhor-modelo, baseline]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: melhor-modelo
+    categoria: Modelos
+    titulo: Qual modelo teve o menor erro
+    perguntas: ["Qual algoritmo apresentou o menor erro?", "Qual foi o melhor modelo?", "Por que a Ridge foi escolhida?"]
+    palavras: [melhor, modelo, menor, erro, algoritmo, escolhido, vencedor, ridge, apresentou]
+    resposta: >
+      A {modelo_nome} teve o menor erro médio na validação de 2022 a 2024 (MAE {mae_validacao_melhor},
+      contra {mae_validacao_referencia} da média dos últimos 5 jogos) e também o menor RMSE. No teste com
+      2025, dados que o modelo nunca viu, o erro foi {mae_teste}, contra {mae_referencia_teste} da referência.
+      A escolha exigia ganho de pelo menos 2% no MAE e nenhuma temporada com piora acima de 10%.
+    fonte: data/predictions/modelagem/metricas.json
+    relacionados: [mae, rmse, baseline, treino-teste]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: baseline
+    categoria: Modelos
+    titulo: Modelo de referência (baseline)
+    perguntas: ["O que é baseline?", "Por que comparar com uma referência simples?"]
+    palavras: [baseline, referencia, simples, comparar, comparacao]
+    resposta: >
+      A referência é uma regra simples: prever que a equipe vai manter a média de pontos dos últimos 5 jogos.
+      Um modelo de Machine Learning só vale a pena se errar menos que essa regra. Aqui, a {modelo_nome}
+      reduziu o erro no teste de {mae_referencia_teste} para {mae_teste} ponto por jogo.
+    fonte: docs/model_card.md
+    relacionados: [melhor-modelo, mae]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: mae
+    categoria: Modelos
+    titulo: O que significa MAE
+    perguntas: ["O que significa MAE?", "O que é erro médio absoluto?", "Qual é a margem de erro do modelo?"]
+    palavras: [mae, erro, medio, absoluto, margem, significa, precisao]
+    resposta: >
+      MAE é o erro médio absoluto: em média, quanto a previsão erra, para mais ou para menos. No teste com
+      2025, o MAE foi {mae_teste} ponto por jogo. Se o modelo prevê 1,6 ponto por jogo (8 pontos em 5 jogos),
+      o resultado real costuma ficar a cerca de {mae_5_jogos} pontos disso. Quanto menor o MAE, mais perto da
+      realidade.
+    fonte: data/predictions/modelagem/metricas.json
+    relacionados: [rmse, melhor-modelo, por-que-erra]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: rmse
+    categoria: Modelos
+    titulo: O que significa RMSE
+    perguntas: ["O que significa RMSE?", "Qual a diferença entre MAE e RMSE?"]
+    palavras: [rmse, raiz, quadratico, medio, diferenca, erros, grandes]
+    resposta: >
+      RMSE é a raiz do erro quadrático médio. Ele é parecido com o MAE, mas pesa mais os erros grandes:
+      errar por 2 pontos conta mais que errar duas vezes por 1. No teste com 2025, o RMSE do modelo
+      escolhido foi {rmse_teste}. Usar as duas métricas evita escolher um modelo que erra pouco em geral mas
+      erra muito às vezes.
+    fonte: data/predictions/modelagem/metricas.json
+    relacionados: [mae]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: vies
+    categoria: Modelos
+    titulo: Viés
+    perguntas: ["O que é viés do modelo?", "O modelo é otimista ou pessimista?"]
+    palavras: [vies, otimista, pessimista, tendencia, sistematico]
+    resposta: >
+      Viés é a média de (previsto − real). Positivo indica que o modelo tende a prever mais pontos do que
+      acontece; negativo, menos. No teste com 2025, o viés ficou próximo de zero, ou seja, o modelo não tende
+      a ser otimista nem pessimista no geral, embora possa errar para um lado em equipes específicas.
+    fonte: data/predictions/cientifica/relatorio_cientifico.md
+    relacionados: [mae]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: treino-teste
+    categoria: Metodologia
+    titulo: Treino, validação e teste
+    perguntas: ["Qual é a diferença entre treino e teste?", "O que é validação?", "Por que separar os dados?"]
+    palavras: [treino, teste, validacao, diferenca, separar, holdout, dados, nunca, viu]
+    resposta: >
+      O treino é a parte dos dados usada para o modelo aprender. A validação (temporadas de 2022 a 2024) serve
+      para comparar e escolher o modelo. O teste ({n_teste} previsões de 2025) só é usado no final, com o modelo
+      já escolhido, para medir o desempenho em dados que ele nunca viu. Sem essa separação, o erro pareceria
+      menor do que realmente é.
+    fonte: docs/model_card.md
+    relacionados: [validacao, vazamento]
+    pagina: metodologia.html
+    sugerir: true
+
+  - id: validacao
+    categoria: Metodologia
+    titulo: Como foi feita a validação
+    perguntas: ["Como foi feita a validação dos modelos?", "O que é backtesting?", "O que é janela expansiva?"]
+    palavras: [validacao, validado, backtesting, janela, expansiva, temporal, feita, modelos]
+    resposta: >
+      Foi uma validação temporal com janela expansiva, como no mundo real: para prever 2022, o modelo treina
+      só com temporadas anteriores; para 2023, com tudo até 2022; e assim por diante. Uma previsão só entra no
+      treino depois que os 5 jogos do alvo terminaram, para não usar o futuro. No final, o modelo escolhido foi
+      treinado com dados até {corte_treino} e testado em 2025.
+    fonte: src/models/backtesting.py
+    relacionados: [treino-teste, vazamento]
+    pagina: metodologia.html
+    sugerir: true
+
+  - id: vazamento
+    categoria: Metodologia
+    titulo: Vazamento de informação
+    perguntas: ["O modelo usa dados do futuro?", "O que é vazamento de dados?", "Existe vazamento de informação?"]
+    palavras: [vazamento, futuro, leakage, informacao, futura, trapaca]
+    resposta: >
+      Vazamento é quando o modelo usa, sem querer, informação que não existiria no momento da previsão.
+      Aqui, todas as variáveis usam só jogos já encerrados, o alvo começa no jogo seguinte e o treino de cada
+      período termina antes do início do teste. O preenchimento de valores ausentes é ajustado só no treino.
+      Esses cuidados têm testes automatizados no projeto.
+    fonte: tests/unit/test_features_temporais.py e test_backtesting.py
+    relacionados: [validacao, treino-teste]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: importancia
+    categoria: Modelos
+    titulo: Importância das variáveis
+    perguntas: ["Quais variáveis mais influenciaram o modelo?", "Como foi calculada a importância?", "O que mais pesa na previsão?"]
+    palavras: [importancia, variaveis, influenciaram, pesa, permutacao, influencia, calculada]
+    resposta: >
+      A importância foi medida por permutação: embaralhamos uma variável de cada vez no teste de 2025 e
+      medimos quanto o erro aumenta. Quanto maior o aumento, mais o modelo depende daquela informação.
+      Isso mostra associação com a previsão, não causa: não quer dizer que mudar a variável muda o resultado.
+    fonte: data/predictions/cientifica/importancias.csv
+    relacionados: [atributos, saldo-medio]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: faixa
+    categoria: Previsões
+    titulo: Faixa de incerteza de 90%
+    perguntas: ["O que é a faixa de 90%?", "O que significam os limites da previsão?", "O intervalo é confiável?"]
+    palavras: [faixa, intervalo, limites, incerteza, 90, confianca, cobertura]
+    resposta: >
+      Os limites mostram uma faixa onde o resultado real costuma cair. Ela foi calculada com os erros da
+      validação: 90% deles ficaram dentro desse tamanho. No teste com 2025, o resultado real ficou dentro da
+      faixa em {cobertura} dos casos. É uma faixa empírica, sem garantia estatística formal, porque os alvos de
+      jogos seguidos se sobrepõem.
+    fonte: docs/model_card.md
+    relacionados: [por-que-erra, mae]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: por-que-erra
+    categoria: Previsões
+    titulo: Por que as previsões podem errar
+    perguntas: ["Por que as previsões podem errar?", "As previsões são confiáveis?", "Posso usar para apostar?"]
+    palavras: [erram, errar, confiaveis, apostar, aposta, certeza, por, que, podem]
+    resposta: >
+      Futebol tem muito acaso: lesões, expulsões, troca de técnico, calendário e sorte não estão nos dados.
+      O modelo só conhece os resultados anteriores. Por isso as previsões são estimativas, com erro médio de
+      {mae_teste} ponto por jogo no teste, e não devem ser usadas como certeza nem como recomendação de aposta.
+    fonte: docs/model_card.md
+    relacionados: [mae, faixa, limitacoes]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: limitacoes
+    categoria: Metodologia
+    titulo: Limitações do projeto
+    perguntas: ["Quais são as limitações do projeto?", "O que o projeto não consegue responder?"]
+    palavras: [limitacoes, limites, nao, consegue, fraquezas, restricoes]
+    resposta: >
+      Os dados são observacionais e de uma única competição; cada equipe tem poucas observações no teste.
+      Há um único período de teste (2025). Não há estatísticas individuais por jogo, nem xG, finalizações ou
+      posse de bola. A importância das variáveis não indica causa. As zonas da tabela não consideram vagas
+      extras por títulos de copas.
+    fonte: docs/model_card.md
+    relacionados: [xg, por-que-erra]
+    pagina: metodologia.html
+    sugerir: true
+
+  - id: xg
+    categoria: Dados
+    titulo: xG e estatísticas avançadas
+    perguntas: ["Qual é o xG do Flamengo?", "Tem dados de finalizações ou posse de bola?"]
+    palavras: [xg, expected, goals, gols, esperados, finalizacoes, posse, chutes, escanteios, cartoes]
+    resposta: >
+      Não encontrei informações suficientes nos dados disponíveis para responder com segurança. A base usada
+      tem apenas placares e datas das partidas; xG, finalizações, posse de bola, escanteios e cartões não
+      estão disponíveis, e nenhum valor foi estimado.
+    fonte: docs/sources_audit.md
+    relacionados: [dados, limitacoes]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: destaques-fonte
+    categoria: Dados
+    titulo: Artilheiros, prêmios, escudos e fotos
+    perguntas: ["De onde vêm os artilheiros e as fotos?", "Como foi escolhido o destaque do campeonato?"]
+    palavras: [artilheiros, fotos, escudos, premio, craque, goleiro, destaque, imagens, escolhido]
+    resposta: >
+      Artilheiros, o Craque do Brasileirão e o Melhor Goleiro vêm da caixa de informações das páginas de cada
+      temporada na Wikipédia em português; os dois prêmios são os oficiais da CBF. As fotos vêm do artigo do
+      próprio jogador e só são usadas com licença livre; sem isso, aparece uma silhueta. Os escudos são marcas
+      dos clubes e são exibidos a partir da Wikimedia apenas para identificação. Não há dados individuais de
+      gols sofridos por goleiro, por isso o cartão mostra os gols sofridos pelo clube.
+    fonte: config/destaques.csv e config/escudos.csv
+    relacionados: [dados]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: metodologia-etapas
+    categoria: Metodologia
+    titulo: Etapas do projeto
+    perguntas: ["Quais são as etapas do projeto?", "Como o projeto foi construído?"]
+    palavras: [etapas, construido, processo, passos, pipeline, ciencia]
+    resposta: >
+      São oito etapas: coleta dos dados, limpeza e preparação, análise exploratória, engenharia de atributos,
+      treinamento dos modelos, validação, teste final e geração das previsões. Cada etapa tem código e testes
+      no repositório.
+    fonte: docs/methodology.md
+    relacionados: [validacao, atributos]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: central
+    categoria: Projeto
+    titulo: Como esta central funciona
+    perguntas: ["Como funciona esta central?", "Você usa inteligência artificial?", "As respostas são inventadas?"]
+    palavras: [central, consulta, funciona, inteligencia, artificial, ia, chatgpt, inventadas, respostas]
+    resposta: >
+      A central não usa inteligência artificial paga. Ela procura sua pergunta em uma base de conhecimento
+      escrita a partir da documentação do projeto e calcula as estatísticas diretamente das {n_partidas}
+      partidas, no seu navegador. Se a pergunta estiver fora do tema ou sem dados suficientes, ela avisa em vez
+      de inventar.
+    fonte: src/api/central.py e static/js/motor.js
+    relacionados: [projeto, dados]
+    pagina: consulta.html
+    sugerir: false
