@@ -2,33 +2,37 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "c6ab133c65e5834a4891",
   "position": {
-    "x": 640,
-    "y": 90,
-    "width": 620,
-    "height": 610,
+    "x": 16,
+    "y": 180,
+    "width": 618,
+    "height": 250,
     "z": 4,
     "tabOrder": 4
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "clusteredColumnChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_equipes"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "nome_padronizado"
+                  "Property": "pontos"
                 }
               },
-              "queryRef": "dim_equipes.nome_padronizado",
-              "nativeQueryRef": "nome_padronizado"
-            },
+              "queryRef": "fato_desempenho_equipes.pontos",
+              "nativeQueryRef": "pontos"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
             {
               "field": {
                 "Measure": {
@@ -37,59 +41,79 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Partidas"
+                  "Property": "Observações de equipe"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Partidas",
-              "nativeQueryRef": "Partidas"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Gols"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Gols",
-              "nativeQueryRef": "Gols"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Pontos totais"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Pontos totais",
-              "nativeQueryRef": "Pontos totais"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "fato_desempenho_equipes"
-                    }
-                  },
-                  "Property": "Gols por jogo"
-                }
-              },
-              "queryRef": "fato_desempenho_equipes.Gols por jogo",
-              "nativeQueryRef": "Gols por jogo"
+              "queryRef": "fato_desempenho_equipes.Observações de equipe",
+              "nativeQueryRef": "Observações de equipe"
             }
           ]
         }
       }
     },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -103,14 +127,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Tabela estatística'"
+                  "Value": "'Distribuição de resultados (0, 1 e 3 pontos)'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "13D"
                 }
               }
             },
@@ -119,22 +143,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#17364D'"
+                      "Value": "'#0b2545'"
                     }
                   }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "background": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }

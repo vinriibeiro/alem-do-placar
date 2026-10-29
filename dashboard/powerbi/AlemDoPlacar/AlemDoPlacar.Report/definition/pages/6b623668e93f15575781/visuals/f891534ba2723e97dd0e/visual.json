@@ -2,69 +2,26 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "f891534ba2723e97dd0e",
   "position": {
-    "x": 20,
-    "y": 90,
-    "width": 1240,
-    "height": 300,
+    "x": 16,
+    "y": 68,
+    "width": 1248,
+    "height": 36,
     "z": 1,
     "tabOrder": 1
   },
   "visual": {
-    "visualType": "textbox",
-    "objects": {
-      "general": [
+    "visualType": "pageNavigator",
+    "visualContainerObjects": {
+      "background": [
         {
           "properties": {
-            "paragraphs": [
-              {
-                "textRuns": [
-                  {
-                    "value": "Assistente de perguntas e respostas sobre dados e previsões (fase T009).",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#17364D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Para usar, inicie a API FastAPI local e abra o endereço no navegador.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#17364D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "A página não depende de serviço externo e não envia dados para a nuvem.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#17364D"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Sem a API ativa, o endereço não responde.",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "16px",
-                      "color": "#17364D"
-                    }
-                  }
-                ]
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
               }
-            ]
+            }
           }
         }
       ]

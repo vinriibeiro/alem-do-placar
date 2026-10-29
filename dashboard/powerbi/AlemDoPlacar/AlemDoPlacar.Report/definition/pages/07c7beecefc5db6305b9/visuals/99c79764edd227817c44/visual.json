@@ -2,33 +2,19 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "99c79764edd227817c44",
   "position": {
-    "x": 800,
-    "y": 210,
-    "width": 460,
-    "height": 490,
+    "x": 16,
+    "y": 180,
+    "width": 800,
+    "height": 400,
     "z": 4,
     "tabOrder": 4
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "lineChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
           "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "previsoes"
-                    }
-                  },
-                  "Property": "equipe"
-                }
-              },
-              "queryRef": "previsoes.equipe",
-              "nativeQueryRef": "equipe"
-            },
             {
               "field": {
                 "Column": {
@@ -42,54 +28,134 @@
               },
               "queryRef": "previsoes.data_referencia",
               "nativeQueryRef": "data_referencia"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "Média prevista"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.Média prevista",
+              "nativeQueryRef": "Média prevista"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "previsoes"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "previsao"
+                  "Property": "Média observada"
                 }
               },
-              "queryRef": "previsoes.previsao",
-              "nativeQueryRef": "previsao"
+              "queryRef": "fato_desempenho_equipes.Média observada",
+              "nativeQueryRef": "Média observada"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "previsoes"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "limite_inferior"
+                  "Property": "Limite inferior"
                 }
               },
-              "queryRef": "previsoes.limite_inferior",
-              "nativeQueryRef": "limite_inferior"
+              "queryRef": "fato_desempenho_equipes.Limite inferior",
+              "nativeQueryRef": "Limite inferior"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "previsoes"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "limite_superior"
+                  "Property": "Limite superior"
                 }
               },
-              "queryRef": "previsoes.limite_superior",
-              "nativeQueryRef": "limite_superior"
+              "queryRef": "fato_desempenho_equipes.Limite superior",
+              "nativeQueryRef": "Limite superior"
             }
           ]
         }
       }
     },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -103,14 +169,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Previsões e intervalos'"
+                  "Value": "'Previsto, observado e intervalo de 90%'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "13D"
                 }
               }
             },
@@ -119,22 +185,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#17364D'"
+                      "Value": "'#0b2545'"
                     }
                   }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "background": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }

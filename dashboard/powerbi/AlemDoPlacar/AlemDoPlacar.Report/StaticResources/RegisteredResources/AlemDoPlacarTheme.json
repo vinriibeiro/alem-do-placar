@@ -1,0 +1,101 @@
+{
+  "name": "AlemDoPlacar",
+  "dataColors": [
+    "#0b2545",
+    "#0f8f68",
+    "#e0a526",
+    "#5b8def",
+    "#c2410c",
+    "#7a8ca3",
+    "#9fe3cb",
+    "#f4c978",
+    "#a9c1f5",
+    "#e8a27c"
+  ],
+  "background": "#ffffff",
+  "foreground": "#14212e",
+  "tableAccent": "#0f8f68",
+  "good": "#1a7f4b",
+  "neutral": "#e0a526",
+  "bad": "#b42318",
+  "maximum": "#0f8f68",
+  "center": "#e0a526",
+  "minimum": "#b42318",
+  "null": "#c5cfda",
+  "textClasses": {
+    "callout": {
+      "fontSize": 28,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#0b2545"
+    },
+    "title": {
+      "fontSize": 13,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#0b2545"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#0b2545"
+    },
+    "label": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI",
+      "color": "#4f5f70"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#0b2545"
+              }
+            },
+            "fontSize": 13,
+            "fontFamily": "Segoe UI Semibold"
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#ffffff"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#e1e7ee"
+              }
+            },
+            "radius": 8
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#f6f8fa"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    }
+  }
+}

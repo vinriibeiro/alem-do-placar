@@ -2,36 +2,18 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "19112ae7c5f1ef06776c",
   "position": {
-    "x": 20,
-    "y": 220,
-    "width": 600,
-    "height": 300,
+    "x": 1024,
+    "y": 112,
+    "width": 240,
+    "height": 84,
     "z": 6,
     "tabOrder": 6
   },
   "visual": {
-    "visualType": "lineChart",
+    "visualType": "card",
     "query": {
       "queryState": {
-        "Category": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_temporadas"
-                    }
-                  },
-                  "Property": "ano"
-                }
-              },
-              "queryRef": "dim_temporadas.ano",
-              "nativeQueryRef": "ano"
-            }
-          ]
-        },
-        "Y": {
+        "Values": {
           "projections": [
             {
               "field": {
@@ -41,17 +23,105 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Gols"
+                  "Property": "MAE global selecionado"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Gols",
-              "nativeQueryRef": "Gols"
+              "queryRef": "fato_desempenho_equipes.MAE global selecionado",
+              "nativeQueryRef": "MAE global selecionado"
             }
           ]
         }
       }
     },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "26D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -65,14 +135,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Gols por temporada'"
+                  "Value": "'Erro do modelo (MAE, holdout)'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "13D"
                 }
               }
             },
@@ -81,22 +151,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#17364D'"
+                      "Value": "'#0b2545'"
                     }
                   }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "background": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }

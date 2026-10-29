@@ -2,10 +2,10 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "e00f49eda3c13402260e",
   "position": {
-    "x": 20,
-    "y": 420,
-    "width": 800,
-    "height": 80,
+    "x": 16,
+    "y": 112,
+    "width": 700,
+    "height": 240,
     "z": 2,
     "tabOrder": 2
   },
@@ -19,16 +19,105 @@
               {
                 "textRuns": [
                   {
-                    "value": "http://127.0.0.1:8765",
+                    "value": "Converse com os dados",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "24px",
-                      "color": "#188A8A"
+                      "fontSize": "22px",
+                      "color": "#0b2545",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "O assistente responde perguntas sobre classificação, confrontos, mando de campo, gols, sequências, rankings e previsões do Brasileirão. Cada resposta mostra a fonte, o período e as limitações.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "14px",
+                      "color": "#14212e"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ele usa apenas os dados deste projeto e nunca inventa números.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "14px",
+                      "color": "#4f5f70"
                     }
                   }
                 ]
               }
             ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
           }
         }
       ]

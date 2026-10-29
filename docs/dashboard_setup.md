@@ -1,70 +1,104 @@
-# Dashboard Power BI local (T008)
+# Dashboard Power BI (T008)
 
-O projeto Power BI é gerado por `src/evaluation/powerbi.py`, a partir de arquivos Parquet, JSON e CSV locais. O gerador não baixa dados, não publica nada e não executa a CLI da Microsoft.
+O projeto Power BI é gerado por `src/evaluation/powerbi.py` (modelo semântico) e `src/evaluation/powerbi_layout.py` (tema, cabeçalho, navegação e páginas), a partir de arquivos Parquet, JSON e CSV. O gerador não baixa dados, não publica nada e não executa a CLI da Microsoft.
 
-**Status:** código e testes entregues. A validação visual e de importação no Power BI Desktop ainda será feita pelo controlador. Nenhum QA foi aprovado nesta escrita.
+**Status:** código, testes e redesign entregues. A validação visual e de importação no Power BI Desktop ainda precisa ser feita por você, com o roteiro em `docs/qa/T008/checklist_desktop.md`. Nenhum QA foi aprovado.
 
 ## Pré-requisitos
 
-- Python 3.12 e ambiente com as dependências do `pyproject.toml` (`pyarrow` é usado para ler os schemas).
-- Power BI Desktop instalado (somente para abrir e validar o `.pbip`).
-- Um scaffold oficial criado com a ferramenta Microsoft `powerbi-report-author` 0.5.0, contendo `AlemDoPlacar.pbip`, `AlemDoPlacar.Report/` e o tema `StaticResources/SharedResources/BaseThemes/Fluent2-CY26SU10.json`. Esse scaffold é preparado pelo controlador; o gerador apenas o copia.
+- Python 3.12 com as dependências do `pyproject.toml`.
+- Power BI Desktop, apenas para abrir e validar o `.pbip`.
+- O scaffold oficial em `dashboard/powerbi/template` (versionado), criado com a ferramenta Microsoft `powerbi-report-author` 0.5.0. O gerador apenas o copia.
 
-Instalação (PowerShell, com o ambiente virtual ativo):
+## Gerar o projeto
 
 ```powershell
-python -m pip install -e ".[test,lint]"
+.\.venv\Scripts\python.exe scripts\gerar_powerbi.py
 ```
+
+O script recria `dashboard/powerbi/AlemDoPlacar`. Ele só apaga a pasta se ela já contiver `AlemDoPlacar.pbip`.
+
+Opções:
+
+| Opção | Efeito |
+|---|---|
+| `--fonte local` (padrão) | Partições `File.Contents` com o caminho absoluto desta máquina. Não acessa rede. |
+| `--fonte web --url-base https://raw.githubusercontent.com/USUARIO/REPO/main/data` | Partições `Web.Contents`. Permite atualizar o relatório publicado sem gateway. |
+| `--url-assistente https://SEU-SITE/assistente` | Endereço do botão da página Assistente. O padrão `https://ALTERAR` é um marcador visível. |
+
+Os tokens de cor vêm de `dashboard/assets/tema_tokens.json`, gerado pelo site (`python scripts/gerar_og.py`). Assim o relatório e o site compartilham a identidade visual.
 
 ## Entradas
 
 | Argumento | Conteúdo esperado |
 |---|---|
-| `pasta_processados` | `dim_equipes.parquet`, `dim_temporadas.parquet`, `fato_partidas.parquet`, `fato_desempenho_equipes.parquet`, `dataset_analitico.parquet` |
-| `pasta_modelagem` | `previsoes.parquet`, `metricas.json` (lista de registros) e `metadados.json` (`modelo_selecionado`, `corte_treino`, `versao`, `notas`) |
-| `pasta_cientifica` | `importancias.csv` (`atributo`, `delta_mae_media`, `delta_mae_desvio`, decimais com ponto) |
-| `template_dir` | Scaffold oficial descrito acima |
+| `pasta_processados` | `dim_equipes`, `dim_temporadas`, `fato_partidas`, `fato_desempenho_equipes` e `dataset_analitico` em Parquet |
+| `pasta_modelagem` | `previsoes.parquet`, `metricas.json` e `metadados.json` (`modelo_selecionado`, `corte_treino`, `versao`; opcionais `notas`, `cobertura_holdout`) |
+| `pasta_cientifica` | `importancias.csv` |
+| `template_dir` | Scaffold oficial |
 
-As pastas de entrada são somente lidas.
+As pastas de entrada são somente lidas. A saída deve estar ausente ou vazia.
 
-## Geração
+## Layout (canvas 1280 x 720)
 
-```python
-from pathlib import Path
+Todas as páginas seguem a mesma estrutura:
 
-from evaluation.powerbi import gerar_projeto
+| Faixa | Posição | Conteúdo |
+|---|---|---|
+| Cabeçalho | y 0–64 | Título e subtítulo da página, fundo azul-marinho |
+| Navegação | y 68–104 | Navegador de páginas nativo do Power BI |
+| Conteúdo | y 112–692 | Margens de 16 px, espaçamento de 12 px |
+| Rodapé | y 698–718 | Fonte, modelo, versão e corte de treino |
 
-pbip = gerar_projeto(
-    pasta_saida=Path("dashboard/powerbi/gerado"),
-    pasta_processados=Path("data/processed"),
-    pasta_modelagem=Path("data/predictions"),
-    pasta_cientifica=Path("reports/metrics"),
-    template_dir=Path("dashboard/powerbi/template"),
-)
-print(pbip)
-```
+Páginas:
 
-Regras:
+1. **Visão Geral:** 5 indicadores, segmentações de temporada e equipe, gols por jogo por temporada, pontos por equipe e classificação.
+2. **Tendências:** média móvel de 3, 5 e 10 jogos, média recente por equipe e matriz de aproveitamento equipe x temporada.
+3. **Estatística:** distribuição de resultados, mandante x visitante, dispersão saldo de gols x pontos e volatilidade.
+4. **Laboratório de Modelos:** MAE do modelo e do baseline, MAE e RMSE por modelo, métricas e importância por permutação.
+5. **Previsões:** previsto, observado e intervalo de 90% por equipe, com aviso de que são previsões retrospectivas.
+6. **Assistente:** botão que abre o site do assistente e exemplos de perguntas.
+7. **Metodologia:** dados, modelo, leitura das previsões e limitações.
 
-- `pasta_saida` deve estar ausente ou vazia. Se contiver arquivos, a geração falha sem sobrescrever nada.
-- Tipos complexos (listas, estruturas, mapas) nos Parquet são rejeitados.
-- Erros de entrada (arquivo ausente, campo ausente, valor inválido) são `ErroProjeto` com a causa indicada.
+## Medidas DAX
 
-## Conteúdo do projeto
+Ficam na tabela `fato_desempenho_equipes`, com formato definido.
 
-- `AlemDoPlacar.SemanticModel/model.bim`: tabelas em TMSL, partições M (`Parquet.Document(File.Contents(...))` ou `Table.FromRecords` para `metricas` e `importancias`), 7 relacionamentos 1:N unidirecionais e medidas DAX.
-- `AlemDoPlacar.Report/`: sete páginas (Visão Geral, Tendências, Estatística, Laboratório de Modelos, Previsões, Assistente e Metodologia) com identificadores determinísticos.
-- Previsões são retrospectivas de 2025, com horizonte de 5 partidas. A página mostra modelo, corte e intervalo de 90%.
-- A página Assistente indica o endereço local `http://127.0.0.1:8765`, que depende da API do T009.
+| Medida | Definição resumida |
+|---|---|
+| Partidas, Temporadas | Contagens distintas de partida e de ano |
+| Gols, Gols sofridos, Saldo de gols, Pontos totais | Somas das colunas do fato |
+| Vitórias, Empates, Derrotas | Contagem por pontos 3, 1 e 0 |
+| Gols por jogo, Gols sofridos por jogo, Pontos por jogo | Divisões seguras por partidas ou observações |
+| Aproveitamento | Pontos dividido por 3 vezes as observações |
+| Vitórias do mandante | Vitórias como mandante dividido por jogos como mandante |
+| Volatilidade de pontos | `STDEV.P` dos pontos por jogo |
+| Posição | `RANKX` por pontos, dentro do filtro de temporada |
+| Média prevista, Média observada, Limite inferior, Limite superior, Erro absoluto médio | Sobre a tabela `previsoes` |
+| Média 3 jogos, Média recente, Média 10 jogos | Médias móveis do dataset analítico |
+| MAE e RMSE de validação e de holdout, MAE global selecionado e baseline | Sobre `metricas`, sempre com temporada `todas` |
+| Cobertura do intervalo | Constante do `metadados.json`, quando informada (não usada nas páginas) |
+
+Posição só tem valor quando há uma equipe no contexto. Vitórias do mandante responde ao filtro de equipe e de temporada.
+
+## O que foi verificado e o que não foi
+
+Verificado por testes automatizados: sete páginas, cabeçalho, navegação e rodapé em todas, nenhum visual fora do canvas ou sobreposto, referências a tabelas, colunas e medidas existentes, tema registrado, URLs do botão e partições web.
+
+**Não verificado:** a abertura no Power BI Desktop. Os visuais pageNavigator, pivotTable, scatterChart, o hiperlink da caixa de texto e o formato do tema são os mais recentes e os primeiros a conferir. Se algum falhar, a causa estará em `powerbi_layout.py`.
 
 ## Validação no Power BI Desktop
 
-1. Abrir `AlemDoPlacar.pbip` no Power BI Desktop.
-2. Confirmar que a importação termina sem erros e que o modelo carrega as 8 tabelas.
-3. Na visão de modelo, conferir os 7 relacionamentos. Se o Desktop acusar caminhos ambíguos (dimensões ligadas a `analitico`/`previsoes` e a `fato_desempenho_equipes`), desativar os relacionamentos de `analitico` e `previsoes` com as dimensões.
-4. Conferir se os valores dos cards batem com os resultados de Python (partidas, gols, pontos e MAE de holdout).
-5. Só então publicar. Publicação e autenticação na nuvem não fazem parte deste projeto.
+Siga `docs/qa/T008/checklist_desktop.md`. Se o Desktop acusar caminhos ambíguos entre dimensões e `analitico`/`previsoes`, desative os relacionamentos dessas duas tabelas com as dimensões.
+
+## Publicação
+
+1. Gere em modo web com a URL do repositório público e do site.
+2. Abra no Desktop, confira e publique em um workspace.
+3. No Serviço: Arquivo, Inserir relatório, Publicar na web (público). Copie o endereço do iframe para `POWERBI_EMBED_URL` do site.
+
+Publicação e autenticação na nuvem não fazem parte do código.
 
 ## Versionamento
 
-O gerador e o template são versionados. A pasta gerada depende de caminhos locais e pode ser recriada a qualquer momento. O cache local do Power BI Desktop (`.pbi/`) é ignorado pelo Git.
+O gerador, o template e o projeto gerado são versionados. O cache local do Desktop (`.pbi/`) é ignorado.

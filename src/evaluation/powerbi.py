@@ -6,7 +6,6 @@ não altera as pastas de entrada.
 """
 
 import csv
-import hashlib
 import json
 import math
 import re
@@ -17,14 +16,13 @@ from typing import Any
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from evaluation.powerbi_layout import construir_paginas, construir_tema
+
 NOME = "AlemDoPlacar"
-COR_TEXTO = "#17364D"
-COR_DESTAQUE = "#188A8A"
-URL_ASSISTENTE = "http://127.0.0.1:8765"
+URL_ASSISTENTE = "https://ALTERAR"
+TEMA_ARQUIVO = "AlemDoPlacarTheme.json"
 MODELO_BASELINE = "M00_media_recente_5"
 FATO = "fato_desempenho_equipes"
-SCHEMA_PAGINA = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json"
-SCHEMA_VISUAL = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
 SCHEMA_PAGINAS = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json"
 ARQUIVOS_TEMPLATE = (
     "AlemDoPlacar.pbip",
@@ -60,31 +58,73 @@ RELACIONAMENTOS = [
     ("previsoes", "temporada", "dim_temporadas", "ano"),
 ]
 
+# (nome, expressão DAX, formatString)
+_VIT_CASA = f'CALCULATE(COUNTROWS({FATO}),{FATO}[mando_campo]="mandante",{FATO}[pontos]=3)'
+_JOGOS_CASA = f'CALCULATE(COUNTROWS({FATO}),{FATO}[mando_campo]="mandante")'
+_MAE = "CALCULATE(MAX(metricas[mae]),metricas[fase]="
+_RMSE = "CALCULATE(MAX(metricas[rmse]),metricas[fase]="
 MEDIDAS_DAX = [
-    ("Partidas", f"DISTINCTCOUNT({FATO}[partida_id])"),
-    ("Observações de equipe", f"COUNTROWS({FATO})"),
-    ("Gols", f"SUM({FATO}[gols_pro])"),
-    ("Pontos totais", f"SUM({FATO}[pontos])"),
-    ("Gols por jogo", "DIVIDE([Gols],[Partidas])"),
-    ("Média prevista", "AVERAGE(previsoes[previsao])"),
-    ("Média observada", "AVERAGE(previsoes[alvo])"),
-    ("Média recente", "AVERAGE(analitico[media_pontos_5])"),
-    ("Importância", "AVERAGE(importancias[delta_mae_media])"),
+    ("Partidas", f"DISTINCTCOUNT({FATO}[partida_id])", "#,0"),
+    ("Temporadas", "DISTINCTCOUNT(dim_temporadas[ano])", "0"),
+    ("Observações de equipe", f"COUNTROWS({FATO})", "#,0"),
+    ("Gols", f"SUM({FATO}[gols_pro])", "#,0"),
+    ("Gols sofridos", f"SUM({FATO}[gols_contra])", "#,0"),
+    ("Saldo de gols", f"SUM({FATO}[saldo_gols])", "+#,0;-#,0;0"),
+    ("Pontos totais", f"SUM({FATO}[pontos])", "#,0"),
+    ("Vitórias", f"CALCULATE(COUNTROWS({FATO}),{FATO}[pontos]=3)", "#,0"),
+    ("Empates", f"CALCULATE(COUNTROWS({FATO}),{FATO}[pontos]=1)", "#,0"),
+    ("Derrotas", f"CALCULATE(COUNTROWS({FATO}),{FATO}[pontos]=0)", "#,0"),
+    ("Gols por jogo", "DIVIDE([Gols],[Partidas])", "0.00"),
+    ("Gols sofridos por jogo", "DIVIDE([Gols sofridos],[Observações de equipe])", "0.00"),
+    ("Pontos por jogo", "DIVIDE([Pontos totais],[Observações de equipe])", "0.00"),
+    ("Aproveitamento", "DIVIDE([Pontos totais],3*[Observações de equipe])", "0.0%"),
+    ("Vitórias do mandante", f"DIVIDE({_VIT_CASA},{_JOGOS_CASA})", "0.0%"),
+    ("Volatilidade de pontos", f"STDEV.P({FATO}[pontos])", "0.00"),
+    (
+        "Posição",
+        "IF(ISINSCOPE(dim_equipes[nome_padronizado]),"
+        "RANKX(ALL(dim_equipes[nome_padronizado]),[Pontos totais],,DESC,Dense))",
+        "0",
+    ),
+    ("Média prevista", "AVERAGE(previsoes[previsao])", "0.00"),
+    ("Média observada", "AVERAGE(previsoes[alvo])", "0.00"),
+    ("Limite inferior", "AVERAGE(previsoes[limite_inferior])", "0.00"),
+    ("Limite superior", "AVERAGE(previsoes[limite_superior])", "0.00"),
+    (
+        "Erro absoluto médio",
+        "AVERAGEX(previsoes,ABS(previsoes[previsao]-previsoes[alvo]))",
+        "0.000",
+    ),
+    ("Média 3 jogos", "AVERAGE(analitico[media_pontos_3])", "0.00"),
+    ("Média recente", "AVERAGE(analitico[media_pontos_5])", "0.00"),
+    ("Média 10 jogos", "AVERAGE(analitico[media_pontos_10])", "0.00"),
+    ("Importância", "AVERAGE(importancias[delta_mae_media])", "0.0000"),
     (
         "MAE global selecionado",
         "VAR ModeloAtual = [Modelo selecionado] RETURN "
         'CALCULATE(MAX(metricas[mae]),metricas[fase]="holdout",'
         'metricas[modelo]=ModeloAtual,metricas[temporada]="todas")',
+        "0.000",
     ),
     (
         "MAE global baseline",
-        f'CALCULATE(MAX(metricas[mae]),metricas[fase]="holdout",metricas[modelo]="{MODELO_BASELINE}",metricas[temporada]="todas")',
+        'CALCULATE(MAX(metricas[mae]),metricas[fase]="holdout",'
+        f'metricas[modelo]="{MODELO_BASELINE}",metricas[temporada]="todas")',
+        "0.000",
     ),
+    ("MAE validação", _MAE + '"validacao",metricas[temporada]="todas")', "0.000"),
+    ("MAE holdout", _MAE + '"holdout",metricas[temporada]="todas")', "0.000"),
+    ("RMSE validação", _RMSE + '"validacao",metricas[temporada]="todas")', "0.000"),
+    ("RMSE holdout", _RMSE + '"holdout",metricas[temporada]="todas")', "0.000"),
 ]
 
 
 class ErroProjeto(ValueError):
     """Entrada ausente ou inválida, ou saída já ocupada."""
+
+
+def _url_dados(url_base: str | None, subpasta: str, arquivo: str) -> str | None:
+    return f"{url_base.rstrip('/')}/{subpasta}/{arquivo}" if url_base else None
 
 
 def gerar_projeto(
@@ -93,11 +133,25 @@ def gerar_projeto(
     pasta_modelagem: Path,
     pasta_cientifica: Path,
     template_dir: Path,
+    *,
+    fonte_dados: str = "local",
+    url_base_dados: str | None = None,
+    url_assistente: str = URL_ASSISTENTE,
+    tokens: Path | None = None,
 ) -> Path:
     """Gera o projeto PBIP em ``pasta_saida`` e devolve o caminho do ``.pbip``.
 
     As pastas de entrada são somente lidas. ``pasta_saida`` deve estar ausente ou vazia.
+    ``fonte_dados="web"`` troca ``File.Contents`` por ``Web.Contents`` em ``url_base_dados``
+    (ex.: ``https://raw.githubusercontent.com/usuario/repo/main/data``), o que permite atualizar
+    o relatório publicado sem gateway. O padrão ``"local"`` não acessa rede.
     """
+    if fonte_dados not in {"local", "web"}:
+        raise ErroProjeto("fonte_dados deve ser 'local' ou 'web'")
+    if fonte_dados == "web" and not (url_base_dados or "").startswith("https://"):
+        raise ErroProjeto("fonte_dados='web' exige url_base_dados começando com https://")
+    web = fonte_dados == "web"
+    tokens_design = _ler_tokens(tokens)
     saida_resolvida = pasta_saida.resolve()
     for entrada in (pasta_processados, pasta_modelagem, pasta_cientifica, template_dir):
         origem_resolvida = entrada.resolve()
@@ -106,14 +160,20 @@ def gerar_projeto(
     _validar_template(template_dir)
     _validar_saida(pasta_saida)
     meta = _ler_metadados(pasta_modelagem / "metadados.json")
-    tabelas = [
-        _tabela_parquet(nome, pasta_processados / f"{nome}.parquet")
-        for nome in ("dim_equipes", "dim_temporadas", "fato_partidas")
-    ]
-    tabelas.append(_tabela_parquet(FATO, pasta_processados / f"{FATO}.parquet", _medidas(meta)))
+
+    def _proc(nome: str, medidas: list | None = None, arquivo: str | None = None) -> dict:
+        arq = arquivo or f"{nome}.parquet"
+        url = _url_dados(url_base_dados, "processed", arq) if web else None
+        return _tabela_parquet(nome, pasta_processados / arq, medidas, url)
+
+    tabelas = [_proc(nome) for nome in ("dim_equipes", "dim_temporadas", "fato_partidas")]
+    tabelas.append(_proc(FATO, _medidas(meta)))
+    url_prev = _url_dados(url_base_dados, "predictions/modelagem", "previsoes.parquet")
     tabelas += [
-        _tabela_parquet("analitico", pasta_processados / "dataset_analitico.parquet"),
-        _tabela_parquet("previsoes", pasta_modelagem / "previsoes.parquet"),
+        _proc("analitico", arquivo="dataset_analitico.parquet"),
+        _tabela_parquet(
+            "previsoes", pasta_modelagem / "previsoes.parquet", None, url_prev if web else None
+        ),
         _tabela_registros(
             "metricas", _linhas_metricas(pasta_modelagem / "metricas.json"), COLUNAS_METRICAS
         ),
@@ -133,12 +193,23 @@ def gerar_projeto(
             "relationships": [_relacionamento(*r) for r in RELACIONAMENTOS],
         },
     }
-    paginas = _paginas(meta)
+    paginas = construir_paginas(meta, tokens_design, url_assistente)
     _validar_referencias(tabelas, paginas)
     shutil.copytree(template_dir, pasta_saida, dirs_exist_ok=True)
     _escrever_modelo(pasta_saida, modelo)
-    _escrever_relatorio(pasta_saida, paginas)
+    _escrever_relatorio(pasta_saida, paginas, construir_tema(tokens_design))
     return pasta_saida / f"{NOME}.pbip"
+
+
+def _ler_tokens(caminho: Path | None) -> dict[str, str]:
+    """Tokens de design de ``tema_tokens.json``; sem arquivo, usa o padrão do layout."""
+    if caminho is None:
+        return {}
+    dados = _ler_json(caminho)
+    cores = dados.get("cores") if isinstance(dados, dict) else None
+    if not isinstance(cores, dict):
+        raise ErroProjeto(f"tokens inválidos: {caminho}")
+    return {str(k): str(v) for k, v in cores.items()}
 
 
 # --- Entradas e validações -------------------------------------------------------------------
@@ -185,6 +256,11 @@ def _ler_metadados(caminho: Path) -> dict[str, str]:
     return {
         **{chave: str(dados[chave]) for chave in CHAVES_METADADOS},
         "notas": str(dados.get("notas", dados.get("motivo_selecao", "Avaliação histórica local."))),
+        **(
+            {"cobertura": str(dados["cobertura_holdout"])}
+            if isinstance(dados.get("cobertura_holdout"), int | float)
+            else {}
+        ),
     }
 
 
@@ -282,14 +358,15 @@ def _tabela(nome: str, colunas: dict[str, str], expressao: list[str], medidas: l
     }
 
 
-def _tabela_parquet(nome: str, caminho: Path, medidas: list = None) -> dict:
-    caminho_m = _texto_literal(caminho.resolve())
-    expressao = [
-        "let",
-        f"    Origem = Parquet.Document(File.Contents({caminho_m}))",
-        "in",
-        "    Origem",
-    ]
+def _tabela_parquet(
+    nome: str, caminho: Path, medidas: list | None = None, url: str | None = None
+) -> dict:
+    """Partição Parquet local (``File.Contents``) ou, se ``url`` for dada, ``Web.Contents``."""
+    if url:
+        origem = f"Parquet.Document(Web.Contents({_texto_literal(url)}))"
+    else:
+        origem = f"Parquet.Document(File.Contents({_texto_literal(caminho.resolve())}))"
+    expressao = ["let", f"    Origem = {origem}", "in", "    Origem"]
     return _tabela(nome, _colunas_parquet(caminho), expressao, medidas)
 
 
@@ -327,326 +404,21 @@ def _medidas(meta: dict[str, str]) -> list[dict[str, str]]:
         ("Versão do modelo", meta["versao"]),
         ("Notas do modelo", meta["notas"]),
     ]
-    return [{"name": n, "expression": _texto_literal(v)} for n, v in constantes] + [
-        {"name": n, "expression": dax} for n, dax in MEDIDAS_DAX
-    ]
-
-
-# --- Páginas PBIR ---------------------------------------------------------------------------
-
-
-def _id(*partes: str) -> str:
-    """Identificador hexadecimal de 20 caracteres, estável entre execuções."""
-    return hashlib.sha256("|".join(partes).encode("utf-8")).hexdigest()[:20]
-
-
-def _c(tabela: str, campo: str) -> tuple[str, str, str]:
-    return (tabela, campo, "Column")
-
-
-def _m(nome: str) -> tuple[str, str, str]:
-    return (FATO, nome, "Measure")
-
-
-def _lit(valor: str) -> dict:
-    return {"expr": {"Literal": {"Value": valor}}}
-
-
-def _projecao(ref: tuple[str, str, str]) -> dict:
-    tabela, campo, tipo = ref
-    return {
-        "field": {tipo: {"Expression": {"SourceRef": {"Entity": tabela}}, "Property": campo}},
-        "queryRef": f"{tabela}.{campo}",
-        "nativeQueryRef": campo,
-    }
-
-
-def _envelope(pos: tuple[int, int, int, int], visual: dict) -> dict:
-    x, y, largura, altura = pos
-    return {"position": {"x": x, "y": y, "width": largura, "height": altura}, "visual": visual}
-
-
-def _caixa_texto(pos, linhas: list[str], tamanho: str = "14px", cor: str = COR_TEXTO) -> dict:
-    estilo = {"fontFamily": "Segoe UI", "fontSize": tamanho, "color": cor}
-    paragrafos = [{"textRuns": [{"value": linha, "textStyle": estilo}]} for linha in linhas]
-    visual = {
-        "visualType": "textbox",
-        "objects": {"general": [{"properties": {"paragraphs": paragrafos}}]},
-    }
-    return _envelope(pos, visual)
-
-
-def _titulo(texto: str) -> dict:
-    return _caixa_texto((20, 20, 1240, 60), [texto], "24px")
-
-
-def _visual(tipo: str, pos, papeis: dict[str, list], titulo: str) -> dict:
-    estado = {p: {"projections": [_projecao(r) for r in refs]} for p, refs in papeis.items()}
-    visual = {"visualType": tipo, "query": {"queryState": estado}}
-    visual["visualContainerObjects"] = {
-        "title": [
+    medidas = [{"name": n, "expression": _texto_literal(v)} for n, v in constantes]
+    if meta.get("cobertura"):
+        medidas.append(
             {
-                "properties": {
-                    "show": _lit("true"),
-                    "text": _lit(f"'{titulo}'"),
-                    "fontSize": _lit("16D"),
-                    "fontColor": {"solid": {"color": _lit(f"'{COR_TEXTO}'")}},
-                }
+                "name": "Cobertura do intervalo",
+                "expression": repr(float(meta["cobertura"])),
+                "formatString": "0.0%",
             }
-        ],
-        "background": [{"properties": {"show": _lit("false")}}],
-        "padding": [
-            {"properties": {lado: _lit("8D") for lado in ("top", "bottom", "left", "right")}}
-        ],
-    }
-    return _envelope(pos, visual)
-
-
-def _pagina(nome: str, visuais: list[dict]) -> dict:
-    ident = _id(nome)
-    containers = [
-        {
-            "$schema": SCHEMA_VISUAL,
-            "name": _id(ident, str(i)),
-            "position": {**v["position"], "z": i, "tabOrder": i},
-            "visual": v["visual"],
-        }
-        for i, v in enumerate(visuais)
-    ]
-    pagina = {
-        "$schema": SCHEMA_PAGINA,
-        "name": ident,
-        "displayName": nome,
-        "displayOption": "FitToPage",
-        "height": 720,
-        "width": 1280,
-    }
-    return {"id": ident, "pagina": pagina, "visuais": containers}
-
-
-def _paginas(meta: dict[str, str]) -> list[dict]:
-    """Sete páginas; layouts dentro de x 20–1260 e y 20–700."""
-    eq = _c("dim_equipes", "nome_padronizado")
-    ano = _c("dim_temporadas", "ano")
-    modelo = (
-        f"Modelo: {meta['modelo_selecionado']}. Corte de treino: {meta['corte_treino']}. "
-        f"Versão: {meta['versao']}."
-    )
-    return [
-        _pagina(
-            "Visão Geral",
-            [
-                _titulo("Visão Geral"),
-                _visual("card", (20, 90, 200, 110), {"Values": [_m("Partidas")]}, "Partidas"),
-                _visual("card", (240, 90, 200, 110), {"Values": [_m("Gols")]}, "Gols"),
-                _visual(
-                    "card", (460, 90, 200, 110), {"Values": [_m("Gols por jogo")]}, "Gols por jogo"
-                ),
-                _visual("slicer", (680, 90, 280, 110), {"Values": [ano]}, "Temporada"),
-                _visual("slicer", (980, 90, 280, 110), {"Values": [eq]}, "Equipe"),
-                _visual(
-                    "lineChart",
-                    (20, 220, 600, 300),
-                    {"Category": [ano], "Y": [_m("Gols")]},
-                    "Gols por temporada",
-                ),
-                _visual(
-                    "clusteredBarChart",
-                    (640, 220, 620, 480),
-                    {"Category": [eq], "Y": [_m("Pontos totais")]},
-                    "Pontos por equipe",
-                ),
-                _caixa_texto(
-                    (20, 540, 600, 160),
-                    [
-                        "Fonte: OpenFootball (CC0), temporadas 2018–2025.",
-                        "Os filtros de equipe e temporada se aplicam aos indicadores.",
-                    ],
-                ),
-            ],
-        ),
-        _pagina(
-            "Tendências",
-            [
-                _titulo("Tendências"),
-                _visual("slicer", (20, 90, 300, 100), {"Values": [ano]}, "Temporada"),
-                _visual("slicer", (340, 90, 300, 100), {"Values": [eq]}, "Equipe"),
-                _caixa_texto(
-                    (660, 90, 600, 100),
-                    ["Média recente: média de pontos nas últimas 5 partidas de cada equipe."],
-                ),
-                _visual(
-                    "lineChart",
-                    (20, 210, 1240, 240),
-                    {"Category": [_c("analitico", "data_referencia")], "Y": [_m("Média recente")]},
-                    "Média recente por data",
-                ),
-                _visual(
-                    "clusteredBarChart",
-                    (20, 470, 1240, 230),
-                    {"Category": [eq], "Y": [_m("Média recente")]},
-                    "Média recente por equipe",
-                ),
-            ],
-        ),
-        _pagina(
-            "Estatística",
-            [
-                _titulo("Estatística"),
-                _visual("slicer", (20, 90, 300, 100), {"Values": [ano]}, "Temporada"),
-                _visual("slicer", (340, 90, 300, 100), {"Values": [eq]}, "Equipe"),
-                _visual(
-                    "clusteredColumnChart",
-                    (20, 210, 600, 490),
-                    {"Category": [_c(FATO, "pontos")], "Y": [_m("Observações de equipe")]},
-                    "Distribuição de pontos (0, 1 e 3)",
-                ),
-                _visual(
-                    "tableEx",
-                    (640, 90, 620, 610),
-                    {
-                        "Values": [
-                            eq,
-                            _m("Partidas"),
-                            _m("Gols"),
-                            _m("Pontos totais"),
-                            _m("Gols por jogo"),
-                        ]
-                    },
-                    "Tabela estatística",
-                ),
-            ],
-        ),
-        _pagina(
-            "Laboratório de Modelos",
-            [
-                _titulo("Laboratório de Modelos"),
-                _visual(
-                    "card",
-                    (20, 90, 300, 120),
-                    {"Values": [_m("MAE global selecionado")]},
-                    "MAE global holdout (selecionado)",
-                ),
-                _visual(
-                    "card",
-                    (340, 90, 300, 120),
-                    {"Values": [_m("MAE global baseline")]},
-                    "MAE global holdout (M00 baseline)",
-                ),
-                _visual(
-                    "card",
-                    (660, 90, 300, 120),
-                    {"Values": [_m("Modelo selecionado")]},
-                    "Modelo selecionado",
-                ),
-                _visual(
-                    "card",
-                    (980, 90, 280, 120),
-                    {"Values": [_m("Corte de treino")]},
-                    "Corte de treino",
-                ),
-                _visual(
-                    "tableEx",
-                    (20, 230, 760, 470),
-                    {
-                        "Values": [
-                            _c("metricas", c)
-                            for c in ("fase", "modelo", "temporada", "mae", "rmse")
-                        ]
-                    },
-                    "Métricas dos modelos",
-                ),
-                _visual(
-                    "clusteredBarChart",
-                    (800, 230, 460, 470),
-                    {"Category": [_c("importancias", "atributo")], "Y": [_m("Importância")]},
-                    "Importância por permutação (ΔMAE)",
-                ),
-            ],
-        ),
-        _pagina(
-            "Previsões",
-            [
-                _titulo("Previsões"),
-                _visual("slicer", (20, 90, 320, 100), {"Values": [eq]}, "Equipe"),
-                _caixa_texto(
-                    (360, 90, 900, 100),
-                    [
-                        "Previsões retrospectivas 2025; horizonte 5 partidas, não certezas.",
-                        modelo + " Intervalo: 90% empírico.",
-                    ],
-                ),
-                _visual(
-                    "lineChart",
-                    (20, 210, 760, 490),
-                    {
-                        "Category": [_c("previsoes", "data_referencia")],
-                        "Y": [_m("Média prevista"), _m("Média observada")],
-                    },
-                    "Média prevista e observada",
-                ),
-                _visual(
-                    "tableEx",
-                    (800, 210, 460, 490),
-                    {
-                        "Values": [
-                            _c("previsoes", c)
-                            for c in (
-                                "equipe",
-                                "data_referencia",
-                                "previsao",
-                                "limite_inferior",
-                                "limite_superior",
-                            )
-                        ]
-                    },
-                    "Previsões e intervalos",
-                ),
-            ],
-        ),
-        _pagina(
-            "Assistente",
-            [
-                _titulo("Assistente"),
-                _caixa_texto(
-                    (20, 90, 1240, 300),
-                    [
-                        "Assistente de perguntas e respostas sobre dados e previsões (fase T009).",
-                        "Para usar, inicie a API FastAPI local e abra o endereço no navegador.",
-                        "A página não depende de serviço externo e não envia dados para a nuvem.",
-                        "Sem a API ativa, o endereço não responde.",
-                    ],
-                    "16px",
-                ),
-                _caixa_texto((20, 420, 800, 80), [URL_ASSISTENTE], "24px", COR_DESTAQUE),
-            ],
-        ),
-        _pagina(
-            "Metodologia",
-            [
-                _titulo("Metodologia"),
-                _caixa_texto(
-                    (20, 90, 1240, 610),
-                    [
-                        "Fonte: OpenFootball, licença CC0 verificada (docs/sources_audit.md).",
-                        "Período analisado: temporadas 2018–2025 do Campeonato Brasileiro Série A.",
-                        "Dados de 2026 estão fora do escopo.",
-                        modelo,
-                        "Alvo: média de pontos nas próximas 5 partidas.",
-                        "Validação temporal com janela expansiva; holdout exclusivo de 2025.",
-                        "Baseline: M00 média recente de 5 partidas. Métricas: MAE e RMSE.",
-                        "Limitações: dados observacionais, uma competição "
-                        "e amostra pequena por equipe.",
-                        "Previsões não são certezas.",
-                        "Correlação e importância preditiva não indicam causalidade.",
-                        "Tema observacional: os resultados descrevem o passado.",
-                        "Não garantem desempenho futuro.",
-                        f"Notas do modelo: {meta['notas']}",
-                    ],
-                ),
-            ],
-        ),
-    ]
+        )
+    for nome, dax, formato in MEDIDAS_DAX:
+        medida = {"name": nome, "expression": dax}
+        if formato:
+            medida["formatString"] = formato
+        medidas.append(medida)
+    return medidas
 
 
 # --- Escrita e validação final ----------------------------------------------------------------
@@ -669,13 +441,13 @@ def _validar_referencias(tabelas: list[dict], paginas: list[dict]) -> None:
         for visual in pagina["visuais"]:
             pos = visual["position"]
             if (
-                pos["x"] < 20
-                or pos["y"] < 20
-                or pos["x"] + pos["width"] > 1260
-                or pos["y"] + pos["height"] > 700
+                pos["x"] < 0
+                or pos["y"] < 0
+                or pos["x"] + pos["width"] > 1280
+                or pos["y"] + pos["height"] > 720
             ):
                 raise ErroProjeto(
-                    f"visual fora da área útil na página {pagina['pagina']['displayName']}"
+                    f"visual fora do canvas na página {pagina['pagina']['displayName']}"
                 )
             estado = visual["visual"].get("query", {}).get("queryState", {})
             for papel in estado.values():
@@ -695,11 +467,12 @@ def _escrever_modelo(raiz: Path, modelo: dict) -> None:
     _gravar_json(semantico / "model.bim", modelo)
 
 
-def _escrever_relatorio(raiz: Path, paginas: list[dict]) -> None:
+def _escrever_relatorio(raiz: Path, paginas: list[dict], tema: dict) -> None:
     relatorio = raiz / f"{NOME}.Report"
     pbir = _ler_json(relatorio / "definition.pbir")
     pbir["datasetReference"] = {"byPath": {"path": f"../{NOME}.SemanticModel"}}
     _gravar_json(relatorio / "definition.pbir", pbir)
+    _registrar_tema(relatorio, tema)
     paginas_dir = relatorio / "definition" / "pages"
     shutil.rmtree(paginas_dir, ignore_errors=True)
     for pagina in paginas:
@@ -712,3 +485,33 @@ def _escrever_relatorio(raiz: Path, paginas: list[dict]) -> None:
         paginas_dir / "pages.json",
         {"$schema": SCHEMA_PAGINAS, "pageOrder": ids, "activePageName": ids[0]},
     )
+
+
+def _registrar_tema(relatorio: Path, tema: dict) -> None:
+    """Grava o tema do projeto em RegisteredResources e o registra em report.json."""
+    _gravar_json(relatorio / "StaticResources" / "RegisteredResources" / TEMA_ARQUIVO, tema)
+    caminho = relatorio / "definition" / "report.json"
+    dados = _ler_json(caminho)
+    colecao = dados.setdefault("themeCollection", {})
+    versao = colecao.get("baseTheme", {}).get(
+        "reportVersionAtImport", {"visual": "2.11.0", "report": "3.4.0", "page": "2.3.1"}
+    )
+    colecao["customTheme"] = {
+        "name": TEMA_ARQUIVO,
+        "reportVersionAtImport": versao,
+        "type": "RegisteredResources",
+    }
+    pacotes = [
+        p
+        for p in dados.setdefault("resourcePackages", [])
+        if p.get("name") != "RegisteredResources"
+    ]
+    pacotes.append(
+        {
+            "name": "RegisteredResources",
+            "type": "RegisteredResources",
+            "items": [{"name": TEMA_ARQUIVO, "path": TEMA_ARQUIVO, "type": "CustomTheme"}],
+        }
+    )
+    dados["resourcePackages"] = pacotes
+    _gravar_json(caminho, dados)

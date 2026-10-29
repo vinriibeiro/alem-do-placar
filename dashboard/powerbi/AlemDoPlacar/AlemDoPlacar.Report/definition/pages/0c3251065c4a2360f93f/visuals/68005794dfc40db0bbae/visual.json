@@ -2,94 +2,126 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "68005794dfc40db0bbae",
   "position": {
-    "x": 20,
-    "y": 230,
-    "width": 760,
-    "height": 470,
+    "x": 961,
+    "y": 112,
+    "width": 303,
+    "height": 84,
     "z": 5,
     "tabOrder": 5
   },
   "visual": {
-    "visualType": "tableEx",
+    "visualType": "card",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "metricas"
+                      "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "fase"
+                  "Property": "Corte de treino"
                 }
               },
-              "queryRef": "metricas.fase",
-              "nativeQueryRef": "fase"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "metricas"
-                    }
-                  },
-                  "Property": "modelo"
-                }
-              },
-              "queryRef": "metricas.modelo",
-              "nativeQueryRef": "modelo"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "metricas"
-                    }
-                  },
-                  "Property": "temporada"
-                }
-              },
-              "queryRef": "metricas.temporada",
-              "nativeQueryRef": "temporada"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "metricas"
-                    }
-                  },
-                  "Property": "mae"
-                }
-              },
-              "queryRef": "metricas.mae",
-              "nativeQueryRef": "mae"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "metricas"
-                    }
-                  },
-                  "Property": "rmse"
-                }
-              },
-              "queryRef": "metricas.rmse",
-              "nativeQueryRef": "rmse"
+              "queryRef": "fato_desempenho_equipes.Corte de treino",
+              "nativeQueryRef": "Corte de treino"
             }
           ]
         }
       }
     },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "26D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0b2545'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -103,14 +135,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Métricas dos modelos'"
+                  "Value": "'Corte de treino'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "13D"
                 }
               }
             },
@@ -119,22 +151,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#17364D'"
+                      "Value": "'#0b2545'"
                     }
                   }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "background": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }

@@ -2,15 +2,15 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
   "name": "8f44ed863b6b4a149163",
   "position": {
-    "x": 800,
-    "y": 230,
-    "width": 460,
-    "height": 470,
+    "x": 16,
+    "y": 208,
+    "width": 294,
+    "height": 230,
     "z": 6,
     "tabOrder": 6
   },
   "visual": {
-    "visualType": "clusteredBarChart",
+    "visualType": "clusteredColumnChart",
     "query": {
       "queryState": {
         "Category": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "importancias"
+                      "Entity": "metricas"
                     }
                   },
-                  "Property": "atributo"
+                  "Property": "modelo"
                 }
               },
-              "queryRef": "importancias.atributo",
-              "nativeQueryRef": "atributo"
+              "queryRef": "metricas.modelo",
+              "nativeQueryRef": "modelo"
             }
           ]
         },
@@ -41,17 +41,93 @@
                       "Entity": "fato_desempenho_equipes"
                     }
                   },
-                  "Property": "Importância"
+                  "Property": "MAE validação"
                 }
               },
-              "queryRef": "fato_desempenho_equipes.Importância",
-              "nativeQueryRef": "Importância"
+              "queryRef": "fato_desempenho_equipes.MAE validação",
+              "nativeQueryRef": "MAE validação"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fato_desempenho_equipes"
+                    }
+                  },
+                  "Property": "MAE holdout"
+                }
+              },
+              "queryRef": "fato_desempenho_equipes.MAE holdout",
+              "nativeQueryRef": "MAE holdout"
             }
           ]
         }
       }
     },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ffffff'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#e1e7ee'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -65,14 +141,14 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Importância por permutação (ΔMAE)'"
+                  "Value": "'MAE por modelo'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "13D"
                 }
               }
             },
@@ -81,22 +157,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#17364D'"
+                      "Value": "'#0b2545'"
                     }
                   }
-                }
-              }
-            }
-          }
-        }
-      ],
-      "background": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }

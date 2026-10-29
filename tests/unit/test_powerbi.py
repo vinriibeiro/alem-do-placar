@@ -14,7 +14,9 @@ ANALITICO = pa.schema(
         ("equipe", pa.string()),
         ("temporada", pa.int64()),
         ("data_referencia", pa.date32()),
+        ("media_pontos_3", pa.float64()),
         ("media_pontos_5", pa.float64()),
+        ("media_pontos_10", pa.float64()),
     ]
 )
 PREVISOES = pa.schema(
