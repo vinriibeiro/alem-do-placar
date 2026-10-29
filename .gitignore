@@ -1,0 +1,34 @@
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Dependências
+node_modules/
+.venv/
+venv/
+__pycache__/
+
+# Arquivos temporários
+*.log
+*.tmp
+.cache/
+.pytest_cache/
+
+# Compilação
+dist/
+build/
+coverage/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
