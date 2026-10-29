@@ -27,13 +27,13 @@ def _visuais(saida: Path) -> dict[str, list[dict]]:
     return paginas
 
 
-def _gerar_com(entradas, destino: Path, **kwargs) -> Path:
+def _gerar_com(pastas, destino: Path, **kwargs) -> Path:
     gerar_projeto(
         destino,
-        entradas["processados"],
-        entradas["modelagem"],
-        entradas["cientifica"],
-        entradas["template"],
+        pastas["processados"],
+        pastas["modelagem"],
+        pastas["cientifica"],
+        pastas["template"],
         **kwargs,
     )
     return destino
