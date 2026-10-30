@@ -6,7 +6,8 @@ export const FORA_DO_TEMA =
 export const SEM_INFORMACAO =
   "Não encontrei informações suficientes nos dados disponíveis para responder com segurança.";
 
-const FONTE_PARTIDAS = "Calculado a partir das partidas do OpenFootball (CC0)";
+import { criarAnalises } from "./analises.js";
+import { FONTE_PARTIDAS, dataBR, fmt, pct, resposta, tabelaLinhas } from "./util.js";
 
 const PARADAS = new Set(
   ("a o os as um uma uns umas de do da dos das em no na nos nas por para pra pelo pela com sem e ou " +
@@ -86,15 +87,10 @@ function distancia(a, b) {
   return d[m][n];
 }
 
-const fmt = (n, casas = 0) =>
-  Number(n).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
-const pct = (n) => `${fmt(n * 100, 1)}%`;
-const dataBR = (iso) => iso.split("-").reverse().join("/");
-
 export function criarMotor(dados) {
   const { equipes } = dados.partidas;
-  const jogos = dados.partidas.partidas.map(([ano, data, m, v, gm, gv]) => ({
-    ano, data, mandante: equipes[m], visitante: equipes[v], gm, gv,
+  const jogos = dados.partidas.partidas.map(([ano, data, m, v, gm, gv, rodada]) => ({
+    ano, data, mandante: equipes[m], visitante: equipes[v], gm, gv, rodada: rodada ?? null,
   }));
   const anos = [...new Set(jogos.map((j) => j.ano))].sort((a, b) => a - b);
   const ultimoAno = anos[anos.length - 1];
@@ -150,17 +146,20 @@ export function criarMotor(dados) {
   }
 
   // ---------- cálculos ----------
-  function linhas(ano) {
+  function linhas(ano, rodadaMax = null) {
     const tab = new Map();
     const reg = (eq, gp, gc) => {
-      if (!tab.has(eq)) tab.set(eq, { equipe: eq, J: 0, V: 0, E: 0, D: 0, GP: 0, GC: 0, casaJ: 0, casaP: 0, foraJ: 0, foraP: 0 });
+      if (!tab.has(eq)) tab.set(eq, { equipe: eq, J: 0, V: 0, E: 0, D: 0, GP: 0, GC: 0, casaJ: 0, casaP: 0, foraJ: 0, foraP: 0, SSG: 0, SM: 0 });
       const r = tab.get(eq);
       r.J += 1; r.GP += gp; r.GC += gc;
+      if (gc === 0) r.SSG += 1;
+      if (gp === 0) r.SM += 1;
       if (gp > gc) r.V += 1; else if (gp === gc) r.E += 1; else r.D += 1;
       return r;
     };
     for (const j of jogos) {
       if (ano && j.ano !== ano) continue;
+      if (rodadaMax && (j.rodada == null || j.rodada > rodadaMax)) continue;
       const m = reg(j.mandante, j.gm, j.gv);
       const v = reg(j.visitante, j.gv, j.gm);
       m.casaJ += 1; m.casaP += j.gm > j.gv ? 3 : j.gm === j.gv ? 1 : 0;
@@ -187,9 +186,9 @@ export function criarMotor(dados) {
     return { equipe, melhor, ini, fim };
   }
 
+  const analises = criarAnalises({ jogos, anos, equipes, escudos, modelo, destaques, linhas, sequencia });
+
   // ---------- respostas ----------
-  const resposta = (tipo, titulo, texto, extra = {}) => ({ tipo, titulo, texto, ...extra });
-  const tabelaLinhas = (colunas, linhasT) => ({ colunas, linhas: linhasT });
 
   function validarAno(ano) {
     if (ano && !anos.includes(ano)) {
@@ -238,6 +237,9 @@ export function criarMotor(dados) {
     vitorias: { rotulo: "mais vitórias", campo: (r) => r.V, desc: true, txt: (r) => `${r.V} vitórias` },
     empates: { rotulo: "mais empates", campo: (r) => r.E, desc: true, txt: (r) => `${r.E} empates` },
     derrotas: { rotulo: "mais derrotas", campo: (r) => r.D, desc: true, txt: (r) => `${r.D} derrotas` },
+    sem_sofrer: { rotulo: "mais jogos sem sofrer gols", campo: (r) => r.SSG, desc: true, txt: (r) => `${r.SSG} jogos sem sofrer gols` },
+    sem_marcar: { rotulo: "mais jogos sem marcar", campo: (r) => r.SM, desc: true, txt: (r) => `${r.SM} jogos sem marcar` },
+    aproveitamento: { rotulo: "melhor aproveitamento", campo: (r) => r.aprov, desc: true, txt: (r) => `${pct(r.aprov)} (${r.P} pontos)` },
     mandante: { rotulo: "melhor mandante", campo: (r) => r.casaP / r.casaJ, desc: true, txt: (r) => `${fmt(r.casaP / r.casaJ, 2)} pontos por jogo em casa` },
     visitante: { rotulo: "melhor visitante", campo: (r) => r.foraP / r.foraJ, desc: true, txt: (r) => `${fmt(r.foraP / r.foraJ, 2)} pontos por jogo fora` },
   };
@@ -253,26 +255,6 @@ export function criarMotor(dados) {
         tabela: tabelaLinhas(["#", "Equipe", "Valor", "Jogos"], t.slice(0, 5).map((r, i) => [i + 1, r.equipe, m.txt(r), r.J])),
         fonte: FONTE_PARTIDAS, pagina: "dashboard.html", escudo: escudos[topo.equipe] || null,
       });
-  }
-
-  function rResumo(equipe, ano) {
-    if (ano) {
-      if (!equipeNoAno(equipe, ano)) {
-        return resposta("sem_dados", equipe, `${equipe} não disputou a Série A em ${ano} nos dados disponíveis.`, { fonte: FONTE_PARTIDAS });
-      }
-      const r = linhas(ano).find((x) => x.equipe === equipe);
-      return resposta("estatistica", `${equipe} em ${ano}`,
-        `${equipe} terminou ${ano} em ${r.pos}º lugar, com ${r.P} pontos, ${r.V} vitórias, ${r.E} empates e ${r.D} derrotas, saldo de gols ${r.SG > 0 ? "+" : ""}${r.SG} e ${pct(r.aprov)} de aproveitamento.`,
-        { tabela: tabelaLinhas(["Pos.", "P", "J", "V", "E", "D", "GP", "GC", "SG", "Aprov."], [[r.pos, r.P, r.J, r.V, r.E, r.D, r.GP, r.GC, r.SG, pct(r.aprov)]]),
-          fonte: FONTE_PARTIDAS, pagina: "dashboard.html", escudo: escudos[equipe] || null });
-    }
-    const porAno = anos.filter((a) => equipeNoAno(equipe, a)).map((a) => ({ ano: a, ...linhas(a).find((x) => x.equipe === equipe) }));
-    const tot = porAno.reduce((s, r) => ({ J: s.J + r.J, P: s.P + r.P, V: s.V + r.V }), { J: 0, P: 0, V: 0 });
-    const melhor = porAno.slice().sort((a, b) => a.pos - b.pos)[0];
-    return resposta("estatistica", `${equipe} de ${anos[0]} a ${ultimoAno}`,
-      `${equipe} disputou ${porAno.length} das ${anos.length} temporadas: ${tot.J} jogos, ${tot.V} vitórias e ${tot.P} pontos (${pct(tot.P / (3 * tot.J))} de aproveitamento). Melhor campanha: ${melhor.pos}º lugar em ${melhor.ano}.`,
-      { tabela: tabelaLinhas(["Temporada", "Pos.", "P", "V", "E", "D", "SG"], porAno.map((r) => [r.ano, r.pos, r.P, r.V, r.E, r.D, r.SG])),
-        fonte: FONTE_PARTIDAS, pagina: "dashboard.html", escudo: escudos[equipe] || null });
   }
 
   function rComparar(a, b, ano) {
@@ -306,19 +288,6 @@ export function criarMotor(dados) {
         fonte: FONTE_PARTIDAS });
   }
 
-  function rMando(equipe, ano) {
-    const t = linhas(ano);
-    const alvo = equipe ? t.filter((r) => r.equipe === equipe) : t;
-    if (!alvo.length) return resposta("sem_dados", "Mando de campo", `${equipe} não disputou a Série A${ano ? ` em ${ano}` : ""} nos dados.`, { fonte: FONTE_PARTIDAS });
-    const s = alvo.reduce((acc, r) => ({ cj: acc.cj + r.casaJ, cp: acc.cp + r.casaP, fj: acc.fj + r.foraJ, fp: acc.fp + r.foraP }), { cj: 0, cp: 0, fj: 0, fp: 0 });
-    const ref = ano ? ` em ${ano}` : ` de ${anos[0]} a ${ultimoAno}`;
-    const sujeito = equipe ? `${equipe}${ref} fez` : `As equipes${ref} fizeram`;
-    return resposta("estatistica", `Mando de campo${equipe ? `: ${equipe}` : ""}`,
-      `${sujeito} ${fmt(s.cp / s.cj, 2)} pontos por jogo em casa e ${fmt(s.fp / s.fj, 2)} fora.`,
-      { tabela: tabelaLinhas(["Mando", "Jogos", "Pontos por jogo"], [["Em casa", s.cj, fmt(s.cp / s.cj, 2)], ["Fora", s.fj, fmt(s.fp / s.fj, 2)]]),
-        fonte: FONTE_PARTIDAS, pagina: "dashboard.html" });
-  }
-
   function rGols(ano, goleadas) {
     const lista = jogos.filter((j) => !ano || j.ano === ano);
     const total = lista.reduce((s, j) => s + j.gm + j.gv, 0);
@@ -329,13 +298,7 @@ export function criarMotor(dados) {
         `A maior goleada ${ref} foi ${top[0].mandante} ${top[0].gm} × ${top[0].gv} ${top[0].visitante}, em ${dataBR(top[0].data)}.`,
         { tabela: tabelaLinhas(["Data", "Mandante", "Placar", "Visitante"], top.map((j) => [dataBR(j.data), j.mandante, `${j.gm} × ${j.gv}`, j.visitante])), fonte: FONTE_PARTIDAS });
     }
-    const porAno = anos.filter((a) => !ano || a === ano).map((a) => {
-      const l = jogos.filter((j) => j.ano === a);
-      return [a, l.length, fmt(l.reduce((s, j) => s + j.gm + j.gv, 0) / l.length, 2)];
-    });
-    return resposta("estatistica", `Gols por partida ${ref}`,
-      `Foram ${fmt(total)} gols em ${fmt(lista.length)} partidas ${ref}: média de ${fmt(total / lista.length, 2)} gols por partida.`,
-      { tabela: tabelaLinhas(["Temporada", "Partidas", "Gols por partida"], porAno), fonte: FONTE_PARTIDAS });
+    return analises.estatisticasCampeonato(ano);
   }
 
   const TIPOS_SEQ = {
@@ -453,6 +416,12 @@ export function criarMotor(dados) {
     return toks.some((t) => DOMINIO.some((d) => t.startsWith(d)));
   }
 
+  const EXEMPLOS = [
+    "Melhor jogo do Flamengo em 2025", "Quem foi o campeão de 2024?", "Classificação de 2025 após a rodada 20",
+    "Últimos 5 jogos do Palmeiras", "Em que ano o Vasco foi melhor?", "Quem mais evoluiu em 2025?",
+    "Qual o placar mais comum?", "Qual equipe o modelo mais errou?",
+  ];
+
   function responder(pergunta, filtros = {}) {
     const n = normalizar(pergunta);
     const toks = n.split(" ").filter(Boolean);
@@ -464,14 +433,21 @@ export function criarMotor(dados) {
     if (!dominio || (tem(n, ...FORA) && !ents.equipes.length && !toks.some((t) => ["campeonato", "brasileirao", "modelo", "dashboard", "projeto"].includes(t)))) {
       return resposta("fora_tema", "Assunto fora do tema", FORA_DO_TEMA, { relacionados: sugestoes(3) });
     }
-    if (ents.anos.length > 1 && !tem(n, "entre", " a ")) {
-      return resposta("esclarecimento", "Mais de uma temporada", `A pergunta cita ${ents.anos.join(" e ")}. Escolha uma temporada por pergunta.`);
+    // Intervalo de anos: só o período completo é aceito (vira "todo o histórico").
+    if (ents.anos.length === 2) {
+      const [a, b] = [...ents.anos].sort((x, y) => x - y);
+      if (a === anos[0] && b === ultimoAno) ents.anos = [];
+      else if (b - a === 1 && tem(n, "evoluiu", "evolucao", "cresceu", "melhorou", "caiu", "piorou", "queda", "diferenca", "comparado", "para")) ents.anos = [b];
+      else return resposta("esclarecimento", "Intervalo de temporadas", `A pergunta cita ${a} e ${b}. Por enquanto a central responde por uma temporada (${anos[0]} a ${ultimoAno}) ou pelo histórico completo. Escolha uma temporada ou tire o intervalo.`);
+    } else if (ents.anos.length > 2) {
+      return resposta("esclarecimento", "Mais de uma temporada", `A pergunta cita ${ents.anos.join(", ")}. Escolha uma temporada por pergunta.`);
     }
     const ano = ents.anos[0] || (filtros.ano ? Number(filtros.ano) : null);
     const invalido = validarAno(ano);
     if (invalido) return invalido;
     let times = ents.equipes;
     if (!times.length && filtros.equipe && !ents.ambiguos.length) times = [filtros.equipe];
+    const time = times[0];
     const conceito = CONCEITO.some((c) => n.includes(c));
 
     if (conceito && kb.length && kb[0].score >= 1.6) return rConhecimento(kb[0].item);
@@ -483,58 +459,127 @@ export function criarMotor(dados) {
       }
       return fn();
     };
+    const rodadaPedida = (() => {
+      const m = n.match(/rodada (\d{1,2})\b/) || n.match(/\b(\d{1,2}) rodada\b/);
+      return m && !tem(n, "ultim", "proxim") ? Number(m[1]) : null;
+    })();
 
     // métricas que não existem nos dados
     if (tem(n, "xg", "expected goals", "gols esperados", "finaliza", "chutes", "posse de bola", "escanteio", "cartao", "cartoes", "torcida", "torcedor", "publico", "salario", "valor de mercado", "elenco", "tecnico")) {
       const xg = conhecimento.find((c) => c.id === "xg");
       return resposta("sem_dados", "Informação indisponível", xg ? xg.resposta : SEM_INFORMACAO, { fonte: xg?.fonte, relacionados: sugestoes(3) });
     }
+
     // destaques individuais
-    if (tem(n, "artilh", "goleador")) return rDestaque("artilheiro", anoOuUltimo);
-    if (tem(n, "craque", "melhor jogador", "bola de ouro")) return rDestaque("craque", anoOuUltimo);
-    if (tem(n, "melhor goleiro", "goleiro")) return rDestaque("goleiro", anoOuUltimo);
-    // previsões
+    const plural = !ents.anos.length && !filtros.ano && tem(n, "todos", "todas", "cada", "historic", "lista", "quais foram", "quem foram", "artilheiros", "craques", "melhores goleiros");
+    if (tem(n, "artilh", "goleador")) return plural ? analises.listaDestaques("artilheiro") : rDestaque("artilheiro", anoOuUltimo);
+    if (tem(n, "craque", "melhor jogador", "bola de ouro")) return plural ? analises.listaDestaques("craque") : rDestaque("craque", anoOuUltimo);
+    if (tem(n, "melhor goleiro", "melhores goleiros", "goleiro")) return plural ? analises.listaDestaques("goleiro") : rDestaque("goleiro", anoOuUltimo);
+
+    // modelo e previsões
+    if (tem(n, "modelo", "previs", "preve") && tem(n, "mais errou", "mais erra", "pior previsao", "dificil de prever", "menos acerta")) return analises.errosDoModelo("piores");
+    if (tem(n, "modelo", "previs", "preve") && tem(n, "menos errou", "mais acertou", "mais acerta", "melhor previsao", "facil de prever")) return analises.errosDoModelo("melhores");
     if (tem(n, "previs", "preve", "vai fazer", "proximos jogos") && !conceito) {
-      return pedeEquipe(() => (times.length ? rPrevisao(times[0]) : (kb.length ? rConhecimento(kb[0].item) : rConhecimento(conhecimento.find((c) => c.id === "como-preve")))));
+      if (!times.length && !ents.ambiguos.length && tem(n, "todas", "todos", "cada equipe", "cada time", "quem o modelo", "qual equipe o modelo", "equipes")) return analises.previsaoGeral();
+      return pedeEquipe(() => (time ? rPrevisao(time) : (kb.length ? rConhecimento(kb[0].item) : rConhecimento(conhecimento.find((c) => c.id === "como-preve")))));
     }
+
+    // rodadas
+    if (rodadaPedida) {
+      if (tem(n, "classific", "tabela", "lider", "liderava", "apos", "depois", "colocad", "posicao")) return analises.classificacaoApos(rodadaPedida, anoOuUltimo, tem(n, "completa", "toda", "todos") ? 20 : 10);
+      return analises.jogosDaRodada(rodadaPedida, anoOuUltimo);
+    }
+
+    // equipe: forma recente, jogos marcantes, anos, títulos
+    if (time && !conceito) {
+      const nUlt = (n.match(/ultim\w* (\d{1,2})/) || [])[1];
+      if (tem(n, "ultimos", "ultimas", "forma recente", "fase atual", "momento")) return pedeEquipe(() => analises.formaRecente(time, nUlt ? Math.min(Number(nUlt), 20) : 5, ano));
+      if (tem(n, "melhor jogo", "melhor partida", "maior vitoria", "melhor resultado", "maior goleada", "goleada aplicada", "maior triunfo")) return analises.jogoDestaque(time, ano, "melhor");
+      if (tem(n, "pior jogo", "pior partida", "maior derrota", "pior resultado", "goleada sofrida", "maior vexame")) return analises.jogoDestaque(time, ano, "pior");
+      if (tem(n, "jogo com mais gols", "partida com mais gols", "mais gols em um jogo", "jogo mais movimentado")) return analises.jogoDestaque(time, ano, "gols");
+      if (tem(n, "ultimo jogo", "ultima partida", "jogo mais recente")) return analises.jogoDestaque(time, ano, "ultimo");
+      if (tem(n, "primeiro jogo", "primeira partida")) return analises.jogoDestaque(time, ano, "primeiro");
+      if (tem(n, "melhor ano", "melhor temporada", "melhor campanha", "melhor fase")) return analises.melhorAno(time, false);
+      if (tem(n, "pior ano", "pior temporada", "pior campanha")) return analises.melhorAno(time, true);
+      if (tem(n, "em que ano", "qual ano", "que ano")) return analises.melhorAno(time, tem(n, "pior", "rebaix", "mal"));
+      if (tem(n, "titulo", "titulos", "vice", "quantas vezes", "quantos titulos", "foi campeao", "foi rebaixad", "rebaixamentos")) return analises.titulosEquipe(time);
+      if (tem(n, "evoluiu", "evolucao", "cresceu", "melhorou", "caiu", "piorou", "queda", "diferenca para") && (ano ? ano > anos[0] : true)) {
+        return analises.variacaoAnos(anoOuUltimo, tem(n, "caiu", "piorou", "queda") ? "caiu" : "evoluiu", time);
+      }
+    }
+
+    // campeonato: campeões, subiram, evolução entre anos
+    if (!times.length && tem(n, "campeoes de cada", "todos os campeoes", "campeoes por temporada", "lista de campeoes", "quem mais foi campeao", "maior campeao", "mais titulos", "quantos titulos", "campeoes de", "campeoes do", "quais foram os campeoes", "quem foram os campeoes", "campeoes")) {
+      return analises.campeoes(ano);
+    }
+    if (!times.length && tem(n, "vice") && !tem(n, "classific", "tabela")) return analises.campeoes(anoOuUltimo, true);
+    if (!times.length && tem(n, "campeao", "campea") && !tem(n, "classific", "tabela", "rebaix")) return analises.campeoes(anoOuUltimo);
+    if (!times.length && tem(n, "subiram", "promovid", "acesso", "entraram", "novatos", "recem promovid", "voltaram")) return analises.entradasSaidas(anoOuUltimo, "subiram");
+    if (!times.length && tem(n, "deixaram a serie", "sairam da serie", "cairam para a serie b")) return analises.entradasSaidas(anoOuUltimo, "cairam");
+    if (!times.length && !conceito && tem(n, "evoluiu", "evolucao", "cresceu mais", "melhorou mais", "caiu mais", "piorou mais", "maior queda", "maior evolucao", "mais caiu")) {
+      return analises.variacaoAnos(anoOuUltimo, tem(n, "caiu", "piorou", "queda") ? "caiu" : "evoluiu", null);
+    }
+
     // classificação
-    if (tem(n, "classific", "tabela", "campea", "campeoes", "lider", "venceu o campeonato", "ganhou o campeonato", "rebaix", "g4", "z4") && !conceito) {
-      return rClassificacao(anoOuUltimo, { topo: tem(n, "campea", "campeoes", "lider", "ganhou", "venceu") ? 5 : 20, rebaixados: tem(n, "rebaix", "z4") });
+    if (tem(n, "classific", "tabela", "campea", "campeoes", "lider", "venceu o campeonato", "ganhou o campeonato", "rebaix", "g4", "z4") && !conceito && !times.length) {
+      return rClassificacao(anoOuUltimo, { topo: tem(n, "campea", "lider", "ganhou", "venceu") ? 5 : 20, rebaixados: tem(n, "rebaix", "z4") });
     }
+
     // dois times
     if (times.length >= 2) {
       if (tem(n, "confront", "contra", "x ", "versus", "historico entre", "jogos entre", "duelo", "classico")) return rConfronto(times[0], times[1], ano);
       return rComparar(times[0], times[1], ano);
     }
+
     // rankings
     const ranking = [
       [["pior ataque"], "pior_ataque"], [["pior defesa", "mais vazad", "mais gols sofrid", "sofreu mais"], "pior_defesa"],
+      [["jogos sem sofrer", "sem sofrer gol", "clean sheet", "sem levar gol", "defesa menos vazada"], "sem_sofrer"], [["jogos sem marcar", "sem marcar gol", "sem fazer gol"], "sem_marcar"],
       [["melhor ataque", "mais gols marcad", "marcou mais", "mais gols"], "ataque"], [["melhor defesa", "menos vazad", "menos gols sofrid", "sofreu menos"], "defesa"],
+      [["melhor aproveitamento", "mais pontos", "pontuou mais"], "aproveitamento"],
       [["saldo"], "saldo"], [["mais vitorias", "venceu mais"], "vitorias"], [["mais empates", "empatou mais"], "empates"],
       [["mais derrotas", "perdeu mais"], "derrotas"], [["melhor mandante", "melhor em casa"], "mandante"], [["melhor visitante", "melhor fora"], "visitante"],
     ];
-    if (!times.length && !conceito) {
+    if (!times.length && !conceito && !tem(n, "jogo com mais gols", "partida com mais gols", "mais gols em um jogo", "mais gols em uma partida")) {
       for (const [chaves, metrica] of ranking) if (tem(n, ...chaves)) return rRanking(metrica, anoOuUltimo);
     }
+
+    // jogos e placares do campeonato
+    if (!times.length && tem(n, "jogo com mais gols", "partida com mais gols", "mais gols em um jogo", "mais gols em uma partida", "jogo mais movimentado")) return analises.maisGols(ano);
+    if (!times.length && tem(n, "melhor jogo", "melhor partida", "jogo mais emocionante", "melhor jogo do campeonato")) {
+      const r = analises.maisGols(ano);
+      return { ...r, nota: 'Não existe um critério objetivo para "melhor jogo". Mostrei o jogo com mais gols; para uma equipe, pergunte "melhor jogo do <equipe>" (maior vitória por saldo de gols).' };
+    }
+    if (tem(n, "placar mais comum", "placares mais comuns", "placar mais frequente", "resultado mais comum", "resultado mais frequente", "quantos empates", "0x0", "0 x 0", "empate sem gols", "empates sem gols", "placares")) return analises.placarMaisComum(ano);
+
     // mando
-    if (tem(n, "mandante", "visitante", "em casa", "fora de casa", "mando") && !conceito) return pedeEquipe(() => rMando(times[0], ano));
+    if (tem(n, "mandante", "visitante", "em casa", "fora de casa", "mando") && !conceito) return pedeEquipe(() => analises.mando(time, ano));
     // sequências
     if (tem(n, "sequenc", "invict", "seguidas", "seguidos", "serie de")) {
       const tipo = tem(n, "derrota", "perdeu", "perder") && !tem(n, "sem perder", "invict") ? "derrotas" : tem(n, "sem vencer", "sem ganhar") ? "sem_vencer" : tem(n, "vitoria", "venceu", "ganhou") ? "vitorias" : "invicta";
-      return pedeEquipe(() => rSequencia(tipo, times[0], ano));
+      return pedeEquipe(() => rSequencia(tipo, time, ano));
     }
     // gols
     if (tem(n, "goleada", "maior placar", "maiores placares")) return rGols(ano, true);
-    if (tem(n, "gols por jogo", "gols por partida", "media de gols", "quantos gols") && !times.length) return rGols(ano, false);
+    if (tem(n, "gols por jogo", "gols por partida", "media de gols", "quantos gols", "quantas partidas", "quantos jogos", "estatisticas do campeonato", "numeros do campeonato") && !times.length) return rGols(ano, false);
+
     // equipe sozinha
-    const pedeResumo = tem(n, "desempenho", "campanha", "como foi", "como esta", "resumo", "temporada", "pontos", "posicao", "terminou", "historico", "estatistic", "numeros", "aproveitamento", "vitorias", "jogos")
+    const pedeResumo = tem(n, "desempenho", "campanha", "como foi", "como esta", "resumo", "temporada", "pontos", "posicao", "terminou", "historico", "estatistic", "numeros", "aproveitamento", "vitorias", "jogos", "gols", "marcou", "sofreu", "fez", "ficou", "colocacao")
       || palavras(pergunta).filter((t) => !/^\d{4}$/.test(t)).length <= 2;
-    if (times.length === 1 && !conceito && pedeResumo && (kb.length === 0 || kb[0].score < 2.5)) return rResumo(times[0], ano);
+    if (time && !conceito && pedeResumo && (kb.length === 0 || kb[0].score < 2.5)) return analises.resumoEquipe(time, ano, n);
     if (ents.ambiguos.length && !times.length && !conceito) return pedeEquipe(() => null);
+    // pergunta curta só com um ano ("Brasileirão 2023"): mostra a classificação dele
+    const semAno = palavras(pergunta).filter((t) => !/^\d{4}$/.test(t));
+    if (ents.anos.length === 1 && !times.length && !conceito && semAno.length <= 2) return rClassificacao(ano, {});
     // base de conhecimento
     if (kb.length && kb[0].score >= 1.2) return rConhecimento(kb[0].item);
+    // só um ano com mais palavras sem resposta: mostra a classificação dele
+    if (ents.anos.length === 1 && !times.length) return rClassificacao(ano, {});
+    // equipe sem pergunta reconhecida: mostra o resumo e sugere perguntas
+    if (time && !conceito) return { ...analises.resumoEquipe(time, ano, n), nota: "Não reconheci exatamente o que você quis saber, então mostrei o resumo da equipe. Veja as perguntas sugeridas abaixo." };
     return resposta("sem_dados", "Sem informação suficiente", SEM_INFORMACAO, {
-      relacionados: kb.slice(0, 3).map((r) => r.item.perguntas[0]).concat(kb.length ? [] : sugestoes(3)),
+      relacionados: kb.slice(0, 3).map((r) => r.item.perguntas[0]).concat(kb.length ? [] : EXEMPLOS.slice(0, 4)),
+      nota: "Exemplos do que a central responde: melhor e pior jogo de um time, campeões, classificação por rodada, últimos jogos, melhor ano, evolução entre temporadas e acertos do modelo.",
     });
   }
 
@@ -542,5 +587,5 @@ export function criarMotor(dados) {
     return conhecimento.filter((c) => c.sugerir).map((c) => c.perguntas[0]).slice(0, n);
   }
 
-  return { responder, buscar, detectarEquipes, detectarAnos, linhas, sugestoes, anos, equipes };
+  return { responder, buscar, detectarEquipes, detectarAnos, linhas, sugestoes, painel: analises.painel, anos, equipes };
 }

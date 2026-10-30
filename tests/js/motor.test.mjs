@@ -67,7 +67,9 @@ test("classificação respeita a temporada e o desempate", () => {
 });
 
 test("campeão e rebaixados", () => {
-  assert.match(r("Quem foi o campeão de 2025?").texto, /^Flamengo terminou 2025 em 1º lugar, com 79 pontos/);
+  const camp = r("Quem foi o campeão de 2025?");
+  assert.match(camp.texto, /^Flamengo foi campeão de 2025 com 79 pontos .*3 à frente do vice SE Palmeiras \(76\)/);
+  assert.equal(camp.kpis[0][1], "Flamengo");
   assert.match(r("Quem foi rebaixado em 2025?").texto, /^Rebaixados em 2025/);
 });
 

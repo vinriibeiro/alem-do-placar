@@ -12,6 +12,7 @@ const ROTULO_TIPO = {
 };
 const HISTORICO = "alem-do-placar:historico";
 let motor = null;
+let escudos = {};
 
 function lerHistorico() {
   try {
@@ -41,10 +42,26 @@ function botaoPergunta(texto, classe = "chip") {
   return b;
 }
 
+function celula(valor, indice, escudoColuna) {
+  const texto = valor ?? "—";
+  const td = el("td", { classe: typeof valor === "number" ? "num" : "" });
+  const url = indice === escudoColuna ? escudos[String(valor)] : null;
+  if (url) {
+    td.append(el("span", { classe: "com-escudo" }, el("img", { src: url, alt: "", loading: "lazy", width: "20", height: "20" }), el("span", { texto })));
+  } else {
+    td.textContent = String(texto);
+  }
+  return td;
+}
+
 function tabela(t) {
   const cab = el("tr", {}, t.colunas.map((c) => el("th", { scope: "col", texto: c })));
-  const corpo = t.linhas.map((l) => el("tr", {}, l.map((v) => el("td", { classe: typeof v === "number" ? "num" : "", texto: v ?? "—" }))));
-  return el("div", { classe: "tabela-rolagem", tabindex: "0", role: "region", "aria-label": "Tabela" }, el("table", {}, el("thead", {}, cab), el("tbody", {}, corpo)));
+  const corpo = t.linhas.map((l) => el("tr", {}, l.map((v, i) => celula(v, i, t.escudoColuna))));
+  return el("div", { classe: "tabela-rolagem", tabindex: "0", role: "region", "aria-label": "Tabela de dados" }, el("table", {}, el("thead", {}, cab), el("tbody", {}, corpo)));
+}
+
+function indicadores(kpis) {
+  return el("dl", { classe: "kpis" }, kpis.map(([rotulo, valor]) => el("div", { classe: "kpi" }, el("dt", { texto: rotulo }), el("dd", { texto: valor }))));
 }
 
 function cartao(res, pergunta) {
@@ -61,7 +78,9 @@ function cartao(res, pergunta) {
     if (res.credito) corpo.push(el("p", { classe: "resposta__credito", texto: res.credito }));
     partes.push(...corpo);
   }
+  if (res.kpis && res.kpis.length) partes.push(indicadores(res.kpis));
   if (res.tabela) partes.push(tabela(res.tabela));
+  if (res.nota) partes.push(el("p", { classe: "resposta__nota", texto: res.nota }));
   const rodape = [];
   if (res.fonte) {
     const fonte = el("p", { classe: "resposta__fonte" }, el("strong", { texto: "Origem: " }), res.fonte);
@@ -84,6 +103,7 @@ function consultar(texto, rolar = true) {
   const res = motor.responder(texto, filtros);
   $("#resultado").replaceChildren(cartao(res, texto));
   $("#bloco-sugestoes").hidden = true;
+  $("#bloco-painel").hidden = true;
   const hist = [texto, ...lerHistorico().filter((p) => p !== texto)];
   salvarHistorico(hist);
   desenharHistorico();
@@ -101,16 +121,37 @@ function categorias(conhecimento) {
   );
 }
 
+function curiosidades(cards) {
+  return cards.map((c) => {
+    const b = el("button", { type: "button", classe: "curiosidade" },
+      el("span", { classe: "curiosidade__rotulo", texto: c.rotulo }),
+      el("span", { classe: "curiosidade__valor" }, c.escudo ? el("img", { src: c.escudo, alt: "", width: "28", height: "28", loading: "lazy" }) : null, el("span", { texto: c.valor })),
+      el("span", { classe: "curiosidade__detalhe", texto: c.detalhe }),
+      el("span", { classe: "curiosidade__acao", texto: "Saiba mais →" }));
+    b.addEventListener("click", () => consultar(c.pergunta));
+    return b;
+  });
+}
+
+const EXEMPLOS = [
+  "Melhor jogo do Flamengo em 2025", "Quem foi o campeão de 2024?", "Classificação de 2025 após a rodada 20",
+  "Últimos 5 jogos do Palmeiras", "Em que ano o Vasco foi melhor?", "Quem mais evoluiu em 2025?",
+  "Qual o placar mais comum?", "Qual equipe o modelo mais errou?",
+];
+
 async function iniciar() {
   try {
     const nomes = ["partidas", "modelo", "destaques", "escudos", "conhecimento"];
     const lidos = await Promise.all(nomes.map((n) => obter(n)));
     const dados = Object.fromEntries(nomes.map((n, i) => [n, lidos[i]]));
+    escudos = dados.escudos;
     motor = criarMotor(dados);
     for (const ano of [...motor.anos].reverse()) $("#ano").append(el("option", { value: ano, texto: ano }));
     for (const eq of motor.equipes) $("#equipe").append(el("option", { value: eq, texto: eq }));
     $("#categorias").replaceChildren(...categorias(dados.conhecimento));
-    $("#sugestoes").replaceChildren(...motor.sugestoes(8).map((p) => botaoPergunta(p)), botaoPergunta("Qual equipe teve o melhor ataque em 2025?"), botaoPergunta("Quem foi o artilheiro de 2025?"));
+    $("#painel").replaceChildren(...curiosidades(motor.painel()));
+    $("#bloco-painel").hidden = false;
+    $("#sugestoes").replaceChildren(...EXEMPLOS.map((p) => botaoPergunta(p)), ...motor.sugestoes(6).map((p) => botaoPergunta(p)));
     $("#bloco-sugestoes").hidden = false;
     $("#estado").textContent = `${motor.anos.length} temporadas e ${dados.partidas.partidas.length.toLocaleString("pt-BR")} partidas carregadas.`;
     desenharHistorico();

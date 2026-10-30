@@ -1,0 +1,238 @@
+# Itens adicionais da base de conhecimento da Central (formato do campeonato, glossário, leitura dos
+# gráficos e modelos). Mesmo formato de central_conhecimento.yaml. Números entre chaves vêm dos dados.
+
+itens:
+  - id: formato
+    categoria: Campeonato
+    titulo: Como funciona o Brasileirão
+    perguntas: ["Como funciona o Brasileirão?", "Como é o formato do campeonato?", "Quantos clubes e rodadas tem o Brasileirão?"]
+    palavras: [brasileirao, funciona, formato, campeonato, clubes, rodadas, pontos, corridos, disputado, quantos]
+    resposta: >
+      A Série A é disputada em pontos corridos: {clubes_por_temporada} clubes se enfrentam em casa e fora, em
+      {rodadas_por_temporada} rodadas e {jogos_por_temporada} jogos por temporada ({jogos_por_rodada} jogos por
+      rodada), como mostram os dados. Vitória vale 3 pontos, empate 1 e derrota 0; quem soma mais pontos é o
+      campeão. No projeto, a zona de rebaixamento é do 17º ao 20º lugar. Para os critérios de desempate, pergunte
+      "Como funciona a classificação?".
+    fonte: Dados do projeto (OpenFootball) e docs/methodology.md
+    relacionados: [classificacao, rodada, turno]
+    pagina: dashboard.html
+    sugerir: true
+
+  - id: rodada
+    categoria: Campeonato
+    titulo: O que é uma rodada
+    perguntas: ["O que é uma rodada?", "Quantas rodadas tem o campeonato?", "O que significa rodada?"]
+    palavras: [rodada, rodadas, etapa, calendario, adiado, adiados, quantas]
+    resposta: >
+      Rodada é cada etapa do campeonato em que todos os clubes jogam uma vez. Com {clubes_por_temporada} clubes,
+      cada rodada tem {jogos_por_rodada} jogos, e a temporada tem {rodadas_por_temporada} rodadas. Jogos adiados
+      podem ser disputados em outra data; por isso, na classificação "após a rodada N", algumas equipes podem ter
+      jogado menos partidas que outras. A rodada vem do calendário original registrado nos dados.
+    fonte: Dados do projeto (OpenFootball)
+    relacionados: [turno, formato]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: turno
+    categoria: Campeonato
+    titulo: Turno e returno
+    perguntas: ["O que é turno e returno?", "O que é o primeiro turno?", "Quando começa o returno?"]
+    palavras: [turno, returno, primeiro, segundo, metade, ida, volta]
+    resposta: >
+      O campeonato tem dois turnos. No 1º turno (rodadas 1 a {turno1_fim}) cada clube enfrenta todos os outros
+      uma vez; no returno (rodadas {returno_ini} a {rodadas_por_temporada}) acontecem os jogos de volta, com os
+      mandos invertidos. Pergunte "Classificação de 2025 após a rodada 19" para ver a tabela no fim do 1º turno.
+    fonte: Dados do projeto (OpenFootball)
+    relacionados: [rodada, formato]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: goleada
+    categoria: Indicadores
+    titulo: O que é uma goleada
+    perguntas: ["O que é uma goleada?", "Como as goleadas são calculadas?"]
+    palavras: [goleada, goleadas, diferenca, gols, maior, critério, criterio]
+    resposta: >
+      Não existe uma definição oficial de goleada. Nesta central, as maiores goleadas são os jogos com a maior
+      diferença de gols entre as equipes; quando duas partidas têm a mesma diferença, vale a que teve mais gols.
+    fonte: Definição usada no projeto
+    relacionados: [saldo-gols]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: clubes
+    categoria: Dados
+    titulo: Quantos clubes aparecem nos dados
+    perguntas: ["Quantos clubes aparecem nos dados?", "Quantos times já jogaram a Série A?", "Quais clubes estão nos dados?"]
+    palavras: [clubes, times, equipes, aparecem, quantos, quais, jogaram]
+    resposta: >
+      Entre {ano_inicial} e {ano_final} aparecem {n_equipes} clubes diferentes na Série A, com
+      {clubes_por_temporada} em cada temporada. Quem sobe da Série B entra e quem é rebaixado sai; pergunte
+      "Quais times subiram em 2025?" para ver as entradas de uma temporada.
+    fonte: Dados do projeto (OpenFootball)
+    relacionados: [dados, formato]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: paginas
+    categoria: Projeto
+    titulo: O que mostra cada página do dashboard
+    perguntas: ["O que mostra cada página do dashboard?", "Quais páginas tem o dashboard?", "Como navegar no dashboard?"]
+    palavras: [paginas, pagina, dashboard, mostra, navegar, power, bi, relatorio, abas]
+    resposta: >
+      São sete páginas. Visão Geral: classificação da temporada com escudos, artilheiro, craque, melhor goleiro e
+      melhor ataque. Tendências: médias móveis de pontos e aproveitamento por equipe e temporada. Estatísticas:
+      resultados, pontos por jogo, saldo de gols e regularidade. Modelos: o que é previsto, os modelos comparados
+      e o erro de cada um. Previsões: previsto, real e faixa de incerteza por equipe. Central de Consulta: esta
+      página de perguntas. Metodologia: de onde vêm os dados e como o projeto foi construído.
+    fonte: docs/dashboard_setup.md
+    relacionados: [tendencias, central]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: grafico-resultados
+    categoria: Indicadores
+    titulo: Como ler a distribuição de resultados
+    perguntas: ["Como interpretar o gráfico de distribuição de resultados?", "O que mostra o gráfico de vitórias, empates e derrotas?"]
+    palavras: [grafico, distribuicao, resultados, vitorias, empates, derrotas, proporcao, mostra]
+    resposta: >
+      O gráfico mostra, em porcentagem, quantos resultados foram vitória, empate ou derrota. Como cada partida gera
+      um resultado para cada equipe, a proporção de vitórias é igual à de derrotas. Para ver o efeito de jogar em
+      casa, compare mandantes e visitantes na pergunta "Como as equipes vão como mandante e visitante?".
+    fonte: Página Estatísticas do dashboard
+    relacionados: [mando, pontos-por-jogo]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: grafico-dispersao
+    categoria: Indicadores
+    titulo: Como ler o gráfico saldo de gols × pontos
+    perguntas: ["Como interpretar o gráfico de saldo de gols e pontos?", "O que mostra a dispersão de saldo de gols e pontos?"]
+    palavras: [dispersao, grafico, saldo, gols, pontos, ponto, correlacao, relacao]
+    resposta: >
+      Cada ponto é uma equipe: quanto mais à direita, maior o saldo de gols; quanto mais acima, mais pontos. Os
+      pontos tendem a formar uma linha crescente, porque equipes que vencem por mais gols também somam mais pontos.
+      Isso mostra associação, não causa. Equipes bem acima ou abaixo da linha pontuaram mais ou menos do que o
+      saldo de gols sugeria.
+    fonte: Página Estatísticas do dashboard
+    relacionados: [saldo-gols, oscilacao]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: matriz
+    categoria: Indicadores
+    titulo: Como ler a matriz de aproveitamento
+    perguntas: ["O que é a matriz de aproveitamento?", "Como ler a matriz da página de tendências?"]
+    palavras: [matriz, aproveitamento, equipe, temporada, tabela, tendencias, leitura]
+    resposta: >
+      A matriz mostra o aproveitamento de cada equipe (linhas) em cada temporada (colunas): a porcentagem dos pontos
+      possíveis que ela conquistou. Células vazias indicam temporadas fora da Série A. É útil para ver a subida e a
+      queda de um clube ao longo dos anos. Pergunte "Em que ano o Vasco foi melhor?" para um exemplo numérico.
+    fonte: Página Tendências do dashboard
+    relacionados: [aproveitamento, tendencias]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: ridge
+    categoria: Modelos
+    titulo: O que é Regressão Ridge
+    perguntas: ["O que é Regressão Ridge?", "Como funciona a Ridge?", "Por que a Ridge foi o melhor modelo?"]
+    palavras: [ridge, regressao, linear, penalizacao, regularizacao, alpha, pesos, coeficientes]
+    resposta: >
+      A Regressão Ridge é uma regressão linear que soma as variáveis com pesos, mas penaliza pesos grandes para
+      não depender demais de uma informação só. Isso ajuda quando as variáveis são parecidas entre si, como as
+      médias de 3, 5 e 10 jogos. Neste projeto, os dados são padronizados, valores ausentes viram a mediana do
+      treino e a penalização é 1. Na validação, ela teve o menor erro entre os cinco modelos.
+    fonte: src/models/backtesting.py
+    relacionados: [modelos-testados, melhor-modelo]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: random-forest
+    categoria: Modelos
+    titulo: O que é Random Forest
+    perguntas: ["O que é Random Forest?", "O que é Gradient Boosting?", "Como funcionam os modelos de árvores?"]
+    palavras: [random, forest, floresta, arvores, gradient, boosting, arvore, decisao, ensemble]
+    resposta: >
+      Random Forest combina muitas árvores de decisão independentes e tira a média das previsões; aqui foram 50
+      árvores de profundidade até 6. Gradient Boosting constrói árvores em sequência, cada uma corrigindo os erros
+      da anterior; aqui foram 80 etapas de profundidade até 4. Ambos capturam relações não lineares, mas não
+      superaram a Ridge neste conjunto, que tem poucas observações por equipe.
+    fonte: src/models/backtesting.py
+    relacionados: [ridge, modelos-testados]
+    pagina: dashboard.html
+    sugerir: false
+
+  - id: overfitting
+    categoria: Metodologia
+    titulo: O que é overfitting
+    perguntas: ["O que é overfitting?", "O que é sobreajuste?", "Como evitar que o modelo decore os dados?"]
+    palavras: [overfitting, sobreajuste, decorar, decora, treino, generalizar, generalizacao]
+    resposta: >
+      Overfitting é quando o modelo "decora" o treino, incluindo ruídos, e erra em dados novos. Neste projeto, ele é
+      controlado pela separação temporal entre treino, validação e teste, por modelos simples, pela regra de só
+      escolher um modelo de Machine Learning se ele ganhar pelo menos 2% da referência e por nunca usar o teste
+      de 2025 para decidir nada.
+    fonte: docs/model_card.md
+    relacionados: [treino-teste, validacao]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: reproducao
+    categoria: Projeto
+    titulo: O projeto pode ser reproduzido
+    perguntas: ["O projeto pode ser reproduzido?", "Como rodar o projeto?", "Os resultados são reproduzíveis?"]
+    palavras: [reproduzir, reproduzido, reproducao, reprodutivel, rodar, executar, semente, repetir]
+    resposta: >
+      Sim. O treinamento usa semente fixa, as tabelas finais ficam versionadas e há testes automatizados para
+      o pipeline, os atributos, o backtesting e esta central. No repositório, o README explica como instalar as
+      dependências, rodar os testes e gerar o site e o relatório do Power BI.
+    fonte: README e docs/methodology.md
+    relacionados: [projeto, validacao]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: licenca
+    categoria: Projeto
+    titulo: Licenças dos dados, das imagens e do código
+    perguntas: ["Qual a licença dos dados?", "O que é CC0?", "Posso usar os dados e o código?"]
+    palavras: [licenca, licencas, cc0, mit, direitos, usar, fotos, escudos, imagens, copyright]
+    resposta: >
+      Os resultados das partidas (OpenFootball) estão em domínio público (CC0). O código é distribuído sob a licença
+      MIT. As fotos de jogadores vêm da Wikimedia Commons, só com licenças livres, e o crédito aparece junto da
+      imagem. Os escudos são marcas dos clubes e são exibidos a partir da Wikimedia apenas para identificação,
+      sem fins comerciais.
+    fonte: LICENSE e docs/sources_audit.md
+    relacionados: [destaques-fonte, dados]
+    pagina: metodologia.html
+    sugerir: false
+
+  - id: autoria
+    categoria: Projeto
+    titulo: Quem criou o projeto
+    perguntas: ["Quem criou o projeto?", "Quem é o autor do Além do Placar?", "Onde está o código do projeto?"]
+    palavras: [criou, autor, autoria, feito, desenvolvido, codigo, repositorio, github, quem]
+    resposta: >
+      O Além do Placar é um projeto de portfólio de Vinícius Ribeiro em Ciência de Dados e Business Intelligence.
+      O código, a documentação e a metodologia completa ficam no repositório público do projeto no GitHub; o link
+      está no rodapé do site.
+    fonte: LICENSE e README
+    relacionados: [projeto, reproducao]
+    pagina: index.html
+    sugerir: false
+
+  - id: como-usar
+    categoria: Projeto
+    titulo: O que dá para perguntar nesta central
+    perguntas: ["O que posso perguntar?", "Como usar a central?", "Quais perguntas a central responde?"]
+    palavras: [perguntar, usar, central, exemplos, responde, ajuda, posso, quais, perguntas]
+    resposta: >
+      Dá para perguntar por temporada, equipe ou rodada. Exemplos: "Melhor jogo do Flamengo em 2025", "Quem foi o
+      campeão de 2024?", "Classificação de 2025 após a rodada 20", "Últimos 5 jogos do Palmeiras", "Em que ano o
+      Vasco foi melhor?", "Quem mais evoluiu em 2025?", "Qual o placar mais comum?", "Quem foi o artilheiro de
+      2023?", "Qual equipe o modelo mais errou?" e "O que significa MAE?". Os filtros de temporada e equipe acima
+      da busca valem para perguntas que não citam um ano ou um clube.
+    fonte: Esta central
+    relacionados: [central, dados]
+    pagina: consulta.html
+    sugerir: true

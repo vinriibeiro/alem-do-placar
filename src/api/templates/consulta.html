@@ -1,4 +1,5 @@
 <section class="consulta-hero">
+  <img class="hero__logo hero__logo--pequena" src="static/img/brasileirao-branco.svg" alt="Logo do Campeonato Brasileiro Série A" width="120" height="131">
   <div class="conteiner">
     <span class="hero__eyebrow">Central de Consulta</span>
     <h1>O que você quer saber sobre o Brasileirão?</h1>
@@ -21,6 +22,11 @@
   <section class="consulta__principal" aria-label="Resultado">
     <div id="estado" class="estado" aria-live="polite">Carregando os dados do projeto…</div>
     <div id="resultado" aria-live="polite"></div>
+    <div class="painel-curiosidades" id="bloco-painel" hidden>
+      <h2>Curiosidades do campeonato</h2>
+      <p class="secao__sub">Calculadas das partidas. Clique para ver o detalhe.</p>
+      <div class="curiosidades" id="painel"></div>
+    </div>
     <div class="sugestoes-bloco" id="bloco-sugestoes" hidden>
       <h2>Experimente perguntar</h2>
       <div class="chips" id="sugestoes"></div>

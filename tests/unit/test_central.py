@@ -38,10 +38,14 @@ def test_partidas_completas_e_consistentes(dados):
     p = dados["partidas"]
     assert len(p["partidas"]) == 3040
     por_ano = {}
-    for ano, _data, m, v, gm, gv in p["partidas"]:
+    por_rodada = {}
+    for ano, _data, m, v, gm, gv, rodada in p["partidas"]:
         assert m != v and gm >= 0 and gv >= 0
+        assert rodada is not None and 1 <= rodada <= 38
         por_ano[ano] = por_ano.get(ano, 0) + 1
+        por_rodada[(ano, rodada)] = por_rodada.get((ano, rodada), 0) + 1
     assert set(por_ano.values()) == {380}
+    assert set(por_rodada.values()) == {10}  # 10 jogos por rodada em todas as temporadas
     assert dados["contexto"]["partidas"] == 3040 and dados["contexto"]["temporadas"] == 8
 
 
@@ -90,7 +94,7 @@ def test_motor_javascript_com_node(dados, tmp_path):
             json.dumps(valor, ensure_ascii=False), encoding="utf-8"
         )
     proc = subprocess.run(
-        ["node", "--test", str(RAIZ / "tests" / "js" / "motor.test.mjs")],
+        ["node", "--test", *map(str, sorted((RAIZ / "tests" / "js").glob("*.test.mjs")))],
         env={**__import__("os").environ, "CENTRAL_DADOS": str(tmp_path)},
         capture_output=True,
         text=True,

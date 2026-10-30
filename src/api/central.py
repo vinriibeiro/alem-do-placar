@@ -27,8 +27,13 @@ def _ler_partidas(raiz: Path) -> tuple[list[str], list[list]]:
     t = pd.read_parquet(proc / "dim_temporadas.parquet")
     e = pd.read_parquet(proc / "dim_equipes.parquet")
     nomes = dict(zip(e["equipe_id"], e["nome_padronizado"], strict=True))
-    p = p.merge(t[["temporada_id", "ano"]], on="temporada_id").sort_values(
-        ["data_partida", "partida_id"]
+    rodadas = pd.read_parquet(proc / "fato_desempenho_equipes.parquet").drop_duplicates(
+        "partida_id"
+    )[["partida_id", "rodada"]]
+    p = (
+        p.merge(t[["temporada_id", "ano"]], on="temporada_id")
+        .merge(rodadas, on="partida_id", how="left")
+        .sort_values(["data_partida", "partida_id"])
     )
     equipes = sorted(set(nomes.values()))
     indice = {n: i for i, n in enumerate(equipes)}
@@ -40,6 +45,7 @@ def _ler_partidas(raiz: Path) -> tuple[list[str], list[list]]:
             indice[nomes[r.equipe_visitante_id]],
             int(r.gols_mandante),
             int(r.gols_visitante),
+            None if pd.isna(r.rodada) else int(r.rodada),
         ]
         for r in p.itertuples()
     ]
@@ -161,7 +167,20 @@ def _fatos(equipes: list[str], partidas: list[list], modelo: dict[str, Any]) -> 
     def br(v: float, casas: int = 3) -> str:
         return f"{v:.{casas}f}".replace(".", ",")
 
+    por_ano: dict[int, list[list]] = {}
+    for p in partidas:
+        por_ano.setdefault(p[0], []).append(p)
+    clubes_ano = {a: len({x for p in ps for x in (p[2], p[3])}) for a, ps in por_ano.items()}
+    rodadas = [p[6] for p in partidas if p[6] is not None]
     return {
+        "clubes_por_temporada": str(max(clubes_ano.values())),
+        "turno1_fim": str(max(rodadas) // 2) if rodadas else "—",
+        "returno_ini": str(max(rodadas) // 2 + 1) if rodadas else "—",
+        "jogos_por_temporada": str(max(len(ps) for ps in por_ano.values())),
+        "rodadas_por_temporada": str(max(rodadas)) if rodadas else "—",
+        "jogos_por_rodada": str(max(len(ps) for ps in por_ano.values()) // max(rodadas))
+        if rodadas
+        else "—",
         "n_partidas": f"{len(partidas):,}".replace(",", "."),
         "n_equipes": str(len(equipes)),
         "ano_inicial": str(anos[0]),
@@ -182,11 +201,13 @@ def _fatos(equipes: list[str], partidas: list[list], modelo: dict[str, Any]) -> 
 
 
 def _conhecimento(raiz: Path, fatos: dict[str, str]) -> list[dict[str, Any]]:
-    dados = yaml.safe_load(
-        (raiz / "config" / "central_conhecimento.yaml").read_text(encoding="utf-8")
-    )
+    itens: list[dict[str, Any]] = []
+    for nome in ("central_conhecimento.yaml", "central_conhecimento_extra.yaml"):
+        arquivo = raiz / "config" / nome
+        if arquivo.is_file():
+            itens += yaml.safe_load(arquivo.read_text(encoding="utf-8"))["itens"]
     saida = []
-    for item in dados["itens"]:
+    for item in itens:
         texto = item["resposta"].strip()
         faltam = set(re.findall(r"\{(\w+)\}", texto)) - set(fatos)
         if faltam:
@@ -212,7 +233,7 @@ def montar(raiz: Path, config: dict[str, str] | None = None) -> dict[str, Any]:
     return {
         "partidas": {
             "equipes": equipes,
-            "colunas": ["ano", "data", "mandante", "visitante", "gm", "gv"],
+            "colunas": ["ano", "data", "mandante", "visitante", "gm", "gv", "rodada"],
             "partidas": partidas,
         },
         "modelo": modelo,
