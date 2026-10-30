@@ -61,10 +61,11 @@ p { margin: 0 0 var(--e4); }
     radial-gradient(circle at 85% 20%, rgba(243, 200, 75, 0.22), transparent 42%), radial-gradient(circle at 10% 110%, rgba(21, 150, 106, 0.55), transparent 50%);
   pointer-events: none; }
 .hero .conteiner { position: relative; }
-.hero__logo { position: absolute; right: max(var(--e6), calc((100% - var(--largura)) / 2 + var(--e6))); top: 50%; transform: translateY(-58%); height: clamp(150px, 22vw, 230px); width: auto; opacity: 0.96; pointer-events: none; }
+.hero__logo { position: absolute; right: var(--e6); top: 50%; transform: translateY(-58%); height: clamp(150px, 22vw, 230px); width: auto; aspect-ratio: 1000 / 1090; max-width: 28%; object-fit: contain; opacity: 0.96; pointer-events: none; }
 .hero__logo--pequena { height: clamp(100px, 13vw, 150px); transform: translateY(-50%); }
 @media (max-width: 760px) { .hero__logo { display: none; } }
 .consulta-hero { position: relative; }
+.consulta-hero .conteiner { position: relative; }
 .rodape__marca { display: flex; gap: var(--e4); align-items: flex-start; }
 .rodape__marca img { width: 56px; height: auto; flex: none; opacity: 0.95; }
 .rodape__aviso { font-size: var(--fs-xs); opacity: 0.8; }
